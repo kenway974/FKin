@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Thème — Tailwind CSS v4
+   --------------------------------------------------------------------------
+   Palette « terre & solidarité » : un fond sable chaud, un brun profond pour
+   le texte, une terracotta comme couleur principale et un vert profond comme
+   accent (croissance, éducation).
+
+   Les contrastes ont été choisis pour dépasser le seuil WCAG AA (4,5:1) sur
+   le fond clair :
+     foreground #2B211A sur #FDFAF6 → ~14:1
+     muted      #6B5A4C sur #FDFAF6 → ~5,7:1
+     terre      #9C4A1F sur #FDFAF6 → ~6,3:1
+     vert       #2F6B4F sur #FDFAF6 → ~6,0:1
+   L'ocre, moins contrasté, ne sert jamais à du texte courant : uniquement à
+   des filets, des puces et des aplats décoratifs.
+   ========================================================================== */
+
+@theme {
+  --color-fond: #fdfaf6;
+  --color-sable: #f6efe6;
+  --color-sable-fonce: #ede0ce;
+  --color-encre: #2b211a;
+  --color-doux: #6b5a4c;
+  --color-bordure: #e4d6c4;
+
+  --color-terre: #9c4a1f;
+  --color-terre-clair: #c2703d;
+  --color-terre-fonce: #7a3915;
+  --color-terre-voile: #f7e9df;
+
+  --color-vert: #2f6b4f;
+  --color-vert-fonce: #24523c;
+  --color-vert-voile: #e4efe8;
+
+  --color-ocre: #c97b1e;
+  --color-ocre-voile: #fbf0dc;
+
+  --font-sans:
+    var(--police-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-titre: var(--police-titre), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --radius-douce: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   Bases
+   -------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
+  /* Empêche iOS d'agrandir le texte en paysage. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-fond);
+  color: var(--color-encre);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-titre);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Focus clavier toujours visible — jamais de `outline: none` sec. */
+:focus-visible {
+  outline: 3px solid var(--color-vert);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Respect des préférences système en matière d'animation. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utilitaires maison
+   -------------------------------------------------------------------------- */
+
+/* Conteneur de page : marges généreuses sur mobile d'abord. */
+@utility contenu {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .contenu {
+    padding-inline: 2rem;
+  }
+}
+
+/* Motif discret de « tissu » utilisé sur les sections sable. */
+@utility motif-tissu {
+  background-image:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-ocre) 6%, transparent) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      225deg,
+      color-mix(in srgb, var(--color-ocre) 6%, transparent) 25%,
+      transparent 25%
+    );
+  background-size: 28px 28px;
+}
