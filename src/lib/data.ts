@@ -1,6 +1,6 @@
 import "server-only";
 
-import { creerClientServeur } from "@/lib/supabase/server";
+import { creerClientPublic } from "@/lib/supabase/server";
 import { supabaseConfigure } from "@/lib/env";
 import type { Article, Projet } from "@/types/database";
 
@@ -29,7 +29,7 @@ function signaler(operation: string, erreur: unknown) {
 
 /** Articles publiés, du plus récent au plus ancien. */
 export async function listerArticlesPublies(limite?: number): Promise<Article[]> {
-  const supabase = await creerClientServeur();
+  const supabase = creerClientPublic();
   if (!supabase) {
     signaler("listerArticlesPublies", null);
     return [];
@@ -53,7 +53,7 @@ export async function listerArticlesPublies(limite?: number): Promise<Article[]>
 
 /** Un article publié identifié par son slug, ou `null` s'il n'existe pas. */
 export async function trouverArticleParSlug(slug: string): Promise<Article | null> {
-  const supabase = await creerClientServeur();
+  const supabase = creerClientPublic();
   if (!supabase) {
     signaler("trouverArticleParSlug", null);
     return null;
@@ -73,9 +73,54 @@ export async function trouverArticleParSlug(slug: string): Promise<Article | nul
   return data;
 }
 
+/**
+ * Chiffres-clés de la page d'accueil.
+ *
+ * Calculés à partir du contenu réellement publié plutôt que saisis en dur :
+ * un site qui affiche des statistiques inventées perd la crédibilité qu'il
+ * cherche justement à établir auprès des entreprises donatrices.
+ *
+ * Renvoie des zéros si la base est injoignable ; la page masque alors la
+ * section entière au lieu d'annoncer « 0 projet ».
+ */
+export async function compterPourAccueil(): Promise<{
+  projets: number;
+  articles: number;
+  lieux: number;
+}> {
+  const vide = { projets: 0, articles: 0, lieux: 0 };
+
+  const supabase = creerClientPublic();
+  if (!supabase) {
+    signaler("compterPourAccueil", null);
+    return vide;
+  }
+
+  const [projets, articles] = await Promise.all([
+    // `lieu` est rapatrié pour compter les lieux distincts : la table reste
+    // petite (quelques dizaines de lignes), un agrégat côté base serait ici
+    // plus coûteux à maintenir qu'utile.
+    supabase.from("projets").select("lieu").eq("publie", true),
+    supabase.from("articles").select("id", { count: "exact", head: true }).eq("statut", "publie"),
+  ]);
+
+  if (projets.error || articles.error) {
+    signaler("compterPourAccueil", projets.error ?? articles.error);
+    return vide;
+  }
+
+  const lignes = projets.data ?? [];
+
+  return {
+    projets: lignes.length,
+    articles: articles.count ?? 0,
+    lieux: new Set(lignes.map((ligne) => ligne.lieu.trim().toLowerCase())).size,
+  };
+}
+
 /** Projets visibles dans la galerie, triés par ordre d'affichage puis par date. */
 export async function listerProjetsPublies(limite?: number): Promise<Projet[]> {
-  const supabase = await creerClientServeur();
+  const supabase = creerClientPublic();
   if (!supabase) {
     signaler("listerProjetsPublies", null);
     return [];

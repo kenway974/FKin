@@ -45,6 +45,34 @@ export async function creerClientServeur() {
 }
 
 /**
+ * Client de lecture publique, sans cookies.
+ *
+ * Les pages publiques n'affichent que du contenu publié : elles n'ont donc
+ * aucun besoin de la session du visiteur. Utiliser le client à cookies pour
+ * ces lectures aurait deux défauts :
+ *
+ *  1. `cookies()` est interdit hors d'une requête — `generateStaticParams` et
+ *     le sitemap échoueraient au build (c'est exactement ce qui se produisait) ;
+ *  2. lire les cookies force le rendu dynamique, ce qui ferait perdre le cache
+ *     statique dont dépendent les visiteurs sur connexion lente.
+ *
+ * La clé anonyme reste soumise aux politiques RLS : ce client ne voit que ce
+ * qu'un visiteur non authentifié peut voir.
+ */
+export function creerClientPublic() {
+  if (!supabaseConfigure) return null;
+
+  return createServerClient<Database>(
+    env.NEXT_PUBLIC_SUPABASE_URL as string,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+    {
+      cookies: { getAll: () => [], setAll: () => {} },
+      auth: { persistSession: false, autoRefreshToken: false },
+    },
+  );
+}
+
+/**
  * Client privilégié « service_role ».
  *
  * ⚠️ Contourne toutes les politiques RLS. Réservé à un seul usage :

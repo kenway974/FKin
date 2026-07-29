@@ -6,7 +6,7 @@ import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
-import { listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
+import { compterPourAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -44,9 +44,10 @@ const etapes = [
 export default async function PageAccueil() {
   // Deux requêtes indépendantes : lancées en parallèle pour ne pas additionner
   // les temps d'attente sur une connexion lente.
-  const [projets, articles] = await Promise.all([
+  const [projets, articles, statistiques] = await Promise.all([
     listerProjetsPublies(3),
     listerArticlesPublies(3),
+    compterPourAccueil(),
   ]);
 
   return (
@@ -107,34 +108,52 @@ export default async function PageAccueil() {
       </section>
 
       {/* ------------------------------------------------------------- Chiffres */}
-      <Section>
-        <div className="contenu">
-          <TitreSection
-            surtitre="Notre action en bref"
-            titre="Une démarche mesurée, pas une promesse"
-            chapo="Nous publions ce que nous constatons sur le terrain. Chaque chiffre correspond à des livraisons documentées, photographiées et signées par les structures bénéficiaires."
-          />
-          {/*
-            TODO (propriétaire du site) : remplacer ces quatre chiffres par vos
-            données réelles avant la mise en ligne. Ils sont volontairement
-            modestes et vérifiables plutôt que spectaculaires.
+      {/* Masquée tant qu'aucun projet n'est publié : mieux vaut pas de section
+          du tout qu'une rangée de zéros. */}
+      {statistiques.projets > 0 ? (
+        <Section>
+          <div className="contenu">
+            <TitreSection
+              surtitre="Notre action en bref"
+              titre="Une démarche mesurée, pas une promesse"
+              chapo="Nous publions ce que nous constatons sur le terrain. Chaque chiffre correspond à des livraisons documentées, photographiées et signées par les structures bénéficiaires."
+            />
+            {/*
+            Ces chiffres sont calculés à partir de la base, jamais saisis en dur.
+            Une page qui affiche des statistiques inventées ruinerait exactement
+            la crédibilité que ce site cherche à établir : ici, chaque nombre
+            correspond à une fiche réellement publiée dans le back-office et
+            vérifiable en un clic depuis la page Réalisations.
+
+            Le « 100 % documentées » n'est pas une promesse commerciale : la
+            colonne `resultat` est obligatoire en base, aucune fiche ne peut
+            donc exister sans son compte rendu d'usage.
           */}
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <ChiffreCle valeur="1 200+" libelle="équipements collectés" precision="Depuis 2021" />
-            <ChiffreCle
-              valeur="18"
-              libelle="structures équipées"
-              precision="Écoles, mairies, associations"
-            />
-            <ChiffreCle valeur="9" libelle="entreprises partenaires" precision="En Île-de-France" />
-            <ChiffreCle
-              valeur="100 %"
-              libelle="des livraisons documentées"
-              precision="Photos et compte rendu"
-            />
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <ChiffreCle
+                valeur={String(statistiques.projets)}
+                libelle={statistiques.projets > 1 ? "projets menés à terme" : "projet mené à terme"}
+                precision="Chacun détaillé dans nos réalisations"
+              />
+              <ChiffreCle
+                valeur={String(statistiques.lieux)}
+                libelle={statistiques.lieux > 1 ? "lieux équipés" : "lieu équipé"}
+                precision="Écoles, mairies, associations"
+              />
+              <ChiffreCle
+                valeur={String(statistiques.articles)}
+                libelle="comptes rendus publiés"
+                precision="Convois, installations, retours de terrain"
+              />
+              <ChiffreCle
+                valeur="100 %"
+                libelle="des projets documentés"
+                precision="Lieu, matériel livré et résultat obtenu"
+              />
+            </div>
           </div>
-        </div>
-      </Section>
+        </Section>
+      ) : null}
 
       {/* --------------------------------------------------------- Les 3 temps */}
       <Section fond="sable" aria-labelledby="titre-parcours">
