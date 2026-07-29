@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { EtatVide, Section, TitreSection } from "@/components/sections";
+import { EtatVide, Section } from "@/components/sections";
+import { BannierePage } from "@/components/bannieres";
+import { trouverPhotoBanniere } from "@/lib/visuels";
 import { CarteArticle } from "@/components/carte-article";
 import { listerArticlesPublies } from "@/lib/data";
 import { urlSite } from "@/lib/env";
@@ -46,16 +48,13 @@ export default async function PageActualites() {
         />
       ) : null}
 
-      <Section fond="sable">
-        <div className="contenu">
-          <TitreSection
-            niveau={1}
-            surtitre="Actualités"
-            titre="Nouvelles des convois et du terrain"
-            chapo="Nous publions ici ce qui se passe entre deux livraisons : le départ d'un conteneur, l'installation d'une salle, les difficultés rencontrées et ce que nous en tirons."
-          />
-        </div>
-      </Section>
+      <BannierePage
+        surtitre="Actualités"
+        titre="Nouvelles des convois et du terrain"
+        chapo="Nous publions ici ce qui se passe entre deux livraisons : le départ d'un conteneur, l'installation d'une salle, les difficultés rencontrées et ce que nous en tirons."
+        ton="terre"
+        photo={trouverPhotoBanniere("actualites")}
+      />
 
       <Section>
         <div className="contenu">

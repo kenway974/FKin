@@ -368,7 +368,28 @@ ligne.
 et/ou `--police-titre` dans `globals.css`. Gardez à l'esprit le coût pour les
 visiteurs sur connexion lente.
 
-**Photographies** → aucune photo n'est livrée avec le code. Les cartes affichent
+**Bannières** → chaque page a une bannière en tête. Par défaut, l'accueil
+affiche une illustration SVG (une scène « bureaux franciliens → conteneur →
+école ») et les pages intérieures un aplat dégradé. **Déposez un fichier dans
+`public/bannieres/` et la bannière bascule automatiquement sur votre
+photographie**, sans toucher au code :
+
+| Fichier | Page |
+| --- | --- |
+| `public/bannieres/accueil.jpg` | Accueil |
+| `public/bannieres/services.jpg` | Nos services |
+| `public/bannieres/realisations.jpg` | Réalisations |
+| `public/bannieres/comment-ca-marche.jpg` | Comment ça marche |
+| `public/bannieres/actualites.jpg` | Actualités |
+| `public/bannieres/contact.jpg` | Contact |
+
+Les extensions `.jpg`, `.jpeg`, `.png`, `.webp` et `.avif` sont reconnues.
+Format conseillé : 2000 × 1000 px environ, moins de 400 ko. Un voile dégradé
+est appliqué automatiquement pour que le texte blanc reste lisible quelle que
+soit la photo. La détection a lieu au build : après avoir ajouté un fichier,
+redéployez.
+
+**Photographies de contenu** → aucune photo n'est livrée avec le code. Les cartes affichent
 un visuel de remplacement tant qu'aucune image n'a été téléversée. Ajoutez les
 vôtres depuis le back-office : elles partent dans Supabase Storage et sont
 servies optimisées par `next/image`.

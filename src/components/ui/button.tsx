@@ -20,6 +20,13 @@ const variantesBouton = cva(
         contour: "border-2 border-terre text-terre hover:bg-terre-voile",
         discret: "text-encre hover:bg-sable",
         lien: "text-terre underline underline-offset-4 hover:text-terre-fonce",
+        // Variantes destinées aux fonds sombres (bannières, section verte).
+        // Elles existent en tant que variantes plutôt qu'en surcharge de
+        // `className` : tailwind-merge ne sait pas arbitrer un conflit entre
+        // deux couleurs personnalisées du thème, si bien qu'une surcharge du
+        // type `bg-white` sur `bg-terre` ne gagnait pas de façon fiable.
+        clair: "bg-white text-encre hover:bg-white/90",
+        "contour-clair": "border-2 border-white text-white backdrop-blur-sm hover:bg-white/15",
         danger: "border-2 border-red-700 text-red-800 hover:bg-red-50",
       },
       taille: {

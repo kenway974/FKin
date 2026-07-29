@@ -2,7 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EtatVide, Section, TitreSection } from "@/components/sections";
+import { EtatVide, Section } from "@/components/sections";
+import { BannierePage } from "@/components/bannieres";
+import { trouverPhotoBanniere } from "@/lib/visuels";
 import { CarteProjet } from "@/components/carte-projet";
 import { listerProjetsPublies } from "@/lib/data";
 import { urlSite } from "@/lib/env";
@@ -55,16 +57,13 @@ export default async function PageRealisations() {
         />
       ) : null}
 
-      <Section fond="sable">
-        <div className="contenu">
-          <TitreSection
-            niveau={1}
-            surtitre="Réalisations"
-            titre="Ce que le matériel est devenu"
-            chapo="Chaque fiche indique où le matériel est arrivé, de quoi il s'agissait et ce qu'il a concrètement permis de faire. C'est la partie la plus utile de ce site : elle vous permet de vérifier que la démarche va au bout."
-          />
-        </div>
-      </Section>
+      <BannierePage
+        surtitre="Réalisations"
+        titre="Ce que le matériel est devenu"
+        chapo="Chaque fiche indique où le matériel est arrivé, de quoi il s'agissait et ce qu'il a concrètement permis de faire. C'est la partie la plus utile de ce site : elle vous permet de vérifier que la démarche va au bout."
+        ton="vert"
+        photo={trouverPhotoBanniere("realisations")}
+      />
 
       <Section>
         <div className="contenu">

@@ -2,7 +2,9 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin } from "lucide-react";
 import { Card, CardBody, CardTitre } from "@/components/ui/card";
-import { Section, TitreSection } from "@/components/sections";
+import { Section } from "@/components/sections";
+import { BannierePage } from "@/components/bannieres";
+import { trouverPhotoBanniere } from "@/lib/visuels";
 import { FormulaireContact } from "./formulaire-contact";
 import { site } from "@/lib/site";
 
@@ -16,16 +18,13 @@ export const metadata: Metadata = {
 export default function PageContact() {
   return (
     <>
-      <Section fond="sable">
-        <div className="contenu">
-          <TitreSection
-            niveau={1}
-            surtitre="Contact"
-            titre="Écrivez-nous"
-            chapo="Que vous ayez du matériel à donner ou un besoin à exprimer, un seul formulaire. Précisez simplement qui vous êtes : votre demande sera orientée vers la bonne personne."
-          />
-        </div>
-      </Section>
+      <BannierePage
+        surtitre="Contact"
+        titre="Écrivez-nous"
+        chapo="Que vous ayez du matériel à donner ou un besoin à exprimer, un seul formulaire. Précisez simplement qui vous êtes : votre demande sera orientée vers la bonne personne."
+        ton="vert"
+        photo={trouverPhotoBanniere("contact")}
+      />
 
       <Section>
         <div className="contenu grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start">

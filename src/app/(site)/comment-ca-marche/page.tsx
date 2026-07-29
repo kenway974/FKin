@@ -4,7 +4,9 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
-import { Section, TitreSection } from "@/components/sections";
+import { Section } from "@/components/sections";
+import { BannierePage } from "@/components/bannieres";
+import { trouverPhotoBanniere } from "@/lib/visuels";
 import { urlSite } from "@/lib/env";
 
 export const metadata: Metadata = {
@@ -102,16 +104,13 @@ export default function PageCommentCaMarche() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesStructurees) }}
       />
 
-      <Section fond="sable">
-        <div className="contenu">
-          <TitreSection
-            niveau={1}
-            surtitre="Comment ça marche"
-            titre="Le parcours complet d'un don"
-            chapo="Entre le moment où une entreprise nous signale un lot et celui où des élèves s'installent devant les postes, il s'écoule en général trois à quatre mois. Voici précisément ce qui se passe pendant ce temps — délais réels compris."
-          />
-        </div>
-      </Section>
+      <BannierePage
+        surtitre="Comment ça marche"
+        titre="Le parcours complet d'un don"
+        chapo="Entre le moment où une entreprise nous signale un lot et celui où des élèves s'installent devant les postes, il s'écoule en général trois à quatre mois. Voici précisément ce qui se passe pendant ce temps — délais réels compris."
+        ton="indigo"
+        photo={trouverPhotoBanniere("comment-ca-marche")}
+      />
 
       <Section>
         <div className="contenu">

@@ -35,7 +35,18 @@
   --color-vert-voile: #e4efe8;
 
   --color-ocre: #c97b1e;
+  --color-ocre-fonce: #9a5c11;
   --color-ocre-voile: #fbf0dc;
+
+  /* Couleurs d'appoint, introduites pour donner du relief aux bannières et aux
+     illustrations sans sortir de la famille terre / végétal.
+     `indigo` et `brique` ne servent qu'à des aplats et à du texte sur fond
+     clair : leur contraste sur #FDFAF6 dépasse 6:1. */
+  --color-indigo: #2f4858;
+  --color-indigo-voile: #e6edf1;
+  --color-brique: #b4472f;
+  --color-soleil: #e8a33d;
+  --color-soleil-voile: #fdf3e2;
 
   --font-sans:
     var(--police-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
@@ -128,4 +139,198 @@ p {
       transparent 25%
     );
   background-size: 28px 28px;
+}
+
+/* --------------------------------------------------------------------------
+   Animations
+   --------------------------------------------------------------------------
+   Toutes en CSS pur : aucune librairie, aucun JavaScript, aucun observateur
+   d'intersection. C'est ce qui permet d'animer le site sans alourdir le
+   bundle — une contrainte forte du projet, dont une partie du public navigue
+   sur connexion lente.
+
+   Les apparitions au défilement utilisent `animation-timeline: view()`.
+   Là où le navigateur ne la connaît pas encore (Safari, Firefox à ce jour),
+   la règle `@supports` n'est tout simplement pas appliquée : le contenu
+   s'affiche normalement, sans animation. Aucun risque de texte invisible.
+   -------------------------------------------------------------------------- */
+
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes apparition-laterale {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes flottement {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes defilement-ruban {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Apparition immédiate, pour le contenu déjà visible au chargement (le héros). */
+@utility anim-entree {
+  animation: apparition 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility anim-entree-laterale {
+  animation: apparition-laterale 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Décalages, pour que les éléments d'un même bloc entrent en cascade. */
+@utility anim-retard-1 {
+  animation-delay: 0.1s;
+}
+@utility anim-retard-2 {
+  animation-delay: 0.2s;
+}
+@utility anim-retard-3 {
+  animation-delay: 0.3s;
+}
+@utility anim-retard-4 {
+  animation-delay: 0.4s;
+}
+
+/* Léger mouvement continu, réservé aux éléments purement décoratifs. */
+@utility anim-flottement {
+  animation: flottement 6s ease-in-out infinite;
+}
+
+/* Apparition déclenchée par le défilement — progressive enhancement. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .anim-defilement {
+      animation: apparition 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+/* Relief au survol et au focus clavier, sur les cartes cliquables. */
+@utility carte-relief {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--color-encre) 32%, transparent);
+    border-color: color-mix(in srgb, var(--color-terre) 45%, transparent);
+  }
+}
+
+/* Ruban défilant. Le contenu est dupliqué dans le markup pour que la boucle
+   soit invisible ; l'ensemble est marqué aria-hidden côté composant. */
+@utility ruban-defilant {
+  animation: defilement-ruban 38s linear infinite;
+}
+
+/* Un survol suspend le défilement : indispensable pour qui lit lentement. */
+.ruban-piste:hover .ruban-defilant {
+  animation-play-state: paused;
+}
+
+/* Voile dégradé posé sur les images de bannière, pour garantir la lisibilité
+   du texte blanc quelle que soit la photo déposée par le propriétaire. */
+@utility voile-banniere {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-encre) 88%, transparent) 0%,
+    color-mix(in srgb, var(--color-encre) 62%, transparent) 45%,
+    color-mix(in srgb, var(--color-encre) 30%, transparent) 100%
+  );
+}
+
+/* Voile latéral, utilisé quand le fond est l'illustration : le texte occupe la
+   gauche, la scène reste donc pleinement visible à droite et en bas. */
+@utility voile-lateral {
+  background:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-encre) 82%, transparent) 0%,
+      color-mix(in srgb, var(--color-encre) 62%, transparent) 42%,
+      color-mix(in srgb, var(--color-encre) 18%, transparent) 78%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-encre) 45%, transparent) 0%,
+      transparent 35%
+    );
+}
+
+/* Sur mobile, le texte occupe toute la largeur : un voile latéral masquerait
+   entièrement l'illustration. On bascule donc sur un voile vertical, sombre
+   derrière le texte et transparent en bas, où vit la scène. */
+@media (width < 48rem) {
+  .voile-lateral {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-encre) 78%, transparent) 0%,
+      color-mix(in srgb, var(--color-encre) 72%, transparent) 55%,
+      color-mix(in srgb, var(--color-encre) 25%, transparent) 88%,
+      transparent 100%
+    );
+  }
+}
+
+/* Dégradé chaud, utilisé en repli quand aucune photo n'est disponible. */
+@utility degrade-terre {
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 15% 0%,
+      color-mix(in srgb, var(--color-soleil) 55%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 70% 70% at 90% 30%,
+      color-mix(in srgb, var(--color-brique) 60%, transparent),
+      transparent 65%
+    ),
+    linear-gradient(150deg, var(--color-terre-fonce), var(--color-indigo));
+}
+
+/* Filet tricolore, repris du logo. Sert de séparateur entre deux sections. */
+@utility filet-tricolore {
+  height: 5px;
+  background: linear-gradient(
+    to right,
+    var(--color-terre) 0%,
+    var(--color-terre) 45%,
+    var(--color-ocre) 45%,
+    var(--color-ocre) 72%,
+    var(--color-vert) 72%,
+    var(--color-vert) 100%
+  );
 }

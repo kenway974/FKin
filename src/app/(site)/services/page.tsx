@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
 import { Section, TitreSection } from "@/components/sections";
+import { BannierePage } from "@/components/bannieres";
+import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = {
   title: "Nos services",
@@ -94,16 +96,13 @@ const servicesBeneficiaires = [
 export default function PageServices() {
   return (
     <>
-      <Section fond="sable">
-        <div className="contenu">
-          <TitreSection
-            niveau={1}
-            surtitre="Nos services"
-            titre="Deux métiers, une même chaîne"
-            chapo="D'un côté, décharger les entreprises franciliennes d'un matériel devenu encombrant, en leur garantissant sécurité des données et traçabilité. De l'autre, équiper durablement des structures au Congo, avec un accompagnement qui ne s'arrête pas à la livraison."
-          />
-        </div>
-      </Section>
+      <BannierePage
+        surtitre="Nos services"
+        titre="Deux métiers, une même chaîne"
+        chapo="D'un côté, décharger les entreprises franciliennes d'un matériel devenu encombrant, en leur garantissant sécurité des données et traçabilité. De l'autre, équiper durablement des structures au Congo, avec un accompagnement qui ne s'arrête pas à la livraison."
+        ton="terre"
+        photo={trouverPhotoBanniere("services")}
+      />
 
       {/* --------------------------------------------------------- Entreprises */}
       <Section id="entreprises" aria-labelledby="titre-entreprises">

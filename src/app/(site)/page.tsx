@@ -4,10 +4,14 @@ import { ArrowRight, Building2, GraduationCap, PackageCheck, Ship, Truck } from 
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
+import { BandeauAccent, BanniereAccueil, RubanDefilant } from "@/components/bannieres";
+import { IlluCollecte, IlluEcole, IlluTransport, MotifAngle } from "@/components/illustrations";
+import { trouverPhotoBanniere } from "@/lib/visuels";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
 import { compterPourAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
 import { site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Donnez une seconde vie à votre matériel",
@@ -23,18 +27,24 @@ export const metadata: Metadata = {
 const etapes = [
   {
     icone: Truck,
+    illustration: IlluCollecte,
+    ton: "terre" as const,
     titre: "1. Collecte en Île-de-France",
     texte:
       "Vous nous signalez le matériel dont votre entreprise se sépare. Nous évaluons ce qui est réemployable, planifions l'enlèvement sur site et repartons avec un inventaire signé.",
   },
   {
     icone: Ship,
+    illustration: IlluTransport,
+    ton: "ocre" as const,
     titre: "2. Préparation et acheminement",
     texte:
       "Le matériel est testé, nettoyé, les disques sont effacés puis les lots sont palettisés et expédiés par conteneur vers Kinshasa, où un partenaire local prend le relais au dédouanement.",
   },
   {
     icone: GraduationCap,
+    illustration: IlluEcole,
+    ton: "vert" as const,
     titre: "3. Mise en service au Congo",
     texte:
       "Les équipements sont installés dans des écoles, mairies et associations identifiées à l'avance. Chaque livraison donne lieu à des photos et à un compte rendu d'usage qui vous est transmis.",
@@ -50,62 +60,79 @@ export default async function PageAccueil() {
     compterPourAccueil(),
   ]);
 
+  // Bascule automatiquement sur une vraie photographie dès qu'un fichier
+  // `public/bannieres/accueil.jpg` (ou .png/.webp/.avif) est déposé.
+  const photoBanniere = trouverPhotoBanniere("accueil");
+
   return (
     <>
-      {/* ---------------------------------------------------------------- Héros */}
-      <section className="border-bordure bg-sable motif-tissu border-b">
-        <div className="contenu grid gap-10 py-16 md:grid-cols-[1.1fr_0.9fr] md:items-center md:py-24">
-          <div>
-            <p className="bg-terre-voile text-terre-fonce mb-3 inline-flex rounded-full px-3 py-1 text-sm font-bold">
-              Collecte en Île-de-France · Distribution au Congo
-            </p>
-            <h1 className="text-4xl leading-[1.1] font-bold md:text-5xl lg:text-6xl">
-              Le matériel dont vous n&apos;avez plus l&apos;usage devient une salle de classe
-              équipée.
-            </h1>
-            <p className="text-doux mt-5 max-w-xl text-lg leading-relaxed">
-              Nous accompagnons les entreprises franciliennes qui renouvellent leur parc
-              informatique, électrique ou mobilier, et nous acheminons ce matériel jusqu&apos;à des
-              écoles, mairies et associations au Congo. De l&apos;enlèvement au compte rendu
-              d&apos;usage, chaque étape est tracée.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild taille="lg">
-                <Link href="/contact?profil=entreprise">
-                  Proposer un don
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button asChild taille="lg" variante="contour">
-                <Link href="/realisations">Voir nos réalisations</Link>
-              </Button>
-            </div>
-          </div>
+      {/* ------------------------------------------------------------- Bannière */}
+      <BanniereAccueil photo={photoBanniere} photoAlt="">
+        <p className="anim-entree bg-soleil/25 ring-soleil/40 mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold ring-1 backdrop-blur-sm">
+          <span className="bg-soleil size-2 rounded-full" aria-hidden="true" />
+          Collecte en Île-de-France · Distribution au Congo
+        </p>
 
-          {/* Composition décorative : trois « cartes » évoquant le trajet du don. */}
-          <div aria-hidden="true" className="hidden md:block">
-            <div className="relative mx-auto max-w-sm">
-              <div className="rounded-douce border-bordure border bg-white p-5 shadow-sm">
-                <Building2 className="text-terre size-7" />
-                <p className="mt-2 font-semibold">Une entreprise francilienne</p>
-                <p className="text-doux text-sm">40 postes de travail renouvelés</p>
-              </div>
-              <div className="border-ocre mx-6 my-3 h-8 border-l-2 border-dashed" />
-              <div className="rounded-douce border-bordure border bg-white p-5 shadow-sm">
-                <PackageCheck className="text-ocre size-7" />
-                <p className="mt-2 font-semibold">Testé, effacé, palettisé</p>
-                <p className="text-doux text-sm">Inventaire et attestation remis</p>
-              </div>
-              <div className="border-ocre mx-6 my-3 h-8 border-l-2 border-dashed" />
-              <div className="rounded-douce border-vert/30 bg-vert-voile border p-5 shadow-sm">
-                <GraduationCap className="text-vert size-7" />
-                <p className="text-vert-fonce mt-2 font-semibold">Une salle informatique</p>
-                <p className="text-vert-fonce/85 text-sm">Un lycée de Kinshasa, 180 élèves</p>
-              </div>
-            </div>
-          </div>
+        <h1 className="anim-entree anim-retard-1 text-4xl leading-[1.08] font-bold text-balance md:text-6xl lg:text-7xl">
+          Le matériel dont vous n&apos;avez plus l&apos;usage devient une{" "}
+          <span className="text-soleil">salle de classe équipée</span>.
+        </h1>
+
+        <p className="anim-entree anim-retard-2 mt-6 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl">
+          Nous accompagnons les entreprises franciliennes qui renouvellent leur parc informatique,
+          électrique ou mobilier, et nous acheminons ce matériel jusqu&apos;à des écoles, mairies et
+          associations au Congo. De l&apos;enlèvement au compte rendu d&apos;usage, chaque étape est
+          tracée.
+        </p>
+
+        <div className="anim-entree anim-retard-3 mt-9 flex flex-col gap-3 sm:flex-row">
+          <Button asChild taille="lg" className="shadow-lg shadow-black/20">
+            <Link href="/contact?profil=entreprise">
+              Proposer un don
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </Link>
+          </Button>
+          <Button asChild taille="lg" variante="contour-clair">
+            <Link href="/realisations">Voir nos réalisations</Link>
+          </Button>
         </div>
-      </section>
+
+        {/* Trois repères du parcours, directement dans la bannière. */}
+        <ul className="anim-entree anim-retard-4 mt-12 grid gap-4 sm:grid-cols-3">
+          {[
+            {
+              icone: Building2,
+              texte: "Enlèvement sur votre site",
+              detail: "Toute l'Île-de-France",
+            },
+            { icone: PackageCheck, texte: "Données effacées", detail: "Certificat remis" },
+            { icone: GraduationCap, texte: "Compte rendu d'usage", detail: "Photos à l'appui" },
+          ].map((repere) => (
+            <li
+              key={repere.texte}
+              className="rounded-douce flex items-center gap-3 border border-white/20 bg-white/10 p-3.5 backdrop-blur-sm"
+            >
+              <repere.icone className="text-soleil size-6 shrink-0" aria-hidden="true" />
+              <span>
+                <span className="block text-sm font-semibold">{repere.texte}</span>
+                <span className="block text-xs text-white/75">{repere.detail}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </BanniereAccueil>
+
+      {/* ---------------------------------------------------------------- Ruban */}
+      <RubanDefilant
+        mentions={[
+          "Enlèvement gratuit en Île-de-France",
+          "Effacement certifié des disques",
+          "Inventaire et attestation de don",
+          "Acheminement par conteneur",
+          "Installation par nos relais locaux",
+          "Compte rendu d'usage à 6 mois",
+        ]}
+      />
 
       {/* ------------------------------------------------------------- Chiffres */}
       {/* Masquée tant qu'aucun projet n'est publié : mieux vaut pas de section
@@ -129,7 +156,7 @@ export default async function PageAccueil() {
             colonne `resultat` est obligatoire en base, aucune fiche ne peut
             donc exister sans son compte rendu d'usage.
           */}
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="anim-defilement mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <ChiffreCle
                 valeur={String(statistiques.projets)}
                 libelle={statistiques.projets > 1 ? "projets menés à terme" : "projet mené à terme"}
@@ -165,13 +192,31 @@ export default async function PageAccueil() {
             chapo="Vous n'avez rien à organiser : nous prenons en charge l'ensemble du parcours et vous rendons compte de ce qui a été fait du matériel."
           />
 
-          <ol className="mt-10 grid gap-5 md:grid-cols-3">
+          <ol className="anim-defilement mt-10 grid gap-5 md:grid-cols-3">
             {etapes.map((etape) => (
               <li key={etape.titre}>
-                <Card className="h-full">
+                <Card className="carte-relief h-full">
+                  {/* Bandeau illustré, teinté selon l'étape. */}
+                  <div
+                    className={cn(
+                      "flex h-32 items-center justify-center px-8",
+                      etape.ton === "terre" && "bg-terre-voile",
+                      etape.ton === "ocre" && "bg-soleil-voile",
+                      etape.ton === "vert" && "bg-vert-voile",
+                    )}
+                  >
+                    <etape.illustration className="anim-flottement h-full w-auto max-w-[160px]" />
+                  </div>
                   <CardBody className="space-y-3">
-                    <span className="bg-terre-voile inline-flex size-12 items-center justify-center rounded-full">
-                      <etape.icone className="text-terre size-6" aria-hidden="true" />
+                    <span
+                      className={cn(
+                        "inline-flex size-12 items-center justify-center rounded-full",
+                        etape.ton === "terre" && "bg-terre text-white",
+                        etape.ton === "ocre" && "bg-ocre text-white",
+                        etape.ton === "vert" && "bg-vert text-white",
+                      )}
+                    >
+                      <etape.icone className="size-6" aria-hidden="true" />
                     </span>
                     <CardTitre>{etape.titre}</CardTitre>
                     <p className="text-doux text-sm leading-relaxed">{etape.texte}</p>
@@ -180,6 +225,15 @@ export default async function PageAccueil() {
               </li>
             ))}
           </ol>
+
+          <BandeauAccent ton="indigo" className="anim-defilement mt-10">
+            <p className="font-titre text-lg font-bold">Comptez trois à quatre mois</p>
+            <p className="mt-1.5 text-sm leading-relaxed">
+              La traversée maritime et le dédouanement représentent à eux seuls la moitié du délai,
+              et ce sont les deux étapes sur lesquelles nous avons le moins de prise. Un lot enlevé
+              en janvier arrive généralement en salle de classe entre avril et mai.
+            </p>
+          </BandeauAccent>
 
           <div className="mt-8">
             <Button asChild variante="contour">
@@ -199,9 +253,11 @@ export default async function PageAccueil() {
             surtitre="À qui nous nous adressons"
             titre="Deux interlocuteurs, deux besoins"
           />
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            <Card>
-              <CardBody className="space-y-3">
+          <div className="anim-defilement mt-8 grid gap-5 md:grid-cols-2">
+            <Card className="carte-relief border-terre/25 relative overflow-hidden">
+              <span className="bg-terre absolute inset-x-0 top-0 h-1.5" aria-hidden="true" />
+              <MotifAngle className="text-terre -top-12 -right-12 size-48 opacity-10" />
+              <CardBody className="relative space-y-3">
                 <Building2 className="text-terre size-8" aria-hidden="true" />
                 <CardTitre>Vous êtes une entreprise d&apos;Île-de-France</CardTitre>
                 <p className="text-doux text-sm leading-relaxed">
@@ -219,8 +275,10 @@ export default async function PageAccueil() {
               </CardBody>
             </Card>
 
-            <Card>
-              <CardBody className="space-y-3">
+            <Card className="carte-relief border-vert/25 relative overflow-hidden">
+              <span className="bg-vert absolute inset-x-0 top-0 h-1.5" aria-hidden="true" />
+              <MotifAngle className="text-vert -top-12 -right-12 size-48 opacity-10" />
+              <CardBody className="relative space-y-3">
                 <GraduationCap className="text-vert size-8" aria-hidden="true" />
                 <CardTitre>Vous êtes une structure au Congo</CardTitre>
                 <p className="text-doux text-sm leading-relaxed">
@@ -252,7 +310,7 @@ export default async function PageAccueil() {
           />
 
           {projets.length > 0 ? (
-            <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="anim-defilement mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {projets.map((projet, index) => (
                 <li key={projet.id}>
                   <CarteProjet projet={projet} priorite={index === 0} />
@@ -292,7 +350,7 @@ export default async function PageAccueil() {
               surtitre="Actualités"
               titre="Ce que nous racontons de nos convois"
             />
-            <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="anim-defilement mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {articles.map((article) => (
                 <li key={article.id}>
                   <CarteArticle article={article} />
@@ -312,8 +370,10 @@ export default async function PageAccueil() {
       ) : null}
 
       {/* ------------------------------------------------------------- CTA final */}
-      <section className="bg-vert py-16 md:py-20">
-        <div className="contenu max-w-3xl text-center">
+      <section className="bg-vert relative isolate overflow-hidden py-16 md:py-24">
+        <MotifAngle className="-top-24 -left-24 size-96 text-white/15" aria-hidden="true" />
+        <MotifAngle className="-right-20 -bottom-28 size-80 text-white/10" aria-hidden="true" />
+        <div className="contenu anim-defilement relative max-w-3xl text-center">
           <h2 className="font-titre text-3xl font-bold text-white md:text-4xl">
             Un local à vider ? Parlons-en avant la benne.
           </h2>
@@ -326,12 +386,7 @@ export default async function PageAccueil() {
             <Button asChild taille="lg" className="text-vert-fonce bg-white hover:bg-white/90">
               <Link href="/contact?profil=entreprise">Proposer un don de matériel</Link>
             </Button>
-            <Button
-              asChild
-              taille="lg"
-              variante="contour"
-              className="border-white text-white hover:bg-white/10"
-            >
+            <Button asChild taille="lg" variante="contour-clair">
               <Link href="/contact?profil=beneficiaire">Demander un équipement</Link>
             </Button>
           </div>
