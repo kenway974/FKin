@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { AideChamp, Champ, Input, Label, MessageErreur } from "@/components/ui/field";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 import { IMAGE_TAILLE_MAX_OCTETS, IMAGE_TYPES_ACCEPTES } from "@/lib/validation/contenu";
-import { env } from "@/lib/env";
+import { envPublic } from "@/lib/env-public";
 import { genererSlug } from "@/lib/utils";
 
 /**
@@ -85,7 +85,7 @@ export function TeleversementImage({
     const chemin = `${dossier}/${base}-${Date.now()}.${extension}`;
 
     const { error } = await supabase.storage
-      .from(env.NEXT_PUBLIC_SUPABASE_BUCKET)
+      .from(envPublic.NEXT_PUBLIC_SUPABASE_BUCKET)
       .upload(chemin, fichier, { cacheControl: "31536000", upsert: false });
 
     if (error) {
@@ -97,7 +97,9 @@ export function TeleversementImage({
       return;
     }
 
-    const { data } = supabase.storage.from(env.NEXT_PUBLIC_SUPABASE_BUCKET).getPublicUrl(chemin);
+    const { data } = supabase.storage
+      .from(envPublic.NEXT_PUBLIC_SUPABASE_BUCKET)
+      .getPublicUrl(chemin);
     onChange(data.publicUrl);
     setEnCours(false);
   }

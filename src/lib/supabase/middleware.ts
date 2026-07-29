@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { env, supabaseConfigure } from "@/lib/env";
+import { envPublic, supabaseConfigure } from "@/lib/env-public";
 import type { Database } from "@/types/database";
 
 /**
@@ -19,8 +19,8 @@ export async function rafraichirSession(requete: NextRequest) {
   }
 
   const supabase = createServerClient<Database>(
-    env.NEXT_PUBLIC_SUPABASE_URL as string,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+    envPublic.NEXT_PUBLIC_SUPABASE_URL as string,
+    envPublic.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
     {
       cookies: {
         getAll() {

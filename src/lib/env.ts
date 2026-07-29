@@ -1,44 +1,31 @@
+import "server-only";
+
 import { z } from "zod";
+import { envPublic } from "@/lib/env-public";
 
 /**
- * Lecture et validation centralisées des variables d'environnement.
+ * Variables d'environnement du serveur.
  *
- * Choix assumé : **rien n'est obligatoire au build**. Le site doit pouvoir être
- * cloné, installé et lancé avant que le projet Supabase n'existe — c'est
- * exactement le scénario décrit dans le cahier des charges. Les fonctionnalités
- * qui dépendent d'un service manquant se désactivent proprement plutôt que de
- * faire planter l'application (voir `lib/supabase/*` et `lib/data.ts`).
+ * Ce module importe `server-only` : toute tentative de l'inclure depuis un
+ * composant client échoue à la compilation, avec un message explicite. Les
+ * secrets décrits ici ne peuvent donc pas atteindre le navigateur, même par
+ * accident lors d'une refonte future. Le code client passe par
+ * `lib/env-public.ts`.
  *
- * Les helpers `exigerX()` en bas de fichier servent aux points d'entrée qui,
- * eux, ne peuvent pas fonctionner sans la variable : ils lèvent une erreur
- * explicite au moment de l'appel, pas à l'import.
+ * Choix assumé : **rien n'est obligatoire au build**. Le site doit pouvoir
+ * être cloné, installé et déployé avant que le projet Supabase n'existe.
+ * Les fonctionnalités dépendant d'un service manquant se désactivent
+ * proprement plutôt que de faire planter l'application (voir `lib/data.ts`).
  */
-const schemaEnv = z.object({
-  // --- Public (exposé au navigateur) -----------------------------------------
-  NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
-  NEXT_PUBLIC_SUPABASE_URL: z.url().optional(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(20).optional(),
-  NEXT_PUBLIC_SUPABASE_BUCKET: z.string().min(1).default("medias"),
-
-  // --- Serveur uniquement (jamais envoyé au navigateur) ----------------------
+const schemaServeur = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(20).optional(),
   RESEND_API_KEY: z.string().startsWith("re_").optional(),
   RESEND_FROM_EMAIL: z.string().min(3).optional(),
   CONTACT_NOTIFICATION_EMAIL: z.string().min(3).optional(),
-
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 });
 
-/**
- * Next.js remplace `process.env.NEXT_PUBLIC_*` à la compilation uniquement si
- * la référence est écrite littéralement. On ne peut donc pas passer
- * `process.env` en bloc : chaque variable publique est nommée explicitement.
- */
 const brut = {
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  NEXT_PUBLIC_SUPABASE_BUCKET: process.env.NEXT_PUBLIC_SUPABASE_BUCKET,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
@@ -51,22 +38,21 @@ const nettoye = Object.fromEntries(
   Object.entries(brut).filter(([, valeur]) => valeur !== undefined && valeur !== ""),
 );
 
-const resultat = schemaEnv.safeParse(nettoye);
+const resultat = schemaServeur.safeParse(nettoye);
 
 if (!resultat.success) {
   console.error(
-    "Variables d'environnement invalides :",
+    "Variables d'environnement serveur invalides :",
     z.flattenError(resultat.error).fieldErrors,
   );
-  throw new Error("Variables d'environnement invalides. Voir .env.example.");
+  throw new Error("Variables d'environnement serveur invalides. Voir .env.example.");
 }
 
-export const env = resultat.data;
-
-/** Vrai si les variables permettant de lire la base publique sont présentes. */
-export const supabaseConfigure = Boolean(
-  env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-);
+/**
+ * Toutes les variables lisibles côté serveur : les publiques et les secrètes.
+ * Le code serveur n'a ainsi qu'un seul point d'entrée à connaître.
+ */
+export const env = { ...envPublic, ...resultat.data };
 
 /** Vrai si l'écriture privilégiée côté serveur est possible (messages entrants). */
 export const supabaseServiceConfigure = Boolean(
@@ -78,5 +64,5 @@ export const resendConfigure = Boolean(
   env.RESEND_API_KEY && env.RESEND_FROM_EMAIL && env.CONTACT_NOTIFICATION_EMAIL,
 );
 
-/** URL publique du site, sans slash final. */
-export const urlSite = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+// Réexportés pour que le code serveur n'ait pas à jongler entre deux modules.
+export { supabaseConfigure, urlSite } from "@/lib/env-public";

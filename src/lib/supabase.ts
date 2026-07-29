@@ -16,7 +16,11 @@
  *   import { creerClientService }    from "@/lib/supabase/server";  // écriture privilégiée
  */
 
-export { supabaseConfigure, supabaseServiceConfigure } from "@/lib/env";
+// Réexporté depuis le module public : ce barrel doit rester importable
+// partout, y compris depuis un composant client.
+// `supabaseServiceConfigure` n'y figure pas volontairement — c'est une notion
+// serveur, à importer depuis `@/lib/env`.
+export { supabaseConfigure } from "@/lib/env-public";
 export type {
   Admin,
   Article,
