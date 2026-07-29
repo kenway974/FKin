@@ -37,12 +37,16 @@ create extension if not exists pgcrypto;
 -- -----------------------------------------------------------------------------
 
 -- Tient `updated_at` à jour automatiquement à chaque UPDATE.
+--
+-- `search_path` est figé : sans cela, un rôle disposant d'un schéma temporaire
+-- pourrait y placer sa propre fonction `now()` et détourner l'appel.
 create or replace function public.maj_updated_at()
 returns trigger
 language plpgsql
+set search_path = pg_catalog, pg_temp
 as $$
 begin
-  new.updated_at = now();
+  new.updated_at = pg_catalog.now();
   return new;
 end;
 $$;
@@ -89,6 +93,15 @@ $$;
 
 comment on function public.est_admin() is
   'Vrai si l''utilisateur authentifié figure dans la table admins.';
+
+-- Ferme l'accès RPC (/rest/v1/rpc/est_admin) aux visiteurs non authentifiés.
+--
+-- `authenticated` doit en revanche conserver EXECUTE : une expression de
+-- politique RLS est évaluée avec les droits du rôle qui interroge la base.
+-- Révoquer ce droit rendrait tout le back-office inaccessible.
+revoke execute on function public.est_admin() from public;
+revoke execute on function public.est_admin() from anon;
+grant  execute on function public.est_admin() to authenticated;
 
 
 -- -----------------------------------------------------------------------------
@@ -336,11 +349,21 @@ insert into storage.buckets (id, name, public)
 values ('medias', 'medias', true)
 on conflict (id) do nothing;
 
+-- Aucune politique SELECT : c'est volontaire.
+--
+-- Un bucket public sert déjà ses fichiers via /storage/v1/object/public/…
+-- sans passer par la RLS. Une politique SELECT large n'aurait servi qu'à
+-- l'API `list()` — que l'application n'utilise pas — et aurait permis
+-- d'énumérer l'intégralité des fichiers téléversés.
+--
+-- Si un jour les images cessaient de s'afficher, c'est la première piste à
+-- vérifier ; la politique à rétablir serait :
+--   create policy "Images lisibles par tous"
+--     on storage.objects for select
+--     to anon, authenticated
+--     using (bucket_id = 'medias');
+
 drop policy if exists "Images lisibles par tous" on storage.objects;
-create policy "Images lisibles par tous"
-  on storage.objects for select
-  to anon, authenticated
-  using (bucket_id = 'medias');
 
 drop policy if exists "Les admins téléversent des images" on storage.objects;
 create policy "Les admins téléversent des images"

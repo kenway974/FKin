@@ -95,6 +95,18 @@ quoi que ce soit chez Supabase.
 
 ## 4. Brancher Supabase
 
+> ✅ **Déjà fait pour ce déploiement.** Le projet `dons-solidaires`
+> (ref `ujvfqlriwylxrkjwamjc`, région eu-west-3 / Paris) a été provisionné : le
+> schéma, les politiques RLS, le bucket `medias` et le contenu de démonstration
+> sont en place. Les étapes 4.1 à 4.4 sont donc terminées.
+>
+> Restent à votre charge, parce qu'elles exigent des accès que l'automatisation
+> n'a pas : **créer le compte administrateur** (4.5) et **récupérer la clé
+> `service_role`** (4.6), qui n'est jamais exposée hors du dashboard.
+>
+> Les étapes ci-dessous restent la marche à suivre complète si vous devez un
+> jour recréer le projet de zéro.
+
 Ces six étapes sont à réaliser une seule fois. Comptez une vingtaine de minutes.
 
 ### 4.1 Créer le projet
