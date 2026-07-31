@@ -383,7 +383,11 @@ export default async function PageAccueil() {
             ne pouvons pas, et sous quel délai.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Button asChild taille="lg" className="text-vert-fonce bg-white hover:bg-white/90">
+            <Button
+              asChild
+              taille="lg"
+              className="pulse-cta bouton-brillant text-vert-fonce bg-white hover:bg-white/90"
+            >
               <Link href="/contact?profil=entreprise">Proposer un don de matériel</Link>
             </Button>
             <Button asChild taille="lg" variante="contour-clair">

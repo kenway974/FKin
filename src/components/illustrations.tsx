@@ -54,7 +54,7 @@ export function SceneBanniere({ className }: { className?: string }) {
 
       {/* Soleil et son halo */}
       <circle cx="905" cy="170" r="150" fill="url(#soleil-halo)" />
-      <circle cx="905" cy="170" r="52" fill="#e8a33d" />
+      <circle cx="905" cy="170" r="52" fill="#e8a33d" className="respire-soleil" />
 
       {/* Ligne d'horizon lointaine */}
       <path

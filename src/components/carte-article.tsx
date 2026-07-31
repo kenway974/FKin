@@ -17,7 +17,7 @@ export function CarteArticle({
   const resume = article.extrait?.trim() || extraireResume(article.contenu, 150);
 
   return (
-    <Card className="relative h-full transition-shadow focus-within:shadow-md hover:shadow-md">
+    <Card className="group carte-relief relative h-full">
       <article className="flex h-full flex-col">
         {article.image_couverture ? (
           <div className="bg-sable relative aspect-[16/9] w-full">
@@ -26,7 +26,7 @@ export function CarteArticle({
               alt={article.image_alt ?? ""}
               fill
               sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
-              className="object-cover"
+              className="zoom-survol object-cover"
               priority={priorite}
               loading={priorite ? undefined : "lazy"}
             />

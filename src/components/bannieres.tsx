@@ -87,7 +87,10 @@ export function BannierePage({
 
   return (
     <section className="relative isolate overflow-hidden">
-      <div className={cn("absolute inset-0 -z-20 bg-linear-to-br", tons[ton])} aria-hidden="true" />
+      <div
+        className={cn("fond-anime absolute inset-0 -z-20 bg-linear-to-br", tons[ton])}
+        aria-hidden="true"
+      />
 
       {photo ? (
         <>

@@ -14,7 +14,7 @@ import type { Projet } from "@/types/database";
  */
 export function CarteProjet({ projet, priorite = false }: { projet: Projet; priorite?: boolean }) {
   return (
-    <Card className="h-full">
+    <Card className="group carte-relief h-full">
       <article className="flex h-full flex-col">
         {projet.image_url ? (
           <div className="bg-sable relative aspect-[4/3] w-full">
@@ -23,7 +23,7 @@ export function CarteProjet({ projet, priorite = false }: { projet: Projet; prio
               alt={projet.image_alt ?? `Photographie du projet : ${projet.titre}`}
               fill
               sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
-              className="object-cover"
+              className="zoom-survol object-cover"
               priority={priorite}
               loading={priorite ? undefined : "lazy"}
             />

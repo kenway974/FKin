@@ -334,3 +334,135 @@ p {
     var(--color-vert) 100%
   );
 }
+
+/* --------------------------------------------------------------------------
+   Animations — deuxième vague
+   --------------------------------------------------------------------------
+   Toujours en CSS pur, sans JavaScript. Toutes ces animations sont neutralisées
+   par le bloc `prefers-reduced-motion: reduce` défini plus haut.
+   -------------------------------------------------------------------------- */
+
+@keyframes pulsation-douce {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-soleil) 55%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-soleil) 0%, transparent);
+  }
+}
+
+@keyframes brillance {
+  from {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+@keyframes respiration-soleil {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes glissement-fond {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Anneau de pulsation autour d'un bouton d'appel à l'action majeur. */
+@utility pulse-cta {
+  animation: pulsation-douce 2.8s ease-out infinite;
+}
+
+/* Reflet lumineux qui traverse un bouton au survol. À poser sur un bouton en
+   `position: relative; overflow: hidden`. */
+@utility bouton-brillant {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, white 45%, transparent),
+      transparent
+    );
+    transform: translateX(-120%) skewX(-18deg);
+    pointer-events: none;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    animation: brillance 0.75s ease;
+  }
+}
+
+/* Zoom doux d'une image au survol de sa carte. À poser sur l'`<img>`/conteneur ;
+   la carte parente doit être `overflow: hidden`. */
+@utility zoom-survol {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+  .group:hover &,
+  .group:focus-within & {
+    transform: scale(1.05);
+  }
+}
+
+/* Le soleil de la bannière « respire » lentement. */
+@utility respire-soleil {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: respiration-soleil 7s ease-in-out infinite;
+}
+
+/* Dégradé animé, pour les grands aplats de bannière. Le fond doit être un
+   `background` de type gradient avec `background-size: 200% 200%`. */
+@utility fond-anime {
+  background-size: 200% 200% !important;
+  animation: glissement-fond 14s ease infinite;
+}
+
+/* Soulignement qui se déploie sous un lien de navigation au survol. */
+@utility lien-souligne {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+}

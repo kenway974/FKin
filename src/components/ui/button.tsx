@@ -15,8 +15,8 @@ const variantesBouton = cva(
   {
     variants: {
       variante: {
-        principal: "bg-terre text-white hover:bg-terre-fonce",
-        secondaire: "bg-vert text-white hover:bg-vert-fonce",
+        principal: "bouton-brillant bg-terre text-white hover:bg-terre-fonce",
+        secondaire: "bouton-brillant bg-vert text-white hover:bg-vert-fonce",
         contour: "border-2 border-terre text-terre hover:bg-terre-voile",
         discret: "text-encre hover:bg-sable",
         lien: "text-terre underline underline-offset-4 hover:text-terre-fonce",
@@ -25,7 +25,7 @@ const variantesBouton = cva(
         // `className` : tailwind-merge ne sait pas arbitrer un conflit entre
         // deux couleurs personnalisées du thème, si bien qu'une surcharge du
         // type `bg-white` sur `bg-terre` ne gagnait pas de façon fiable.
-        clair: "bg-white text-encre hover:bg-white/90",
+        clair: "bouton-brillant bg-white text-encre hover:bg-white/90",
         "contour-clair": "border-2 border-white text-white backdrop-blur-sm hover:bg-white/15",
         danger: "border-2 border-red-700 text-red-800 hover:bg-red-50",
       },
