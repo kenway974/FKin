@@ -28,56 +28,56 @@ const etapes = [
     titre: "Vous nous signalez le matériel",
     delai: "Jour 0",
     texte:
-      "Un message via le formulaire de contact suffit : nature du matériel, quantité approximative, adresse et date à laquelle le local doit être libéré. Une liste précise n'est pas nécessaire à ce stade.",
+      "Un message via le formulaire suffit : nature du matériel, quantité approximative, adresse et date de libération du local.",
   },
   {
     numero: "02",
     titre: "Nous qualifions le lot",
     delai: "Sous 72 h",
     texte:
-      "Nous vous répondons en distinguant trois catégories : ce que nous emportons pour réemploi, ce que nous orientons vers une filière de recyclage agréée, et ce que nous ne pouvons pas prendre. Vous savez donc exactement à quoi vous en tenir.",
+      "Nous répondons en trois catégories : ce que nous emportons pour réemploi, ce qui part au recyclage, et ce que nous ne prenons pas.",
   },
   {
     numero: "03",
     titre: "Enlèvement sur votre site",
     delai: "Sous 2 à 4 semaines",
     texte:
-      "Notre équipe se déplace au créneau convenu et assure la manutention. Un inventaire contradictoire est établi et signé sur place : il fait foi pour la suite du parcours.",
+      "Notre équipe se déplace au créneau convenu et assure la manutention. Un inventaire est signé sur place.",
   },
   {
     numero: "04",
     titre: "Test, effacement, reconditionnement",
     delai: "2 à 3 semaines",
     texte:
-      "Chaque équipement est mis sous tension et testé. Les supports de stockage sont effacés par écrasement multi-passes — ou détruits physiquement à votre demande — et un certificat vous est remis. Le matériel non fonctionnel est démonté pour pièces.",
+      "Chaque équipement est testé, les données effacées (certificat remis) ou détruites. Le matériel non fonctionnel est démonté pour pièces.",
   },
   {
     numero: "05",
     titre: "Palettisation et départ en conteneur",
     delai: "Selon le calendrier des convois",
     texte:
-      "Les lots sont regroupés, filmés et palettisés, puis chargés dans un conteneur maritime au départ du Havre ou d'Anvers. La traversée jusqu'à Matadi dure environ cinq semaines.",
+      "Les lots sont palettisés puis chargés en conteneur au Havre ou à Anvers. La traversée jusqu'à Matadi dure environ cinq semaines.",
   },
   {
     numero: "06",
     titre: "Dédouanement et acheminement local",
     delai: "1 à 3 semaines",
     texte:
-      "Notre partenaire sur place prend en charge le dédouanement puis l'acheminement routier jusqu'à Kinshasa ou jusqu'à la structure destinataire. C'est l'étape la plus incertaine du parcours, et nous préférons l'annoncer.",
+      "Notre partenaire prend en charge le dédouanement puis la route jusqu'à la structure. C'est l'étape la plus incertaine.",
   },
   {
     numero: "07",
     titre: "Installation et prise en main",
     delai: "Jour de la livraison",
     texte:
-      "Le matériel est installé dans le local prévu, raccordé et testé en présence de la personne référente. Une première prise en main est assurée avec les enseignants ou les agents concernés.",
+      "Matériel installé, raccordé et testé avec la personne référente. Première prise en main avec les enseignants ou agents.",
   },
   {
     numero: "08",
     titre: "Compte rendu d'usage",
     delai: "3 à 6 mois après",
     texte:
-      "Nous repassons constater l'usage réel du matériel, prendre des photos et recenser les pannes. Ce compte rendu est publié dans nos réalisations et envoyé à l'entreprise donatrice.",
+      "Nous repassons constater l'usage et recenser les pannes. Le compte rendu est publié et envoyé à l'entreprise donatrice.",
   },
 ] as const;
 
@@ -107,7 +107,7 @@ export default function PageCommentCaMarche() {
       <BannierePage
         surtitre="Comment ça marche"
         titre="Le parcours complet d'un don"
-        chapo="Entre le moment où une entreprise nous signale un lot et celui où des élèves s'installent devant les postes, il s'écoule en général trois à quatre mois. Voici précisément ce qui se passe pendant ce temps — délais réels compris."
+        chapo="Du signalement d'un lot à l'installation des élèves devant les postes : trois à quatre mois. Voici ce qui se passe, délais réels compris."
         ton="indigo"
         photo={trouverPhotoBanniere("comment-ca-marche")}
       />
@@ -143,11 +143,9 @@ export default function PageCommentCaMarche() {
           <div className="mt-10">
             <Alert titre="Pourquoi ces délais ?">
               <p>
-                La traversée maritime et le dédouanement représentent à eux seuls la moitié du temps
-                total, et ce sont les deux étapes sur lesquelles nous avons le moins de prise. Nous
-                préférons annoncer un calendrier réaliste plutôt qu&apos;une promesse que nous ne
-                tiendrions pas : un lot enlevé en janvier arrive généralement en salle de classe
-                entre avril et mai.
+                La traversée maritime et le dédouanement pèsent à eux seuls la moitié du délai. Nous
+                préférons annoncer un calendrier réaliste : un lot enlevé en janvier arrive
+                généralement en salle de classe entre avril et mai.
               </p>
             </Alert>
           </div>

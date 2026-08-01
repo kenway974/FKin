@@ -21,7 +21,7 @@ export default function PageContact() {
       <BannierePage
         surtitre="Contact"
         titre="Écrivez-nous"
-        chapo="Que vous ayez du matériel à donner ou un besoin à exprimer, un seul formulaire. Précisez simplement qui vous êtes : votre demande sera orientée vers la bonne personne."
+        chapo="Matériel à donner ou besoin à exprimer : un seul formulaire. Précisez qui vous êtes, on oriente votre demande."
         ton="vert"
         photo={trouverPhotoBanniere("contact")}
       />
@@ -51,8 +51,8 @@ export default function PageContact() {
                 <CardTitre className="text-lg">Délai de réponse</CardTitre>
                 <p className="text-doux flex gap-2.5 text-sm">
                   <Clock className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                  Nous répondons sous 72 heures ouvrées, y compris pour dire que nous ne pouvons pas
-                  donner suite. Vous ne resterez pas sans nouvelles.
+                  Réponse sous 72 heures ouvrées, même pour un refus. Vous ne resterez pas sans
+                  nouvelles.
                 </p>
               </CardBody>
             </Card>
@@ -71,8 +71,8 @@ export default function PageContact() {
                 </p>
                 <p className="text-doux flex gap-2.5 text-sm">
                   <MapPin className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                  Collecte sur toute l&apos;Île-de-France. Distribution à Kinshasa et dans les
-                  provinces desservies par nos partenaires.
+                  Collecte en Île-de-France. Distribution à Kinshasa et dans les provinces
+                  desservies par nos partenaires.
                 </p>
               </CardBody>
             </Card>
@@ -82,8 +82,8 @@ export default function PageContact() {
                 <CardTitre className="text-lg">Pour aller plus vite</CardTitre>
                 <ul className="text-doux space-y-2 text-sm">
                   {[
-                    "Entreprises : indiquez la nature du matériel, la quantité approximative et la date de libération du local.",
-                    "Bénéficiaires : indiquez le nom de la structure, ses effectifs et l'état du local d'accueil.",
+                    "Entreprises : nature du matériel, quantité approximative, date de libération du local.",
+                    "Bénéficiaires : nom de la structure, effectifs, état du local d'accueil.",
                   ].map((conseil) => (
                     <li key={conseil} className="flex gap-2.5">
                       <span

@@ -51,7 +51,7 @@ export default async function PageActualites() {
       <BannierePage
         surtitre="Actualités"
         titre="Nouvelles des convois et du terrain"
-        chapo="Nous publions ici ce qui se passe entre deux livraisons : le départ d'un conteneur, l'installation d'une salle, les difficultés rencontrées et ce que nous en tirons."
+        chapo="Ce qui se passe entre deux livraisons : départ d'un conteneur, installation d'une salle, difficultés rencontrées."
         ton="terre"
         photo={trouverPhotoBanniere("actualites")}
       />

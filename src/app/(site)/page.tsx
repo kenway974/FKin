@@ -30,24 +30,21 @@ const etapes = [
     illustration: IlluCollecte,
     ton: "terre" as const,
     titre: "1. Collecte en Île-de-France",
-    texte:
-      "Vous nous signalez le matériel dont votre entreprise se sépare. Nous évaluons ce qui est réemployable, planifions l'enlèvement sur site et repartons avec un inventaire signé.",
+    texte: "Enlèvement sur votre site, inventaire signé.",
   },
   {
     icone: Ship,
     illustration: IlluTransport,
     ton: "ocre" as const,
     titre: "2. Préparation et acheminement",
-    texte:
-      "Le matériel est testé, nettoyé, les disques sont effacés puis les lots sont palettisés et expédiés par conteneur vers Kinshasa, où un partenaire local prend le relais au dédouanement.",
+    texte: "Matériel testé, données effacées, conteneur vers Kinshasa.",
   },
   {
     icone: GraduationCap,
     illustration: IlluEcole,
     ton: "vert" as const,
     titre: "3. Mise en service au Congo",
-    texte:
-      "Les équipements sont installés dans des écoles, mairies et associations identifiées à l'avance. Chaque livraison donne lieu à des photos et à un compte rendu d'usage qui vous est transmis.",
+    texte: "Installation en école ou mairie, compte rendu d'usage.",
   },
 ] as const;
 
@@ -79,10 +76,8 @@ export default async function PageAccueil() {
         </h1>
 
         <p className="anim-entree anim-retard-2 mt-6 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl">
-          Nous accompagnons les entreprises franciliennes qui renouvellent leur parc informatique,
-          électrique ou mobilier, et nous acheminons ce matériel jusqu&apos;à des écoles, mairies et
-          associations au Congo. De l&apos;enlèvement au compte rendu d&apos;usage, chaque étape est
-          tracée.
+          Nous collectons le matériel dont les entreprises franciliennes se séparent et
+          l&apos;acheminons vers des écoles et associations au Congo. Chaque étape est tracée.
         </p>
 
         <div className="anim-entree anim-retard-3 mt-9 flex flex-col gap-3 sm:flex-row">
@@ -143,7 +138,7 @@ export default async function PageAccueil() {
             <TitreSection
               surtitre="Notre action en bref"
               titre="Une démarche mesurée, pas une promesse"
-              chapo="Nous publions ce que nous constatons sur le terrain. Chaque chiffre correspond à des livraisons documentées, photographiées et signées par les structures bénéficiaires."
+              chapo="Chaque chiffre correspond à des livraisons documentées et signées sur le terrain."
             />
             {/*
             Ces chiffres sont calculés à partir de la base, jamais saisis en dur.
@@ -189,7 +184,7 @@ export default async function PageAccueil() {
             id="titre-parcours"
             surtitre="Comment ça fonctionne"
             titre="Trois temps, de votre local à une salle de classe"
-            chapo="Vous n'avez rien à organiser : nous prenons en charge l'ensemble du parcours et vous rendons compte de ce qui a été fait du matériel."
+            chapo="Vous n'avez rien à organiser : nous prenons en charge tout le parcours."
           />
 
           <ol className="anim-defilement mt-10 grid gap-5 md:grid-cols-3">
@@ -229,9 +224,8 @@ export default async function PageAccueil() {
           <BandeauAccent ton="indigo" className="anim-defilement mt-10">
             <p className="font-titre text-lg font-bold">Comptez trois à quatre mois</p>
             <p className="mt-1.5 text-sm leading-relaxed">
-              La traversée maritime et le dédouanement représentent à eux seuls la moitié du délai,
-              et ce sont les deux étapes sur lesquelles nous avons le moins de prise. Un lot enlevé
-              en janvier arrive généralement en salle de classe entre avril et mai.
+              Un lot enlevé en janvier arrive généralement en salle de classe entre avril et mai —
+              la traversée maritime et le dédouanement pèsent la moitié du délai.
             </p>
           </BandeauAccent>
 
@@ -261,9 +255,8 @@ export default async function PageAccueil() {
                 <Building2 className="text-terre size-8" aria-hidden="true" />
                 <CardTitre>Vous êtes une entreprise d&apos;Île-de-France</CardTitre>
                 <p className="text-doux text-sm leading-relaxed">
-                  Vous renouvelez votre parc et cherchez une alternative à la benne. Nous organisons
-                  l&apos;enlèvement, garantissons l&apos;effacement des données et vous remettons un
-                  inventaire ainsi qu&apos;un compte rendu d&apos;usage exploitable dans votre
+                  Une alternative à la benne : nous organisons l&apos;enlèvement, effaçons les
+                  données et vous remettons inventaire et compte rendu d&apos;usage pour votre
                   rapport RSE.
                 </p>
                 <Button asChild variante="lien" className="px-0">
@@ -282,10 +275,8 @@ export default async function PageAccueil() {
                 <GraduationCap className="text-vert size-8" aria-hidden="true" />
                 <CardTitre>Vous êtes une structure au Congo</CardTitre>
                 <p className="text-doux text-sm leading-relaxed">
-                  École, mairie ou association : vous pouvez nous adresser une demande
-                  d&apos;équipement. Nous examinons chaque dossier avec nos relais locaux, en
-                  fonction du matériel disponible et de votre capacité à l&apos;accueillir
-                  (électricité, local, personne référente).
+                  École, mairie ou association : adressez-nous une demande d&apos;équipement. Nous
+                  examinons chaque dossier avec nos relais locaux, selon le matériel disponible.
                 </p>
                 <Button asChild variante="lien" className="px-0">
                   <Link href="/services#beneficiaires">
@@ -378,9 +369,7 @@ export default async function PageAccueil() {
             Un local à vider ? Parlons-en avant la benne.
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/90">
-            Décrivez-nous en quelques lignes le matériel concerné et son volume. Nous revenons vers
-            vous sous 72 heures avec une réponse claire : ce que nous pouvons prendre, ce que nous
-            ne pouvons pas, et sous quel délai.
+            Décrivez-nous le matériel et son volume. Réponse claire sous 72 heures.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Button

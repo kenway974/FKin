@@ -31,37 +31,37 @@ const servicesEntreprises = [
     icone: ClipboardCheck,
     titre: "Diagnostic du lot",
     texte:
-      "Vous nous transmettez une liste, même approximative. Nous vous disons sous 72 heures ce qui est réemployable, ce qui part en filière de recyclage agréée, et ce que nous ne pouvons pas prendre.",
+      "Envoyez-nous une liste, même approximative. Sous 72 heures, nous vous disons ce qui est réemployable et ce qui part au recyclage.",
   },
   {
     icone: Truck,
     titre: "Enlèvement sur site",
     texte:
-      "Nous nous déplaçons dans toute l'Île-de-France, y compris en étage et sur créneau imposé. Le chargement est assuré par notre équipe : vous n'avez ni palette à préparer, ni manutention à prévoir.",
+      "Partout en Île-de-France, étage compris. Chargement assuré par notre équipe : rien à préparer de votre côté.",
   },
   {
     icone: HardDrive,
     titre: "Effacement des données",
     texte:
-      "Chaque support de stockage est effacé selon une procédure d'écrasement multi-passes, ou détruit physiquement si vous le demandez. Un certificat d'effacement est joint à l'inventaire.",
+      "Effacement multi-passes ou destruction physique sur demande. Certificat joint à l'inventaire.",
   },
   {
     icone: FileText,
     titre: "Inventaire et attestation",
     texte:
-      "Vous recevez un inventaire détaillé du lot enlevé et une attestation de don. Ces pièces sont directement exploitables pour votre rapport RSE ou votre bilan de fin d'exercice.",
+      "Inventaire détaillé et attestation de don, directement exploitables pour votre rapport RSE.",
   },
   {
     icone: Handshake,
     titre: "Compte rendu d'usage",
     texte:
-      "Quelques mois après la livraison, nous vous adressons des photos et un compte rendu indiquant quelle structure a reçu votre matériel et à quoi il sert aujourd'hui.",
+      "Quelques mois plus tard, photos et compte rendu : qui a reçu votre matériel et à quoi il sert.",
   },
   {
     icone: Users,
     titre: "Partenariat sur la durée",
     texte:
-      "Si votre entreprise renouvelle son parc régulièrement, nous mettons en place un calendrier d'enlèvements et un interlocuteur unique côté association.",
+      "Renouvellement régulier de votre parc ? Nous mettons en place un calendrier d'enlèvements et un interlocuteur unique.",
   },
 ] as const;
 
@@ -71,25 +71,25 @@ const servicesBeneficiaires = [
     icone: FileText,
     titre: "Étude de votre demande",
     texte:
-      "Vous nous décrivez votre structure, vos effectifs et vos besoins. Notre relais local vérifie sur place les conditions d'accueil : local sécurisé, alimentation électrique, personne référente.",
+      "Vous décrivez votre structure et vos besoins. Notre relais local vérifie sur place les conditions d'accueil.",
   },
   {
     icone: Warehouse,
     titre: "Dotation en matériel",
     texte:
-      "Selon les arrivages, nous constituons un lot adapté : postes informatiques, onduleurs, rallonges et multiprises, mobilier scolaire, fournitures. Le matériel est fonctionnel et testé.",
+      "Selon les arrivages : postes informatiques, onduleurs, mobilier scolaire, fournitures. Matériel testé et fonctionnel.",
   },
   {
     icone: Wrench,
     titre: "Installation et prise en main",
     texte:
-      "Nos partenaires locaux accompagnent l'installation, l'organisation de la salle et la première prise en main par les enseignants ou les agents, afin que le matériel serve dès la première semaine.",
+      "Nos partenaires locaux accompagnent l'installation et la première prise en main, pour un usage dès la première semaine.",
   },
   {
     icone: Handshake,
     titre: "Suivi après livraison",
     texte:
-      "Nous repassons quelques mois plus tard pour constater l'usage réel, recenser les pannes et, si besoin, compléter la dotation lors du convoi suivant.",
+      "Nous repassons quelques mois plus tard : usage réel, pannes éventuelles, dotation complétée au convoi suivant.",
   },
 ] as const;
 
@@ -99,7 +99,7 @@ export default function PageServices() {
       <BannierePage
         surtitre="Nos services"
         titre="Deux métiers, une même chaîne"
-        chapo="D'un côté, décharger les entreprises franciliennes d'un matériel devenu encombrant, en leur garantissant sécurité des données et traçabilité. De l'autre, équiper durablement des structures au Congo, avec un accompagnement qui ne s'arrête pas à la livraison."
+        chapo="Décharger les entreprises franciliennes de leur matériel, données sécurisées et traçabilité garanties. Équiper durablement des structures au Congo, bien au-delà de la livraison."
         ton="terre"
         photo={trouverPhotoBanniere("services")}
       />
@@ -111,7 +111,7 @@ export default function PageServices() {
             id="titre-entreprises"
             surtitre="Pour les entreprises d'Île-de-France"
             titre="Vous vous séparez de matériel : nous nous occupons de tout"
-            chapo="Aucun coût pour votre entreprise, aucune logistique à organiser de votre côté. Notre engagement porte sur trois points : la sécurité de vos données, la traçabilité du lot et un retour documenté sur son usage final."
+            chapo="Sans coût ni logistique de votre côté. Notre engagement : sécurité des données, traçabilité du lot, retour documenté sur son usage."
           />
 
           <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -133,10 +133,9 @@ export default function PageServices() {
           <div className="mt-8 space-y-5">
             <Alert titre="Ce que nous ne prenons pas">
               <p>
-                Nous refusons le matériel hors d&apos;usage, les écrans cathodiques, les batteries
-                gonflées et tout équipement dont la remise en service coûterait plus cher que son
-                remplacement. Dans ce cas, nous vous orientons vers une filière de recyclage agréée
-                plutôt que de vous laisser sans solution.
+                Ni matériel hors d&apos;usage, ni écrans cathodiques, ni batteries gonflées, ni
+                équipement irréparable à coût raisonnable. Dans ce cas, nous vous orientons vers une
+                filière de recyclage agréée.
               </p>
             </Alert>
 
@@ -157,7 +156,7 @@ export default function PageServices() {
             id="titre-beneficiaires"
             surtitre="Pour les structures au Congo"
             titre="Écoles, mairies et associations : comment être équipé"
-            chapo="Les demandes sont examinées au fil des arrivages. Nous privilégions les structures qui accueillent un public scolaire et qui disposent d'un local pouvant être sécurisé et alimenté en électricité."
+            chapo="Demandes examinées au fil des arrivages. Priorité aux structures à public scolaire disposant d'un local sécurisable et alimenté en électricité."
           />
 
           <ul className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -182,11 +181,11 @@ export default function PageServices() {
                 <CardTitre>Ce qu&apos;il faut nous transmettre</CardTitre>
                 <ul className="text-doux space-y-2.5 text-sm">
                   {[
-                    "Le nom exact et l'adresse de la structure, ainsi que son statut (école publique, école conventionnée, mairie, association).",
-                    "Le nombre de personnes concernées : élèves, enseignants, agents, usagers.",
-                    "Le matériel souhaité, par ordre de priorité, et l'usage prévu.",
-                    "L'état du local : surface, fermeture, présence et stabilité de l'électricité.",
-                    "Le nom et le contact direct d'une personne référente sur place.",
+                    "Nom, adresse et statut de la structure (école, mairie, association).",
+                    "Nombre de personnes concernées : élèves, enseignants, agents.",
+                    "Matériel souhaité, par ordre de priorité, et usage prévu.",
+                    "État du local : surface, fermeture, stabilité de l'électricité.",
+                    "Contact direct d'une personne référente sur place.",
                   ].map((element) => (
                     <li key={element} className="flex gap-2.5">
                       <span

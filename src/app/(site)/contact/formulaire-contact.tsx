@@ -80,13 +80,13 @@ export function FormulaireContact() {
     {
       valeur: "entreprise" as const,
       libelle: "Une entreprise donatrice",
-      precision: "Située en Île-de-France, je souhaite donner du matériel.",
+      precision: "En Île-de-France, je donne du matériel.",
       icone: Building2,
     },
     {
       valeur: "beneficiaire" as const,
       libelle: "Une structure bénéficiaire",
-      precision: "École, mairie ou association au Congo, je cherche à être équipée.",
+      precision: "Au Congo, je cherche à être équipée.",
       icone: GraduationCap,
     },
   ];
@@ -233,8 +233,8 @@ export function FormulaireContact() {
           <MessageErreur id="erreur-message">{errors.message.message}</MessageErreur>
         ) : (
           <AideChamp id="aide-message">
-            Décrivez le matériel concerné et son volume, ou vos besoins et le nombre de personnes
-            concernées. Plus c&apos;est précis, plus notre réponse sera rapide.
+            Décrivez le matériel et son volume, ou vos besoins. Plus c&apos;est précis, plus notre
+            réponse est rapide.
           </AideChamp>
         )}
       </Champ>
@@ -266,9 +266,8 @@ export function FormulaireContact() {
       </div>
 
       <p className="text-doux text-xs leading-relaxed">
-        Les informations transmises sont utilisées uniquement pour traiter votre demande. Elles ne
-        sont ni revendues ni transmises à des tiers. Vous pouvez demander leur suppression à tout
-        moment en nous écrivant.
+        Vos informations servent uniquement à traiter votre demande. Ni revendues, ni transmises à
+        des tiers. Suppression possible à tout moment.
       </p>
     </form>
   );

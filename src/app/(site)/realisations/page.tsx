@@ -60,7 +60,7 @@ export default async function PageRealisations() {
       <BannierePage
         surtitre="Réalisations"
         titre="Ce que le matériel est devenu"
-        chapo="Chaque fiche indique où le matériel est arrivé, de quoi il s'agissait et ce qu'il a concrètement permis de faire. C'est la partie la plus utile de ce site : elle vous permet de vérifier que la démarche va au bout."
+        chapo="Chaque fiche indique le lieu, le matériel livré et ce qu'il a permis de faire. De quoi vérifier que la démarche va au bout."
         ton="vert"
         photo={trouverPhotoBanniere("realisations")}
       />
@@ -95,9 +95,8 @@ export default async function PageRealisations() {
               Votre entreprise peut être le point de départ du prochain projet
             </h2>
             <p className="text-doux mt-3 max-w-2xl">
-              La plupart de ces installations partent d&apos;un simple message : une entreprise qui
-              signale un lot de postes à remplacer. Décrivez-nous le vôtre, nous vous disons
-              rapidement ce que nous pouvons en faire.
+              La plupart de ces installations partent d&apos;un simple message. Décrivez-nous votre
+              lot, nous vous disons rapidement ce que nous pouvons en faire.
             </p>
             <Button asChild className="mt-6">
               <Link href="/contact?profil=entreprise">
