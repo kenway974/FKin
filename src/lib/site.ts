@@ -12,7 +12,7 @@ export const site = {
   baseline: "Le matériel dont vous n'avez plus l'usage devient une salle de classe équipée.",
   description:
     "Nous collectons du matériel informatique, électrique et scolaire auprès des entreprises d'Île-de-France et l'acheminons vers des écoles, mairies et associations au Congo.",
-  email: "contact@passerelle-solidaire.fr",
+  email: "respusse@gmail.com",
   telephone: "+33 1 00 00 00 00",
   adresse: {
     rue: "—",
