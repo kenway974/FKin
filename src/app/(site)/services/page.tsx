@@ -6,6 +6,8 @@ import {
   FileText,
   HardDrive,
   Handshake,
+  Recycle,
+  Sparkles,
   Truck,
   Users,
   Warehouse,
@@ -16,12 +18,13 @@ import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
 import { Section, TitreSection } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
+import { MotifAngle } from "@/components/illustrations";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = {
   title: "Nos services",
   description:
-    "Enlèvement de matériel, effacement des données, inventaire et attestation pour les entreprises d'Île-de-France ; équipement, installation et suivi pour les écoles et associations au Congo.",
+    "Collecte et effacement des données pour les entreprises d'Île-de-France ; équipement des écoles au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
   alternates: { canonical: "/services" },
 };
 
@@ -98,8 +101,8 @@ export default function PageServices() {
     <>
       <BannierePage
         surtitre="Nos services"
-        titre="Deux métiers, une même chaîne"
-        chapo="Décharger les entreprises franciliennes de leur matériel, données sécurisées et traçabilité garanties. Équiper durablement des structures au Congo, bien au-delà de la livraison."
+        titre="Une même chaîne, de la collecte à la formation"
+        chapo="Collecter le matériel des entreprises franciliennes, équiper des structures au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
         ton="terre"
         photo={trouverPhotoBanniere("services")}
       />
@@ -204,6 +207,82 @@ export default function PageServices() {
                 </Button>
               </CardBody>
             </Card>
+          </div>
+        </div>
+      </Section>
+
+      {/* ------------------------------------------------------------ Réparation */}
+      <Section id="reparation" aria-labelledby="titre-reparation">
+        <div className="contenu">
+          <TitreSection
+            id="titre-reparation"
+            surtitre="Réemploi et insertion"
+            titre="Réparer plutôt que jeter, et former en réparant"
+            chapo="Une partie du matériel arrive endommagée. Plutôt que de la mettre au rebut, nous la confions à des recycleries à Kinshasa, où des jeunes apprennent à le remettre en état."
+          />
+
+          <ul className="mt-10 grid gap-5 sm:grid-cols-3">
+            {[
+              {
+                icone: Recycle,
+                titre: "Matériel récupéré",
+                texte: "Postes et périphériques endommagés qui, ailleurs, finiraient à la benne.",
+              },
+              {
+                icone: Wrench,
+                titre: "Remis en état sur place",
+                texte: "Diagnostic, réparation et test dans des recycleries partenaires à Kinshasa.",
+              },
+              {
+                icone: Users,
+                titre: "Des jeunes formés",
+                texte: "Chaque réparation est un atelier : les jeunes acquièrent un vrai savoir-faire.",
+              },
+            ].map((bloc) => (
+              <li key={bloc.titre}>
+                <Card className="h-full">
+                  <CardBody className="space-y-3">
+                    <span className="bg-soleil-voile inline-flex size-11 items-center justify-center rounded-full">
+                      <bloc.icone className="text-ocre size-5" aria-hidden="true" />
+                    </span>
+                    <CardTitre className="text-lg">{bloc.titre}</CardTitre>
+                    <p className="text-doux text-sm leading-relaxed">{bloc.texte}</p>
+                  </CardBody>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
+
+      {/* ------------------------------------------------------------- Formation */}
+      <Section id="formation" fond="sable" aria-labelledby="titre-formation">
+        <div className="contenu">
+          <div className="rounded-douce border-bordure relative overflow-hidden border bg-white p-8 md:p-12">
+            <MotifAngle className="text-indigo -top-16 -right-16 size-72 opacity-10" />
+            <div className="relative max-w-2xl">
+              <span className="bg-indigo-voile text-indigo inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
+                <Sparkles className="size-3.5" aria-hidden="true" />
+                Bientôt
+              </span>
+              <h2 id="titre-formation" className="font-titre mt-4 text-2xl font-bold md:text-3xl">
+                Un centre de formation aux métiers de l&apos;informatique
+              </h2>
+              <p className="text-doux mt-3 leading-relaxed">
+                À Kinshasa, un centre de formation voit le jour : maintenance, réparation et bases du
+                numérique, pour donner aux jeunes un métier autour du matériel qui arrive.
+              </p>
+              <p className="text-doux mt-3 text-sm">
+                Le projet est en cours de montage. Écrivez-nous pour suivre son ouverture ou y
+                contribuer.
+              </p>
+              <Button asChild variante="secondaire" className="mt-6">
+                <Link href="/contact">
+                  En savoir plus sur le centre
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </Section>

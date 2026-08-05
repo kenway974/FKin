@@ -1,6 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Building2, GraduationCap, PackageCheck, Ship, Truck } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  GraduationCap,
+  PackageCheck,
+  Recycle,
+  Ship,
+  Truck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
@@ -289,6 +297,54 @@ export default async function PageAccueil() {
           </div>
         </div>
       </Section>
+
+      {/* -------------------------------------- Au-delà de la distribution (Congo) */}
+      <section className="bg-terre-voile relative isolate overflow-hidden py-16 md:py-20">
+        <MotifAngle className="text-terre -top-20 -right-20 size-80 opacity-10" aria-hidden="true" />
+        <div className="contenu relative">
+          <TitreSection
+            surtitre="Au Congo, au-delà de la distribution"
+            titre="Réparer, transmettre, former"
+          />
+          <div className="anim-defilement mt-8 grid gap-5 md:grid-cols-2">
+            <Card className="carte-relief h-full">
+              <CardBody className="space-y-3">
+                <Recycle className="text-ocre size-8" aria-hidden="true" />
+                <CardTitre>La réparation par les jeunes</CardTitre>
+                <p className="text-doux text-sm leading-relaxed">
+                  Le matériel endommagé part en recyclerie à Kinshasa, où des jeunes apprennent à le
+                  remettre en état.
+                </p>
+                <Button asChild variante="lien" className="px-0">
+                  <Link href="/services#reparation">
+                    Comment ça fonctionne
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </Link>
+                </Button>
+              </CardBody>
+            </Card>
+
+            <Card className="carte-relief border-indigo/25 relative h-full overflow-hidden">
+              <span className="bg-indigo absolute inset-x-0 top-0 h-1.5" aria-hidden="true" />
+              <CardBody className="space-y-3">
+                <span className="bg-indigo-voile text-indigo inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold tracking-wide uppercase">
+                  Bientôt
+                </span>
+                <CardTitre>Un centre de formation</CardTitre>
+                <p className="text-doux text-sm leading-relaxed">
+                  Un centre de formation aux métiers de l&apos;informatique voit le jour à Kinshasa.
+                </p>
+                <Button asChild variante="lien" className="px-0">
+                  <Link href="/services#formation">
+                    Découvrir le projet
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </Link>
+                </Button>
+              </CardBody>
+            </Card>
+          </div>
+        </div>
+      </section>
 
       {/* ---------------------------------------------------------- Réalisations */}
       <Section fond="sable" aria-labelledby="titre-realisations">

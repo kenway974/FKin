@@ -49,7 +49,7 @@ const etapes = [
     titre: "Test, effacement, reconditionnement",
     delai: "2 à 3 semaines",
     texte:
-      "Chaque équipement est testé, les données effacées (certificat remis) ou détruites. Le matériel non fonctionnel est démonté pour pièces.",
+      "Chaque équipement est testé, les données effacées (certificat remis) ou détruites. Le matériel endommagé mais réparable rejoint nos ateliers de réparation au Congo.",
   },
   {
     numero: "05",
