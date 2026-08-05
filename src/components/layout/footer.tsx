@@ -10,7 +10,7 @@ export function Footer() {
       <div className="contenu grid gap-10 py-12 md:grid-cols-3 md:py-16">
         <div className="space-y-3">
           <div className="flex items-center gap-2.5">
-            <Logo className="size-9" />
+            <Logo className="h-9" />
             <span className="font-titre text-lg font-bold">{site.nom}</span>
           </div>
           <p className="text-doux max-w-sm text-sm">{site.description}</p>

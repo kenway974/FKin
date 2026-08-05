@@ -35,7 +35,7 @@ export function Header() {
           className="flex items-center gap-2.5"
           aria-label={`${site.nom} — retour à l'accueil`}
         >
-          <Logo className="size-9 shrink-0 md:size-10" />
+          <Logo className="h-9 shrink-0 md:h-10" priority />
           <span className="font-titre text-encre text-lg leading-tight font-bold md:text-xl">
             {site.nom}
           </span>
