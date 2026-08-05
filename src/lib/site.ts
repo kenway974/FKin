@@ -7,8 +7,8 @@
  */
 
 export const site = {
-  nom: "Passerelle Solidaire",
-  nomLong: "Passerelle Solidaire — Île-de-France ↔ Congo",
+  nom: "Respusse",
+  nomLong: "Respusse — Île-de-France ↔ Congo",
   baseline: "Le matériel dont vous n'avez plus l'usage devient une salle de classe équipée.",
   description:
     "Nous collectons du matériel informatique, électrique et scolaire auprès des entreprises d'Île-de-France et l'acheminons vers des écoles, mairies et associations au Congo.",
