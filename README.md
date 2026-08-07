@@ -95,19 +95,11 @@ quoi que ce soit chez Supabase.
 
 ## 4. Brancher Supabase
 
-> ✅ **Déjà fait pour ce déploiement.** Le projet `dons-solidaires`
-> (ref `ujvfqlriwylxrkjwamjc`, région eu-west-3 / Paris) a été provisionné : le
-> schéma, les politiques RLS, le bucket `medias` et le contenu de démonstration
-> sont en place. Les étapes 4.1 à 4.4 sont donc terminées.
->
-> Restent à votre charge, parce qu'elles exigent des accès que l'automatisation
-> n'a pas : **créer le compte administrateur** (4.5) et **récupérer la clé
-> `service_role`** (4.6), qui n'est jamais exposée hors du dashboard.
->
-> Les étapes ci-dessous restent la marche à suivre complète si vous devez un
-> jour recréer le projet de zéro.
+> Ces étapes provisionnent le projet Supabase de zéro : schéma, sécurité,
+> bucket, administrateurs, contenu de départ, puis récupération des clés. Tout
+> se fait depuis le dashboard Supabase et le fichier `.env.local`.
 
-Ces six étapes sont à réaliser une seule fois. Comptez une vingtaine de minutes.
+Ces étapes sont à réaliser une seule fois. Comptez une vingtaine de minutes.
 
 ### 4.1 Créer le projet
 
@@ -129,15 +121,18 @@ Le script crée les tables `articles`, `projets`, `messages` et `admins`, la
 fonction `est_admin()`, toutes les politiques RLS ainsi que le bucket de
 stockage `medias`. Il est idempotent : vous pouvez le rejouer sans risque.
 
-### 4.3 Charger le contenu de démonstration (facultatif mais conseillé)
+### 4.3 Créer les administrateurs et publier les premiers articles
 
-Même opération avec [`supabase/seed.sql`](supabase/seed.sql) : trois projets et
-trois articles fictifs mais crédibles, pour que le site ne soit pas vide lors de
-la première mise en ligne.
+1. **Créez les comptes administrateurs** dans **Authentication → Users →
+   « Add user » → « Create new user »**, en cochant **« Auto Confirm User »**
+   (une adresse par personne autorisée à accéder au back-office).
+2. **SQL Editor → New query** : copiez **l'intégralité** de
+   [`supabase/seed.sql`](supabase/seed.sql) et cliquez sur **Run**.
 
-Tous ces contenus ont un slug commençant par `demo-`. Vous pouvez les supprimer
-un par un depuis le back-office, ou d'un coup avec la requête de nettoyage
-fournie en bas du fichier de seed.
+Le script déclare comme administrateurs les comptes créés à l'étape 1 (il les
+retrouve par leur adresse e-mail — pensez à adapter la liste d'e-mails en haut
+du fichier) et publie trois articles de départ. Les projets de la galerie
+« Réalisations » ne sont pas pré-remplis : ils sont ajoutés depuis le back-office.
 
 ### 4.4 Vérifier le bucket de stockage
 
@@ -149,26 +144,28 @@ S'il n'apparaît pas, créez-le à la main : **Storage** → **New bucket** → 
 `medias`, case **Public bucket** cochée. Les politiques d'écriture, elles, ont
 bien été posées par le script.
 
-### 4.5 Créer le compte administrateur
+### 4.5 Ajouter un administrateur plus tard
+
+Les administrateurs initiaux sont créés à l'étape 4.3. Pour en ajouter un
+**après coup**, sans toucher au code :
 
 1. **Authentication** → **Users** → **Add user** → **Create new user**.
-2. Renseignez votre adresse e-mail et un mot de passe robuste (12 caractères
+2. Renseignez l'adresse e-mail et un mot de passe robuste (12 caractères
    minimum). **Cochez « Auto Confirm User »**, sinon la connexion sera refusée.
 3. Revenez dans **SQL Editor** et exécutez, en remplaçant l'adresse :
 
 ```sql
 insert into public.admins (user_id, email, nom_affichage)
-select id, email, 'Votre prénom'
+select id, email, 'Prénom'
 from auth.users
-where email = 'vous@votre-domaine.fr'
+where email = 'nouvel-admin@exemple.fr'
 on conflict (user_id) do nothing;
 ```
 
-4. Vérifiez : `select * from public.admins;` doit renvoyer une ligne.
+4. Vérifiez : `select * from public.admins;` doit renvoyer la nouvelle ligne.
 
-> **Pour ajouter un second administrateur plus tard**, répétez uniquement les
-> étapes 1 à 3. Aucune modification de code n'est nécessaire : le droit
-> d'administration est une donnée, pas une constante dans le code.
+> Le droit d'administration est une donnée (une ligne dans `admins`), pas une
+> constante dans le code : aucun déploiement n'est nécessaire.
 
 ### 4.6 Renseigner les clés
 
@@ -263,7 +260,7 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
 ├── next.config.mjs              En-têtes de sécurité, CSP, images distantes
 ├── supabase/
 │   ├── schema.sql               Tables, contraintes, RLS, bucket — NON APPLIQUÉ
-│   └── seed.sql                 Contenu de démonstration — NON APPLIQUÉ
+│   └── seed.sql                 Administrateurs + articles de départ — NON APPLIQUÉ
 └── src/
     ├── app/
     │   ├── (site)/              Pages publiques (header + footer communs)

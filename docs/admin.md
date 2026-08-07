@@ -177,19 +177,14 @@ informatique », et non « photo1 ».
 > Vous pouvez aussi coller directement l'adresse d'une image hébergée ailleurs
 > dans le champ prévu à cet effet, sous le bouton de téléversement.
 
-## Supprimer le contenu de démonstration
+## Contenu de départ
 
-Le site est livré avec trois projets et trois articles fictifs, pour qu'il ne
-soit pas vide au lancement. **Ils doivent être retirés dès que vous avez du
-contenu réel.**
+Le site démarre avec **trois articles** déjà publiés (installés par
+`supabase/seed.sql`) et **aucun projet** dans la galerie « Réalisations ».
 
-Ils sont faciles à repérer : leur adresse commence par `demo-`.
-
-1. **Articles** → ouvrez chaque article de démonstration → **Supprimer**.
-2. **Projets** → même opération.
-
-C'est la méthode recommandée. Une requête SQL de nettoyage existe aussi, en bas
-du fichier `supabase/seed.sql`, si vous préférez tout supprimer d'un coup.
+Les projets sont à ajouter depuis l'onglet **Projets** au fur et à mesure des
+réalisations. Vous pouvez modifier ou supprimer les articles de départ, ou en
+publier d'autres, à tout moment depuis l'onglet **Articles**.
 
 ## Questions fréquentes
 
