@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 /**
  * Scène principale de la bannière d'accueil.
  *
- * Raconte le trajet en une image : un immeuble de bureaux francilien à gauche,
+ * Raconte le trajet en une image : un immeuble de bureaux (en France) à gauche,
  * un conteneur au centre, une école baignée de soleil à droite.
  */
 export function SceneBanniere({ className }: { className?: string }) {
@@ -63,7 +63,7 @@ export function SceneBanniere({ className }: { className?: string }) {
         opacity="0.55"
       />
 
-      {/* --- Rive gauche : immeubles de bureaux (Île-de-France) --- */}
+      {/* --- Rive gauche : immeubles de bureaux (France) --- */}
       <g opacity="0.95">
         <rect x="60" y="150" width="94" height="180" rx="4" fill="#243a47" />
         <rect x="168" y="196" width="76" height="134" rx="4" fill="#2f4858" />

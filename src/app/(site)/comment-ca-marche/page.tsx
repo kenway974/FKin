@@ -12,7 +12,7 @@ import { urlSite } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Comment ça marche",
   description:
-    "Le parcours complet d'un don, du premier message d'une entreprise francilienne jusqu'à la mise en service du matériel dans une école au Congo, étape par étape et avec les délais.",
+    "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école au Congo, étape par étape et avec les délais.",
   alternates: { canonical: "/comment-ca-marche" },
 };
 
@@ -85,9 +85,9 @@ export default function PageCommentCaMarche() {
   const donneesStructurees = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "Le parcours d'un don de matériel, de l'Île-de-France au Congo",
+    name: "Le parcours d'un don de matériel, de la France au Congo",
     description:
-      "Les huit étapes suivies par un lot de matériel, de son signalement par une entreprise francilienne à sa mise en service dans une structure au Congo.",
+      "Les huit étapes suivies par un lot de matériel, de son signalement par une entreprise en France à sa mise en service dans une structure au Congo.",
     url: `${urlSite}/comment-ca-marche`,
     step: etapes.map((etape, index) => ({
       "@type": "HowToStep",

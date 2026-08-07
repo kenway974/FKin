@@ -16,7 +16,7 @@ import { urlSite } from "@/lib/env";
 export const metadata: Metadata = {
   metadataBase: new URL(urlSite),
   title: {
-    default: `${site.nom} — Dons de matériel, Île-de-France ↔ Congo`,
+    default: `${site.nom} — Dons de matériel, France ↔ Congo`,
     template: `%s · ${site.nom}`,
   },
   description: site.description,
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   keywords: [
     "don de matériel informatique",
     "mécénat de matériel",
-    "entreprise Île-de-France",
+    "collecte matériel entreprise France",
     "écoles Kinshasa",
     "solidarité Congo",
     "réemploi informatique",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: urlSite,
     siteName: site.nom,
-    title: `${site.nom} — Dons de matériel, Île-de-France ↔ Congo`,
+    title: `${site.nom} — Dons de matériel, France ↔ Congo`,
     description: site.description,
   },
   twitter: {

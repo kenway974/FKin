@@ -80,7 +80,7 @@ export function FormulaireContact() {
     {
       valeur: "entreprise" as const,
       libelle: "Une entreprise donatrice",
-      precision: "En Île-de-France, je donne du matériel.",
+      precision: "En France, je donne du matériel.",
       icone: Building2,
     },
     {

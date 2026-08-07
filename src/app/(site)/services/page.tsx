@@ -24,7 +24,7 @@ import { trouverPhotoBanniere } from "@/lib/visuels";
 export const metadata: Metadata = {
   title: "Nos services",
   description:
-    "Collecte et effacement des données pour les entreprises d'Île-de-France ; équipement des écoles au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
+    "Collecte et effacement des données pour les entreprises partout en France ; équipement des écoles au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
   alternates: { canonical: "/services" },
 };
 
@@ -40,7 +40,7 @@ const servicesEntreprises = [
     icone: Truck,
     titre: "Enlèvement sur site",
     texte:
-      "Partout en Île-de-France, étage compris. Chargement assuré par notre équipe : rien à préparer de votre côté.",
+      "Partout en France, étage compris. Chargement assuré par notre équipe : rien à préparer de votre côté.",
   },
   {
     icone: HardDrive,
@@ -102,7 +102,7 @@ export default function PageServices() {
       <BannierePage
         surtitre="Nos services"
         titre="Une même chaîne, de la collecte à la formation"
-        chapo="Collecter le matériel des entreprises franciliennes, équiper des structures au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
+        chapo="Collecter le matériel des entreprises partout en France, équiper des structures au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
         ton="terre"
         photo={trouverPhotoBanniere("services")}
       />
@@ -112,7 +112,7 @@ export default function PageServices() {
         <div className="contenu">
           <TitreSection
             id="titre-entreprises"
-            surtitre="Pour les entreprises d'Île-de-France"
+            surtitre="Pour les entreprises en France"
             titre="Vous vous séparez de matériel : nous nous occupons de tout"
             chapo="Sans coût ni logistique de votre côté. Notre engagement : sécurité des données, traçabilité du lot, retour documenté sur son usage."
           />

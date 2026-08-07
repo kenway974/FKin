@@ -10,7 +10,7 @@ import { pictogrammeDataUri } from "@/lib/marque-og";
  * (`lib/marque-og.ts`) : Satori n'a pas accès au système de fichiers une fois
  * déployé, il faut donc lui fournir l'image encodée.
  */
-export const alt = `${site.nom} — dons de matériel entre l'Île-de-France et le Congo`;
+export const alt = `${site.nom} — dons de matériel entre la France et le Congo`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -39,7 +39,7 @@ export default function Image() {
             Le matériel dont vous n&apos;avez plus l&apos;usage devient une salle de classe équipée.
           </div>
           <div style={{ fontSize: 30, color: "#5a6b7a" }}>
-            Collecte en Île-de-France · Distribution au Congo
+            Collecte partout en France · Distribution au Congo
           </div>
         </div>
 

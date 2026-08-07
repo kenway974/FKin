@@ -8,10 +8,10 @@
 
 export const site = {
   nom: "Respusse",
-  nomLong: "Respusse — Île-de-France ↔ Congo",
+  nomLong: "Respusse — France ↔ Congo",
   baseline: "Le matériel dont vous n'avez plus l'usage devient une salle de classe équipée.",
   description:
-    "Nous collectons du matériel informatique, électrique et scolaire auprès des entreprises d'Île-de-France et l'acheminons vers des écoles, mairies et associations au Congo.",
+    "Nous collectons du matériel informatique, électrique et scolaire auprès des entreprises partout en France et l'acheminons vers des écoles, mairies et associations au Congo.",
   email: "respusse@gmail.com",
   // Numéro provisoire, à remplacer par la ligne réelle de la structure.
   telephone: "+33 1 00 00 00 00",
@@ -21,7 +21,7 @@ export const site = {
     ville: "L'Haÿ-les-Roses",
     pays: "FR",
   },
-  zones: ["Île-de-France (collecte)", "Kinshasa et République du Congo (distribution)"],
+  zones: ["France entière (collecte)", "Kinshasa et République du Congo (distribution)"],
 } as const;
 
 /** Navigation principale, réutilisée par le header, le footer et le sitemap. */

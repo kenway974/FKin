@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Donnez une seconde vie à votre matériel",
   description:
-    "Nous collectons le matériel informatique, électrique et scolaire des entreprises d'Île-de-France et l'acheminons vers des écoles et associations au Congo. Traçabilité, reçus, comptes rendus d'usage.",
+    "Nous collectons le matériel informatique, électrique et scolaire des entreprises partout en France et l'acheminons vers des écoles et associations au Congo. Traçabilité, reçus, comptes rendus d'usage.",
   alternates: { canonical: "/" },
 };
 
@@ -37,7 +37,7 @@ const etapes = [
     icone: Truck,
     illustration: IlluCollecte,
     ton: "terre" as const,
-    titre: "1. Collecte en Île-de-France",
+    titre: "1. Collecte partout en France",
     texte: "Enlèvement sur votre site, inventaire signé.",
   },
   {
@@ -75,7 +75,7 @@ export default async function PageAccueil() {
       <BanniereAccueil photo={photoBanniere} photoAlt="">
         <p className="anim-entree bg-soleil/25 ring-soleil/40 mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold ring-1 backdrop-blur-sm">
           <span className="bg-soleil size-2 rounded-full" aria-hidden="true" />
-          Collecte en Île-de-France · Distribution au Congo
+          Collecte partout en France · Distribution au Congo
         </p>
 
         <h1 className="anim-entree anim-retard-1 text-4xl leading-[1.08] font-bold text-balance md:text-6xl lg:text-7xl">
@@ -84,7 +84,7 @@ export default async function PageAccueil() {
         </h1>
 
         <p className="anim-entree anim-retard-2 mt-6 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl">
-          Nous collectons le matériel dont les entreprises franciliennes se séparent et
+          Nous collectons le matériel dont les entreprises françaises se séparent et
           l&apos;acheminons vers des écoles et associations au Congo. Chaque étape est tracée.
         </p>
 
@@ -106,7 +106,7 @@ export default async function PageAccueil() {
             {
               icone: Building2,
               texte: "Enlèvement sur votre site",
-              detail: "Toute l'Île-de-France",
+              detail: "Partout en France",
             },
             { icone: PackageCheck, texte: "Données effacées", detail: "Certificat remis" },
             { icone: GraduationCap, texte: "Compte rendu d'usage", detail: "Photos à l'appui" },
@@ -128,7 +128,7 @@ export default async function PageAccueil() {
       {/* ---------------------------------------------------------------- Ruban */}
       <RubanDefilant
         mentions={[
-          "Enlèvement gratuit en Île-de-France",
+          "Enlèvement gratuit partout en France",
           "Effacement certifié des disques",
           "Inventaire et attestation de don",
           "Acheminement par conteneur",
@@ -261,7 +261,7 @@ export default async function PageAccueil() {
               <MotifAngle className="text-terre -top-12 -right-12 size-48 opacity-10" />
               <CardBody className="relative space-y-3">
                 <Building2 className="text-terre size-8" aria-hidden="true" />
-                <CardTitre>Vous êtes une entreprise d&apos;Île-de-France</CardTitre>
+                <CardTitre>Vous êtes une entreprise en France</CardTitre>
                 <p className="text-doux text-sm leading-relaxed">
                   Une alternative à la benne : nous organisons l&apos;enlèvement, effaçons les
                   données et vous remettons inventaire et compte rendu d&apos;usage pour votre

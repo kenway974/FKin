@@ -28,7 +28,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       addressCountry: site.adresse.pays,
     },
     areaServed: [
-      { "@type": "AdministrativeArea", name: "Île-de-France" },
+      { "@type": "Country", name: "France" },
       { "@type": "Country", name: "République démocratique du Congo" },
       { "@type": "Country", name: "République du Congo" },
     ],
