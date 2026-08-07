@@ -46,6 +46,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 0.7,
     },
+    {
+      url: `${urlSite}/mentions-legales`,
+      lastModified: maintenant,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    {
+      url: `${urlSite}/confidentialite`,
+      lastModified: maintenant,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
   ];
 
   const articles = await listerArticlesPublies();

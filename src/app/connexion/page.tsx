@@ -31,7 +31,7 @@ export default function PageConnexion() {
       <main id="contenu-principal" className="flex flex-1 items-start justify-center px-5 pb-16">
         <div className="w-full max-w-md">
           <div className="mb-6 flex flex-col items-center text-center">
-            <Logo className="size-14" />
+            <Logo className="h-14" />
             <h1 className="font-titre mt-3 text-2xl font-bold">Espace d&apos;administration</h1>
             <p className="text-doux mt-1 text-sm">{site.nom}</p>
           </div>

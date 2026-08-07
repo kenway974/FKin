@@ -13,11 +13,12 @@ export const site = {
   description:
     "Nous collectons du matériel informatique, électrique et scolaire auprès des entreprises d'Île-de-France et l'acheminons vers des écoles, mairies et associations au Congo.",
   email: "respusse@gmail.com",
+  // Numéro provisoire, à remplacer par la ligne réelle de la structure.
   telephone: "+33 1 00 00 00 00",
   adresse: {
     rue: "—",
-    codePostal: "—",
-    ville: "Île-de-France",
+    codePostal: "94240",
+    ville: "L'Haÿ-les-Roses",
     pays: "FR",
   },
   zones: ["Île-de-France (collecte)", "Kinshasa et République du Congo (distribution)"],

@@ -21,6 +21,12 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     url: urlSite,
     description: site.description,
     email: site.email,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: site.adresse.ville,
+      postalCode: site.adresse.codePostal,
+      addressCountry: site.adresse.pays,
+    },
     areaServed: [
       { "@type": "AdministrativeArea", name: "Île-de-France" },
       { "@type": "Country", name: "République démocratique du Congo" },

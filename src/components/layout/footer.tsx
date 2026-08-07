@@ -49,9 +49,9 @@ export function Footer() {
             <li className="flex items-start gap-2">
               <MapPin className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <span>
-                Collecte en Île-de-France
+                {site.adresse.ville} ({site.adresse.codePostal})
                 <br />
-                Distribution à Kinshasa et au Congo
+                Collecte en Île-de-France · Distribution à Kinshasa et au Congo
               </span>
             </li>
           </ul>
@@ -59,13 +59,27 @@ export function Footer() {
       </div>
 
       <div className="border-bordure/70 border-t">
-        <div className="contenu text-doux flex flex-col gap-2 py-5 text-xs sm:flex-row sm:items-center sm:justify-between">
+        <div className="contenu text-doux flex flex-col gap-3 py-5 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {site.nom}. Tous droits réservés.
           </p>
-          <Link href="/connexion" className="hover:text-terre underline-offset-4 hover:underline">
-            Espace administration
-          </Link>
+          <nav aria-label="Liens légaux" className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Link
+              href="/mentions-legales"
+              className="hover:text-terre underline-offset-4 hover:underline"
+            >
+              Mentions légales
+            </Link>
+            <Link
+              href="/confidentialite"
+              className="hover:text-terre underline-offset-4 hover:underline"
+            >
+              Confidentialité
+            </Link>
+            <Link href="/connexion" className="hover:text-terre underline-offset-4 hover:underline">
+              Espace administration
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>
