@@ -30,7 +30,7 @@ export default function Image() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-          <img src={pictogrammeDataUri} width={66} height={64} alt="" />
+          <img src={pictogrammeDataUri} width={87} height={64} alt="" />
           <div style={{ fontSize: 34, fontWeight: 700, color: "#16263c" }}>{site.nom}</div>
         </div>
 
@@ -45,8 +45,8 @@ export default function Image() {
 
         <div style={{ display: "flex", height: 12, width: "100%" }}>
           <div style={{ flex: 2, backgroundColor: "#16263c" }} />
-          <div style={{ flex: 1, backgroundColor: "#4e8a2e" }} />
-          <div style={{ flex: 1, backgroundColor: "#7cae4f" }} />
+          <div style={{ flex: 1, backgroundColor: "#2f6fb0" }} />
+          <div style={{ flex: 1, backgroundColor: "#d1463a" }} />
         </div>
       </div>
     ),

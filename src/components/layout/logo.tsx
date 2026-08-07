@@ -2,10 +2,10 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
- * Pictogramme de la marque Respusse : la flèche de recyclage verte, l'ordinateur
- * portable et le sourire en bleu marine. Fourni en PNG détouré (fond
- * transparent), il se pose donc aussi bien sur le fond clair de l'en-tête que
- * sur le sable du pied de page.
+ * Pictogramme de la marque Respusse : un livre ouvert dont les pages forment un
+ * cœur bleu-blanc-rouge, sur une base bleu marine. Fourni en PNG détouré (fond
+ * transparent, cœur en négatif), il se pose donc aussi bien sur le fond clair de
+ * l'en-tête que sur le sable du pied de page.
  *
  * Le mot « Respusse » est rendu à côté, en texte, par les composants qui
  * utilisent ce pictogramme : on garde ainsi un intitulé sélectionnable et
@@ -22,8 +22,8 @@ export function Logo({
     <Image
       src="/marque/respusse-icone.png"
       alt=""
-      width={508}
-      height={490}
+      width={576}
+      height={421}
       priority={priority}
       className={cn("w-auto", className)}
     />

@@ -31,9 +31,9 @@ export default function PageMentionsLegales() {
           <section className="space-y-2">
             <h2 className="font-titre text-encre text-xl font-bold">Éditeur du site</h2>
             <p>
-              Le présent site est édité par <strong>{site.nom}</strong>,{" "}
-              <em>[forme juridique et, le cas échéant, numéro RNA / SIRET — à compléter]</em>, dont
-              le siège est situé à {site.adresse.ville} ({site.adresse.codePostal}), France.
+              Le présent site est édité par <strong>{site.nom}</strong>, association régie par la
+              loi du 1<sup>er</sup> juillet 1901, dont le siège est situé à {site.adresse.ville} (
+              {site.adresse.codePostal}), France.
             </p>
             <p>
               Adresse e-mail :{" "}
@@ -49,9 +49,7 @@ export default function PageMentionsLegales() {
 
           <section className="space-y-2">
             <h2 className="font-titre text-encre text-xl font-bold">Directeur de la publication</h2>
-            <p>
-              <em>[Nom et qualité du responsable de la publication — à compléter.]</em>
-            </p>
+            <p>Le directeur de la publication est Fabrice Malph, représentant légal de l&apos;association.</p>
           </section>
 
           <section className="space-y-2">
