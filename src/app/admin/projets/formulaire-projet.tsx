@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Save, Wand2 } from "lucide-react";
+import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import {
@@ -57,6 +57,15 @@ export function FormulaireProjet({ projet }: { projet?: Projet }) {
 
   const titre = watch("titre");
   const imageUrl = watch("imageUrl") ?? "";
+
+  // Le slug se génère automatiquement à partir du titre tant que l'utilisateur
+  // ne l'a pas modifié à la main. En édition, on ne l'écrase pas.
+  const [slugAuto, setSlugAuto] = React.useState(!modeEdition);
+  React.useEffect(() => {
+    if (slugAuto) {
+      setValue("slug", genererSlug(titre ?? ""), { shouldValidate: true });
+    }
+  }, [titre, slugAuto, setValue]);
 
   async function auEnvoi(donnees: DonneesProjet) {
     const reponse = modeEdition
@@ -113,28 +122,16 @@ export function FormulaireProjet({ projet }: { projet?: Projet }) {
             <Label htmlFor="slug">
               Identifiant (slug) <span aria-hidden="true">*</span>
             </Label>
-            <div className="flex gap-2">
-              <Input
-                id="slug"
-                aria-required="true"
-                aria-invalid={errors.slug ? true : undefined}
-                aria-describedby="aide-slug-projet"
-                {...register("slug")}
-              />
-              <Button
-                type="button"
-                variante="contour"
-                onClick={() =>
-                  setValue("slug", genererSlug(titre), { shouldValidate: true, shouldDirty: true })
-                }
-              >
-                <Wand2 className="size-4" aria-hidden="true" />
-                Depuis le titre
-              </Button>
-            </div>
+            <Input
+              id="slug"
+              aria-required="true"
+              aria-invalid={errors.slug ? true : undefined}
+              aria-describedby="aide-slug-projet"
+              {...register("slug", { onChange: () => setSlugAuto(false) })}
+            />
             <AideChamp id="aide-slug-projet">
-              Identifiant interne, unique. Il n&apos;apparaît pas dans les URL du site mais évite
-              les doublons.
+              Généré automatiquement à partir du titre (modifiable). Identifiant interne unique — il
+              n&apos;apparaît pas dans les URL du site mais évite les doublons.
             </AideChamp>
             <MessageErreur>{errors.slug?.message}</MessageErreur>
           </Champ>

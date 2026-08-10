@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Save, Wand2 } from "lucide-react";
+import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import {
@@ -61,6 +61,16 @@ export function FormulaireArticle({ article }: { article?: Article }) {
 
   const titre = watch("titre");
   const imageCouverture = watch("imageCouverture") ?? "";
+
+  // Le slug se génère automatiquement à partir du titre tant que l'utilisateur
+  // ne l'a pas modifié à la main. En édition, on n'y touche jamais : changer le
+  // slug d'un article publié casserait les liens existants.
+  const [slugAuto, setSlugAuto] = React.useState(!modeEdition);
+  React.useEffect(() => {
+    if (slugAuto) {
+      setValue("slug", genererSlug(titre ?? ""), { shouldValidate: true });
+    }
+  }, [titre, slugAuto, setValue]);
 
   async function auEnvoi(donnees: DonneesArticle) {
     const reponse = modeEdition
@@ -119,32 +129,18 @@ export function FormulaireArticle({ article }: { article?: Article }) {
             <Label htmlFor="slug">
               Adresse de la page (slug) <span aria-hidden="true">*</span>
             </Label>
-            <div className="flex gap-2">
-              <Input
-                id="slug"
-                aria-required="true"
-                aria-invalid={errors.slug ? true : undefined}
-                aria-describedby="aide-slug"
-                {...register("slug")}
-              />
-              <Button
-                type="button"
-                variante="contour"
-                onClick={() =>
-                  setValue("slug", genererSlug(titre), {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                  })
-                }
-              >
-                <Wand2 className="size-4" aria-hidden="true" />
-                Depuis le titre
-              </Button>
-            </div>
+            <Input
+              id="slug"
+              aria-required="true"
+              aria-invalid={errors.slug ? true : undefined}
+              aria-describedby="aide-slug"
+              {...register("slug", { onChange: () => setSlugAuto(false) })}
+            />
             <AideChamp id="aide-slug">
-              L&apos;article sera accessible à l&apos;adresse /actualites/
-              <strong>{watch("slug") || "votre-slug"}</strong>. Évitez de le modifier une fois
-              l&apos;article publié : les liens existants cesseraient de fonctionner.
+              Généré automatiquement à partir du titre (modifiable). L&apos;article sera accessible
+              à l&apos;adresse /actualites/<strong>{watch("slug") || "votre-slug"}</strong>. Évitez
+              de le modifier une fois l&apos;article publié : les liens existants cesseraient de
+              fonctionner.
             </AideChamp>
             <MessageErreur>{errors.slug?.message}</MessageErreur>
           </Champ>
