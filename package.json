@@ -1,8 +1,8 @@
 {
-  "name": "dons-solidaires-idf-congo",
+  "name": "respusse",
   "version": "0.1.0",
   "private": true,
-  "description": "Site vitrine + blog + back-office pour une structure de dons solidaires Île-de-France ↔ Congo.",
+  "description": "Site vitrine, blog et back-office de Respusse — association de dons solidaires : collecte de matériel partout en France, distribution au Congo.",
   "engines": {
     "node": ">=20.9.0"
   },

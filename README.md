@@ -1,13 +1,13 @@
-# Dons solidaires — Île-de-France ↔ Congo
+# Respusse — France ↔ Congo
 
-Site vitrine, blog et back-office d'une structure qui collecte du matériel
-(informatique, électrique, scolaire) auprès d'entreprises d'Île-de-France et
-l'achemine vers des écoles, mairies et associations au Congo.
+Site vitrine, blog et back-office de **Respusse**, association qui collecte du
+matériel (informatique, électrique, scolaire) auprès d'entreprises partout en
+France et l'achemine vers des écoles, mairies et associations au Congo.
 
 Le site poursuit deux objectifs :
 
-- **convaincre les entreprises franciliennes de donner**, en prouvant que la
-  démarche va jusqu'au bout (traçabilité, sécurité des données, comptes rendus
+- **convaincre les entreprises de donner**, en prouvant que la démarche va
+  jusqu'au bout (traçabilité, sécurité des données, comptes rendus
   d'usage) ;
 - **présenter les services aux structures bénéficiaires**, souvent consultés
   depuis un smartphone sur une connexion lente.
@@ -196,7 +196,7 @@ consultables dans l'onglet **Messages** du back-office.
 
 ```env
 RESEND_API_KEY=re_votre_cle
-RESEND_FROM_EMAIL="Dons solidaires <contact@votre-domaine.fr>"
+RESEND_FROM_EMAIL="Respusse <contact@votre-domaine.fr>"
 CONTACT_NOTIFICATION_EMAIL=vous@votre-domaine.fr
 ```
 

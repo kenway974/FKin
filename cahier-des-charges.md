@@ -1,4 +1,4 @@
-# Cahier des charges — Site « Dons solidaires Île-de-France ↔ Congo »
+# Cahier des charges — Site « Respusse » (France ↔ Congo)
 
 Document de référence du projet, conservé dans le dépôt pour que toute personne
 reprenant le code comprenne les intentions initiales.

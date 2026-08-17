@@ -1,5 +1,5 @@
 -- =============================================================================
---  Schéma de la base — Dons solidaires Île-de-France ↔ Congo
+--  Schéma de la base — Respusse (France ↔ Congo)
 -- =============================================================================
 --
 --  CE FICHIER N'A PAS ÉTÉ APPLIQUÉ. Il est fourni tel quel, à exécuter
