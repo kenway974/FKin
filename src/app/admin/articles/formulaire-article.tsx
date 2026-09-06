@@ -67,9 +67,12 @@ export function FormulaireArticle({ article }: { article?: Article }) {
   // slug d'un article publié casserait les liens existants.
   const [slugAuto, setSlugAuto] = React.useState(!modeEdition);
   React.useEffect(() => {
-    if (slugAuto) {
-      setValue("slug", genererSlug(titre ?? ""), { shouldValidate: true });
-    }
+    if (!slugAuto) return;
+    const genere = genererSlug(titre ?? "");
+    // La validation n'est déclenchée que s'il y a un slug à valider : sinon un
+    // formulaire vierge afficherait l'erreur « le slug doit contenir au moins
+    // 3 caractères » avant même que le titre ait été saisi.
+    setValue("slug", genere, { shouldValidate: genere.length > 0 });
   }, [titre, slugAuto, setValue]);
 
   async function auEnvoi(donnees: DonneesArticle) {
