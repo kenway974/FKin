@@ -497,54 +497,184 @@ p {
 }
 
 /* --------------------------------------------------------------------------
-   Le voyage d'un don
+   Le voyage d'un don — frise horizontale
    --------------------------------------------------------------------------
-   Chaque tronçon de route se dessine pendant qu'il traverse l'écran. Le SVG
-   porte une chronologie de défilement nommée ; son tracé rouge (longueur
-   normalisée à 1 par `pathLength`) s'y cale. Sans prise en charge, la route
-   est simplement affichée entière.
+   Pictogrammes animés en continu, un mouvement par étape. Tous sont coupés
+   par la règle `prefers-reduced-motion` générale, en haut de ce fichier.
    -------------------------------------------------------------------------- */
 
-.trace-dessin {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-@keyframes dessin-trace {
-  from {
-    stroke-dashoffset: 1;
+@keyframes picto-flotte {
+  0%,
+  100% {
+    transform: translateY(0);
   }
-  to {
-    stroke-dashoffset: 0;
+  50% {
+    transform: translateY(-8%);
   }
 }
 
-@keyframes arrivee-pastille {
-  from {
-    transform: scale(0.55);
-    opacity: 0.4;
+@keyframes picto-roule {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
   }
-  to {
+  25% {
+    transform: translate(3%, -4%) rotate(-2deg);
+  }
+  75% {
+    transform: translate(-3%, 2%) rotate(1deg);
+  }
+}
+
+@keyframes picto-outil {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0);
+  }
+  70% {
+    transform: rotate(-28deg);
+  }
+  85% {
+    transform: rotate(16deg);
+  }
+}
+
+@keyframes picto-tangue {
+  0%,
+  100% {
+    transform: rotate(-6deg) translateY(0);
+  }
+  50% {
+    transform: rotate(6deg) translateY(-6%);
+  }
+}
+
+@keyframes picto-lumiere {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgb(255 255 255 / 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgb(255 255 255 / 0.95));
+  }
+}
+
+@keyframes picto-battement {
+  0%,
+  40%,
+  100% {
     transform: scale(1);
-    opacity: 1;
+  }
+  15% {
+    transform: scale(1.14);
+  }
+  28% {
+    transform: scale(0.96);
   }
 }
 
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .troncon {
-      view-timeline-name: --troncon;
-    }
-    .troncon .trace-dessin {
-      animation: dessin-trace linear both;
-      animation-timeline: --troncon;
-      animation-range: entry 20% cover 60%;
-    }
-    /* La pastille « s'allume » quand la route l'atteint. */
-    .anim-pastille {
-      animation: arrivee-pastille cubic-bezier(0.34, 1.56, 0.64, 1) both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 40%;
-    }
+@keyframes halo-onde {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
   }
+  to {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes vague-mer {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 240px;
+  }
+}
+
+@keyframes indice-defilement {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes vehicule-arrivee {
+  from {
+    transform: scale(0.4) rotate(-20deg);
+  }
+  to {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.picto-flotte {
+  animation: picto-flotte 3.2s ease-in-out infinite;
+}
+.picto-roule {
+  animation: picto-roule 0.9s ease-in-out infinite;
+}
+.picto-outil {
+  animation: picto-outil 2.4s ease-in-out infinite;
+  transform-origin: 70% 30%;
+}
+.picto-tangue {
+  animation: picto-tangue 2.6s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+.picto-lumiere {
+  animation: picto-lumiere 2.2s ease-in-out infinite;
+}
+.picto-battement {
+  animation: picto-battement 1.6s ease-in-out infinite;
+}
+
+/* Onde qui s'échappe de la pastille, comme un signal. */
+.halo-bleu,
+.halo-rouge,
+.halo-marine {
+  animation: halo-onde 2.4s ease-out infinite;
+}
+.halo-bleu {
+  background: var(--color-bleu-vif);
+}
+.halo-rouge {
+  background: var(--color-rouge-vif);
+}
+.halo-marine {
+  background: var(--color-marine);
+}
+
+/* Mer sous l'étape Congo : deux rangs de vagues qui défilent. */
+.mer {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='40' viewBox='0 0 240 40'%3E%3Cpath d='M0 20 Q30 4 60 20 T120 20 T180 20 T240 20' fill='none' stroke='%2342b0e3' stroke-opacity='.45' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E"),
+    linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--color-bleu-vif) 18%, transparent)
+    );
+  background-repeat: repeat-x, no-repeat;
+  background-position:
+    0 35%,
+    0 0;
+  background-size:
+    240px 40px,
+    100% 100%;
+  animation: vague-mer 4s linear infinite;
+  /* Fondu sur les côtés : la mer apparaît et disparaît en douceur. */
+  mask-image: linear-gradient(to right, transparent, black 18%, black 82%, transparent);
+}
+
+.indice-defilement {
+  animation: indice-defilement 1.4s ease-in-out infinite;
+}
+
+.vehicule-arrivee {
+  animation: vehicule-arrivee 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }

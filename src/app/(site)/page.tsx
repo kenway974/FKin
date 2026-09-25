@@ -1,20 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import {
-  ArrowRight,
-  Building2,
-  HeartHandshake,
-  Recycle,
-  School,
-  ShieldCheck,
-  Ship,
-  Truck,
-} from "lucide-react";
+import { ArrowRight, Recycle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
 import { BanniereAccueil, RubanDefilant } from "@/components/bannieres";
-import { Bifurcation, Destination, Etape, Troncon } from "@/components/voyage";
+import { VoyageDefilant } from "@/components/voyage-defilant";
 import { Coeur, Vague } from "@/components/formes";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
@@ -110,165 +101,7 @@ export default async function PageAccueil() {
       />
 
       {/* ----------------------------------------------------- Le voyage d'un don */}
-      <section aria-labelledby="titre-voyage" className="py-16 md:py-24">
-        <div className="contenu">
-          <TitreSection
-            id="titre-voyage"
-            surtitre="Le voyage d'un don"
-            titre="De votre bureau à une salle de classe"
-            chapo="Suivez le trajet d'un ordinateur dont vous n'avez plus l'usage. Vous n'avez rien à organiser : nous prenons tout en charge."
-            centre
-          />
-
-          <ol className="mx-auto mt-14 max-w-5xl md:mt-20">
-            <Etape
-              numero={1}
-              lieu="Chez vous"
-              titre="Vous nous signalez le matériel"
-              icone={Building2}
-              ton="bleu"
-              cote="gauche"
-              repere={{ valeur: "72 h", libelle: "pour une réponse claire" }}
-              action={
-                <Button asChild>
-                  <Link href="/contact?profil=entreprise">
-                    Signaler du matériel
-                    <ArrowRight aria-hidden="true" />
-                  </Link>
-                </Button>
-              }
-            >
-              <p>
-                Ordinateurs, écrans, onduleurs, mobilier scolaire… Un message suffit : nature du
-                matériel, quantité, adresse et date de libération du local.
-              </p>
-            </Etape>
-
-            <Troncon sens="droite" />
-
-            <Etape
-              numero={2}
-              lieu="Sur la route"
-              titre="Nous venons le chercher"
-              icone={Truck}
-              ton="rouge"
-              cote="droite"
-              repere={{ valeur: "0 €", libelle: "enlèvement partout en France" }}
-            >
-              <p>
-                Notre équipe se déplace au créneau convenu, assure la manutention et vous remet un
-                inventaire signé et une attestation de don.
-              </p>
-            </Etape>
-
-            <Troncon sens="gauche" />
-
-            <Etape
-              numero={3}
-              lieu="À l'atelier"
-              titre="Testé, effacé, remis en état"
-              icone={ShieldCheck}
-              ton="marine"
-              cote="gauche"
-              repere={{ valeur: "100 %", libelle: "des disques effacés ou détruits" }}
-            >
-              <p>
-                Chaque équipement est testé. Les données sont effacées, certificat à l&apos;appui.
-                Ce qui est réparable part en atelier plutôt qu&apos;à la benne.
-              </p>
-            </Etape>
-
-            <Bifurcation
-              gauche={
-                <Destination
-                  pays="En France"
-                  titre="Livré directement"
-                  delai="Quelques semaines"
-                  icone={Truck}
-                  ton="bleu"
-                >
-                  <p>
-                    Écoles, mairies et associations en France reçoivent le matériel en direct, sans
-                    intermédiaire.
-                  </p>
-                </Destination>
-              }
-              droite={
-                <Destination
-                  pays="Au Congo"
-                  titre="Par conteneur, jusqu'à Kinshasa"
-                  delai="3 à 4 mois"
-                  icone={Ship}
-                  ton="rouge"
-                >
-                  <p>
-                    Départ du Havre ou d&apos;Anvers, cinq semaines de traversée, puis dédouanement
-                    et route jusqu&apos;à la structure avec nos relais locaux.
-                  </p>
-                </Destination>
-              }
-              apres={
-                <div className="forme-coeur bg-nuage flex flex-col items-start gap-5 p-6 md:flex-row md:items-center md:justify-between md:p-8">
-                  <div>
-                    <p className="font-titre text-xl font-semibold">
-                      Vous êtes une école, une mairie ou une association ?
-                    </p>
-                    <p className="text-doux mt-1">
-                      En France comme au Congo, déposez votre demande d&apos;équipement.
-                    </p>
-                  </div>
-                  <Button asChild variante="secondaire" className="shrink-0">
-                    <Link href="/contact?profil=beneficiaire">
-                      Demander un équipement
-                      <ArrowRight aria-hidden="true" />
-                    </Link>
-                  </Button>
-                </div>
-              }
-            />
-
-            <Etape
-              numero={4}
-              lieu="En classe"
-              titre="Installé, allumé, utilisé"
-              icone={School}
-              ton="bleu"
-              cote="droite"
-              repere={{ valeur: "Jour J", libelle: "prise en main sur place" }}
-            >
-              <p>
-                Le matériel est installé, raccordé et testé avec une personne référente. Les
-                enseignants et les agents le prennent en main dès la livraison.
-              </p>
-            </Etape>
-
-            <Troncon sens="droite" />
-
-            <Etape
-              numero={5}
-              lieu="Six mois plus tard"
-              titre="Nous vous racontons la suite"
-              icone={HeartHandshake}
-              ton="rouge"
-              cote="gauche"
-              repere={{ valeur: "6 mois", libelle: "jusqu'au compte rendu d'usage" }}
-              action={
-                <Button asChild variante="courbe">
-                  <Link href="/realisations">
-                    Voir nos réalisations
-                    <ArrowRight aria-hidden="true" />
-                  </Link>
-                </Button>
-              }
-            >
-              <p>
-                Nous repassons constater l&apos;usage réel. Le compte rendu vous est envoyé : de
-                quoi nourrir votre rapport RSE avec du concret.
-              </p>
-            </Etape>
-          </ol>
-        </div>
-      </section>
+      <VoyageDefilant />
 
       {/* ------------------------------------------------------------- Chiffres */}
       {/* Masquée tant qu'aucun projet n'est publié : mieux vaut pas de section
