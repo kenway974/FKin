@@ -48,6 +48,16 @@
   --color-soleil: #e8a33d;
   --color-soleil-voile: #fdf3e2;
 
+  /* Couleurs de la marque, relevées directement sur le logo (livre-cœur).
+     Elles sont réservées au héros de l'accueil, qui porte l'identité ; le
+     reste du site garde la famille terre, plus chaleureuse en lecture longue. */
+  --color-marine: #182448;
+  --color-marine-clair: #24345f;
+  --color-bleu: #0090cc;
+  --color-bleu-clair: #35a9dd;
+  --color-rouge: #e43c3c;
+  --color-rouge-clair: #f0603c;
+
   --font-sans:
     var(--police-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -231,6 +241,36 @@ p {
       animation: apparition 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-timeline: view();
       animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+/* Parallaxe au défilement.
+
+   Piloté par `animation-timeline: scroll()` : aucun JavaScript, donc aucun
+   écouteur de défilement ni recalcul à chaque image — ce qui compte sur les
+   téléphones modestes et les connexions lentes visés par le projet.
+
+   Chaque couche règle son amplitude avec `--parallaxe` : plus la valeur est
+   grande, plus la couche « traîne » derrière le défilement, ce qui crée la
+   sensation de profondeur. Une valeur négative fait remonter la couche.
+
+   Les navigateurs qui ne gèrent pas encore les animations liées au défilement
+   affichent simplement la scène fixe : rien n'est cassé, seul le mouvement
+   manque. */
+@keyframes parallaxe {
+  to {
+    transform: translate3d(0, var(--parallaxe, 3rem), 0);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallaxe {
+      animation: parallaxe linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 80vh;
+      will-change: transform;
     }
   }
 }
