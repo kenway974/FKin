@@ -259,6 +259,32 @@ p {
   }
 }
 
+/* Parallaxe au passage d'un élément dans l'écran.
+
+   Même principe que `.parallaxe`, mais la progression suit le passage de
+   l'élément lui-même dans la fenêtre (`view()`) plutôt que le haut de page :
+   il glisse de `--parallaxe` à son opposé pendant qu'il traverse l'écran.
+   Réservé aux éléments décoratifs (cœurs, pastilles) : ils ne portent aucune
+   information, donc un navigateur qui ne gère pas l'effet ne perd rien. */
+@keyframes parallaxe-vue {
+  from {
+    transform: translate3d(0, var(--parallaxe, 2rem), 0);
+  }
+  to {
+    transform: translate3d(0, calc(var(--parallaxe, 2rem) * -1), 0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallaxe-vue {
+      animation: parallaxe-vue linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+
 /* Relief au survol et au focus clavier, sur les cartes cliquables. */
 @utility carte-relief {
   transition:

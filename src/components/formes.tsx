@@ -14,12 +14,15 @@ import { cn } from "@/lib/utils";
 export const TRACE_COEUR =
   "M50 88C22 68 3 50 3 28 3 13 15 3 29 3c9 0 17 5 21 13 4-8 12-13 21-13 14 0 26 10 26 25 0 22-19 40-47 60Z";
 
-/** Cœur plein, en filigrane derrière un bloc. */
+/**
+ * Cœur plein, en filigrane derrière un bloc. Il glisse légèrement au
+ * défilement (parallaxe), ce qui donne de la profondeur aux sections.
+ */
 export function Coeur({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 100 92"
-      className={cn("pointer-events-none absolute", className)}
+      className={cn("parallaxe-vue pointer-events-none absolute [--parallaxe:3.5rem]", className)}
       aria-hidden="true"
       focusable="false"
     >

@@ -43,15 +43,21 @@ export function BanniereAccueil({
         aria-hidden="true"
       />
 
-      <div className="contenu relative z-10 pt-10 pb-8 text-white sm:pt-14 lg:flex lg:min-h-[inherit] lg:items-center lg:py-16">
-        <div className="lg:max-w-[min(38rem,44vw)]">{children}</div>
+      <div className="contenu relative z-10 pt-8 pb-12 text-white sm:pt-14 sm:pb-16 lg:flex lg:min-h-[inherit] lg:items-center lg:py-16">
+        {/* Le texte descend un peu moins vite que la page : premier plan de
+            lecture, il reste en vue un instant de plus. */}
+        <div className="parallaxe [--parallaxe:3rem] lg:max-w-[min(38rem,44vw)]">{children}</div>
       </div>
 
       {/* Scène : vague + sujet, dimensionnés ensemble. */}
-      <div className="relative mt-auto h-[50svh] min-h-64 w-full lg:absolute lg:right-0 lg:bottom-0 lg:mt-0 lg:aspect-[12/7] lg:h-[86%] lg:w-auto xl:h-full">
-        <VagueScene />
+      <div className="relative min-h-72 w-full flex-1 lg:absolute lg:right-0 lg:bottom-0 lg:mt-0 lg:aspect-[12/7] lg:h-[86%] lg:w-auto xl:h-full">
+        {/* Trois plans, trois vitesses : la vague traîne derrière, le sujet
+            remonte vers le lecteur. */}
+        <div className="parallaxe absolute inset-0 [--parallaxe:4.5rem]">
+          <VagueScene />
+        </div>
         <div className="absolute bottom-0 left-1/2 h-full -translate-x-1/2 lg:left-[76%] lg:h-[88%]">
-          {sujet}
+          <div className="parallaxe h-full [--parallaxe:-2.5rem]">{sujet}</div>
         </div>
       </div>
     </section>
@@ -66,12 +72,12 @@ export function BanniereAccueil({
 function VagueScene() {
   return (
     <div className="absolute inset-0 -z-10" aria-hidden="true">
-      {/* Portrait (téléphone, tablette) : la vague déborde au-dessus de la
+      {/* Portrait (téléphone, tablette) : la vague déborde juste au-dessus de la
           scène pour que le ruban passe derrière les têtes. */}
       <svg
         viewBox="0 0 400 520"
         preserveAspectRatio="none"
-        className="absolute inset-x-0 bottom-0 h-[118%] w-full lg:hidden"
+        className="absolute inset-x-0 bottom-0 h-[calc(100%+2rem)] w-full lg:hidden"
         focusable="false"
       >
         <defs>
@@ -183,7 +189,7 @@ export function BannierePage({
       )}
 
       <div className="contenu relative pt-14 pb-20 text-white md:pt-20 md:pb-28">
-        <div className="max-w-3xl">
+        <div className="parallaxe max-w-3xl [--parallaxe:2rem]">
           {surtitre ? (
             <p className="anim-entree mb-4 inline-flex items-center gap-2 text-sm font-bold tracking-[0.14em] uppercase">
               <span

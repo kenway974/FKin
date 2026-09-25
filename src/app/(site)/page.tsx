@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight, Building2, GraduationCap, Recycle, School, Ship, Truck } from "lucide-react";
@@ -6,7 +7,6 @@ import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
 import { BandeauAccent, BanniereAccueil, RubanDefilant } from "@/components/bannieres";
 import { Coeur, Vague } from "@/components/formes";
-import { VideoDetouree } from "@/components/video-detouree";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
 import { compterPourAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
@@ -69,20 +69,30 @@ export default async function PageAccueil() {
       {/* ------------------------------------------------------------- Bannière */}
       <BanniereAccueil
         sujet={
-          <VideoDetouree
-            sources={[
-              { src: "/heros/enfants-detoures.mp4", type: "video/mp4" },
-              { src: "/heros/enfants-detoures.webm", type: "video/webm" },
-            ]}
-            poster="/heros/enfants-detoures.webp"
-            largeur={662}
-            hauteur={900}
+          <Image
+            src="/heros/enfants.webp"
             alt="Trois écoliers en survêtement bleu, souriants, font coucou"
-            className="h-full"
+            width={1177}
+            height={1696}
+            priority
+            sizes="(min-width: 1024px) 40vw, 70vw"
+            className="h-full w-auto max-w-none drop-shadow-[0_24px_40px_rgba(17,29,54,0.45)]"
           />
         }
       >
-        <h1 className="anim-entree text-[clamp(2.5rem,9vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance lg:text-[clamp(3.5rem,4.8vw,5.75rem)]">
+        {/* Les deux destinations, en un coup d'œil : une seule ligne, le reste
+            est détaillé plus bas dans la page. */}
+        <p className="anim-entree mb-4 inline-flex items-center gap-2.5 rounded-full bg-white/10 py-1.5 pr-4 pl-2 text-sm font-bold tracking-wide ring-1 ring-white/15 backdrop-blur-sm sm:mb-5">
+          <span className="bg-bleu-vif inline-block size-3 rounded-full" aria-hidden="true" />
+          En France
+          <span className="text-white/40" aria-hidden="true">
+            ·
+          </span>
+          <span className="bg-rouge-vif inline-block size-3 rounded-full" aria-hidden="true" />
+          Au Congo
+        </p>
+
+        <h1 className="anim-entree anim-retard-1 text-[clamp(2.5rem,9vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance lg:text-[clamp(3.5rem,4.8vw,5.75rem)]">
           Ce qui dort chez vous <span className="text-rouge-clair">fait école</span> ailleurs.
         </h1>
 
