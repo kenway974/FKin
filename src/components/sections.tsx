@@ -41,7 +41,12 @@ export function TitreSection({
   const Titre = niveau === 1 ? "h1" : "h2";
 
   return (
-    <div className={cn("max-w-3xl", centre && "mx-auto text-center")}>
+    <div
+      className={cn(
+        "parallaxe-vue max-w-3xl [--parallaxe:1.25rem]",
+        centre && "mx-auto text-center",
+      )}
+    >
       {surtitre ? (
         <p
           className={cn(

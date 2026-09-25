@@ -13,12 +13,13 @@ import { Coeur, TRACE_COEUR, Vague } from "@/components/formes";
  * Un plein écran marine, traversé par une vague bleue bordée d'un ruban rouge
  * et d'un liseré blanc — les trois pages du cœur du logo. Le sujet détouré
  * (`sujet`, en général une vidéo sans fond) se tient debout sur la vague, les
- * pieds sur le bas de l'écran.
+ * jambes coupées par le bas de l'écran.
  *
  * Proportions : la vague et le sujet forment une seule « scène », dont la
  * taille découle de la **hauteur** de l'écran. Sur grand écran, la scène a le
- * format fixe de son dessin (12:7), collée en bas à droite ; le sujet y occupe
- * toujours 88 % de la hauteur, centré au même endroit de la vague. Le rapport
+ * format fixe de son dessin (12:7), collée en bas à droite ; le sujet y est
+ * toujours cadré de la même façon (tête à 14 % du haut, jambes coupées par
+ * le bas de l'écran), centré au même endroit de la vague. Le rapport
  * entre la vague, les enfants et le titre reste donc le même d'un portable
  * 13 pouces à un écran 27 pouces. Sur téléphone et tablette, la scène passe
  * sous le texte et occupe le bas de l'écran.
@@ -56,8 +57,11 @@ export function BanniereAccueil({
         <div className="parallaxe absolute inset-0 [--parallaxe:4.5rem]">
           <VagueScene />
         </div>
-        <div className="absolute bottom-0 left-1/2 h-full -translate-x-1/2 lg:left-[76%] lg:h-[88%]">
-          <div className="parallaxe h-full [--parallaxe:-2.5rem]">{sujet}</div>
+        {/* Le sujet est plus grand que la scène : ses jambes sont coupées
+            par le bas de l'écran, comme un cadrage photo. Il remonte au
+            défilement sans jamais laisser de vide sous lui. */}
+        <div className="absolute top-[6%] left-1/2 h-[118%] -translate-x-1/2 lg:top-[14%] lg:left-[76%] lg:h-[110%]">
+          <div className="parallaxe h-full [--parallaxe:-3rem]">{sujet}</div>
         </div>
       </div>
     </section>

@@ -48,6 +48,19 @@ const etapes = [
   },
 ] as const;
 
+/**
+ * Vitesses de parallaxe des éléments d'une même rangée : chaque colonne glisse
+ * un peu plus que la précédente, ce qui décale doucement les cartes au
+ * défilement et donne de la profondeur à la grille. Sur téléphone, où les
+ * cartes sont empilées, la vitesse est la même pour toutes : des vitesses
+ * différentes les feraient se chevaucher.
+ */
+const vitesses = [
+  "[--parallaxe:1rem] md:[--parallaxe:0.75rem]",
+  "[--parallaxe:1rem] md:[--parallaxe:2rem]",
+  "[--parallaxe:1rem] md:[--parallaxe:3.25rem]",
+] as const;
+
 /** Classes des pastilles numérotées, par ton. */
 const pastilles = {
   bleu: "bg-bleu-vif text-white",
@@ -80,17 +93,18 @@ export default async function PageAccueil() {
           />
         }
       >
-        {/* Les deux destinations, en un coup d'œil : une seule ligne, le reste
-            est détaillé plus bas dans la page. */}
-        <p className="anim-entree mb-4 inline-flex items-center gap-2.5 rounded-full bg-white/10 py-1.5 pr-4 pl-2 text-sm font-bold tracking-wide ring-1 ring-white/15 backdrop-blur-sm sm:mb-5">
-          <span className="bg-bleu-vif inline-block size-3 rounded-full" aria-hidden="true" />
-          En France
-          <span className="text-white/40" aria-hidden="true">
-            ·
-          </span>
-          <span className="bg-rouge-vif inline-block size-3 rounded-full" aria-hidden="true" />
-          Au Congo
-        </p>
+        {/* Ce que fait l'association, en deux pastilles : où l'on récupère,
+            où l'on distribue. Le détail vient plus bas dans la page. */}
+        <ul className="anim-entree mb-5 flex flex-wrap gap-2 text-[0.8rem] font-bold sm:mb-6 sm:text-sm">
+          <li className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-3.5 pl-2 ring-1 ring-white/15 backdrop-blur-sm">
+            <span className="bg-bleu-vif inline-block size-3 rounded-full" aria-hidden="true" />
+            Récupération partout en France
+          </li>
+          <li className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-3.5 pl-2 ring-1 ring-white/15 backdrop-blur-sm">
+            <span className="bg-rouge-vif inline-block size-3 rounded-full" aria-hidden="true" />
+            Distribution en France et au Congo
+          </li>
+        </ul>
 
         <h1 className="anim-entree anim-retard-1 text-[clamp(2.5rem,9vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance lg:text-[clamp(3.5rem,4.8vw,5.75rem)]">
           Ce qui dort chez vous <span className="text-rouge-clair">fait école</span> ailleurs.
@@ -182,25 +196,11 @@ export default async function PageAccueil() {
             />
 
             <ol className="anim-defilement relative mt-12 grid gap-6 md:grid-cols-3">
-              {/* Fil qui relie les trois étapes, en courbe, sur grand écran. */}
-              <svg
-                viewBox="0 0 1000 60"
-                preserveAspectRatio="none"
-                className="text-bordure absolute inset-x-[12%] top-7 hidden h-12 md:block"
-                aria-hidden="true"
-              >
-                <path
-                  d="M0 40C160 0 330 0 500 30S840 60 1000 20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeDasharray="2 12"
-                  strokeLinecap="round"
-                />
-              </svg>
-
               {etapes.map((etape, index) => (
-                <li key={etape.titre} className="relative flex flex-col">
+                <li
+                  key={etape.titre}
+                  className={cn("parallaxe-vue relative flex flex-col", vitesses[index])}
+                >
                   <span
                     className={cn(
                       "font-titre ring-nuage relative z-10 mx-auto flex size-16 items-center justify-center rounded-full text-2xl font-bold shadow-lg ring-8 md:mx-0",
@@ -233,7 +233,7 @@ export default async function PageAccueil() {
               ))}
             </ol>
 
-            <BandeauAccent ton="marine" className="anim-defilement mt-12">
+            <BandeauAccent ton="marine" className="parallaxe-vue mt-12 [--parallaxe:1.5rem]">
               <p className="font-titre text-xl font-semibold">
                 Quelques semaines en France, trois à quatre mois pour le Congo
               </p>
@@ -265,7 +265,7 @@ export default async function PageAccueil() {
             titre="Deux interlocuteurs, deux besoins"
           />
           <div className="anim-defilement mt-10 grid gap-6 md:grid-cols-2">
-            <div className="forme-coeur bg-rouge-voile relative isolate overflow-hidden p-7 md:p-9">
+            <div className="forme-coeur bg-rouge-voile parallaxe-vue relative isolate overflow-hidden p-7 [--parallaxe:1rem] md:p-9 md:[--parallaxe:0.75rem]">
               <Coeur className="text-rouge-vif -right-14 -bottom-16 -z-10 w-44 opacity-10" />
               <span className="bg-rouge-vif inline-flex size-14 items-center justify-center rounded-full text-white">
                 <Building2 className="size-7" aria-hidden="true" />
@@ -283,7 +283,7 @@ export default async function PageAccueil() {
               </Button>
             </div>
 
-            <div className="forme-coeur-inverse bg-bleu-voile relative isolate overflow-hidden p-7 md:p-9">
+            <div className="forme-coeur-inverse bg-bleu-voile parallaxe-vue relative isolate overflow-hidden p-7 [--parallaxe:1rem] md:p-9 md:[--parallaxe:2.5rem]">
               <Coeur className="text-bleu-vif -right-14 -bottom-16 -z-10 w-44 opacity-10" />
               <span className="bg-bleu-vif inline-flex size-14 items-center justify-center rounded-full text-white">
                 <GraduationCap className="size-7" aria-hidden="true" />
@@ -324,7 +324,7 @@ export default async function PageAccueil() {
             </h2>
 
             <div className="anim-defilement mt-10 grid gap-6 md:grid-cols-2">
-              <div className="forme-coeur bg-white/[0.07] p-7 ring-1 ring-white/15 md:p-9">
+              <div className="forme-coeur parallaxe-vue bg-white/[0.07] p-7 ring-1 ring-white/15 [--parallaxe:0.75rem] md:p-9">
                 <Recycle className="text-bleu-clair size-8" aria-hidden="true" />
                 <h3 className="mt-4 text-2xl font-semibold">La réparation par les jeunes</h3>
                 <p className="mt-3 leading-relaxed text-white/80">
@@ -339,7 +339,7 @@ export default async function PageAccueil() {
                 </Button>
               </div>
 
-              <div className="forme-coeur-inverse bg-white/[0.07] p-7 ring-1 ring-white/15 md:p-9">
+              <div className="forme-coeur-inverse parallaxe-vue bg-white/[0.07] p-7 ring-1 ring-white/15 [--parallaxe:2.5rem] md:p-9">
                 <span className="bg-rouge-vif inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold tracking-wide uppercase">
                   Bientôt
                 </span>
@@ -373,7 +373,7 @@ export default async function PageAccueil() {
           {projets.length > 0 ? (
             <ul className="anim-defilement mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {projets.map((projet, index) => (
-                <li key={projet.id}>
+                <li key={projet.id} className={cn("parallaxe-vue", vitesses[index % 3])}>
                   <CarteProjet projet={projet} priorite={index === 0} />
                 </li>
               ))}
@@ -412,8 +412,8 @@ export default async function PageAccueil() {
               titre="Ce que nous racontons de nos convois"
             />
             <ul className="anim-defilement mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {articles.map((article) => (
-                <li key={article.id}>
+              {articles.map((article, index) => (
+                <li key={article.id} className={cn("parallaxe-vue", vitesses[index % 3])}>
                   <CarteArticle article={article} />
                 </li>
               ))}
@@ -434,7 +434,7 @@ export default async function PageAccueil() {
       <section className="contenu py-14 md:py-20">
         <div className="from-bleu-vif to-bleu-fonce relative isolate overflow-hidden rounded-[2rem] rounded-bl-lg bg-linear-to-br px-6 py-14 text-center md:rounded-[3rem] md:rounded-bl-xl md:px-12 md:py-20">
           <Coeur className="-right-12 -bottom-16 -z-10 w-64 text-white/10 md:w-96" />
-          <div className="anim-defilement mx-auto max-w-3xl">
+          <div className="parallaxe-vue mx-auto max-w-3xl [--parallaxe:1.5rem]">
             <h2 className="text-3xl font-bold text-white md:text-5xl">
               Un local à vider ? Parlons-en avant la benne.
             </h2>
