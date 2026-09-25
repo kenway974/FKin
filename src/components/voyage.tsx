@@ -343,11 +343,12 @@ export function Voyage() {
           </div>
 
           {/* La route : piste en pointillés, véhicule collant et sa traînée.
-              `overflow-clip` (et non `hidden`) coupe la traînée au début de
-              la route sans casser le `sticky`. */}
+              `overflow-y: clip` (et non `hidden`) coupe la traînée au début
+              de la route sans casser le `sticky` ; sur les côtés, rien n'est
+              coupé, pour que le véhicule reste entier. */}
           <div
             aria-hidden="true"
-            className="absolute inset-y-0 left-0 w-12 overflow-clip md:relative md:inset-auto md:w-auto"
+            className="absolute inset-y-0 left-0 w-12 overflow-x-visible overflow-y-clip md:relative md:inset-auto md:w-auto"
           >
             <span className="border-bordure absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-4 border-dotted" />
             <div className="sticky top-[50vh] flex h-0 justify-center">
