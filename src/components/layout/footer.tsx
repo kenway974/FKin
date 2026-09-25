@@ -57,7 +57,7 @@ export function Footer() {
                 <span>
                   {site.adresse.ville} ({site.adresse.codePostal})
                   <br />
-                  Collecte partout en France · Distribution à Kinshasa et au Congo
+                  Collecte partout en France · Distribution en France et au Congo
                 </span>
               </li>
             </ul>

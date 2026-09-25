@@ -31,7 +31,7 @@ const policeTexte = Nunito({
 export const metadata: Metadata = {
   metadataBase: new URL(urlSite),
   title: {
-    default: `${site.nom} — Dons de matériel, France ↔ Congo`,
+    default: `${site.nom} — Dons de matériel, en France et au Congo`,
     template: `%s · ${site.nom}`,
   },
   description: site.description,
@@ -40,6 +40,7 @@ export const metadata: Metadata = {
     "don de matériel informatique",
     "mécénat de matériel",
     "collecte matériel entreprise France",
+    "équipement écoles France",
     "écoles Kinshasa",
     "solidarité Congo",
     "réemploi informatique",
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: urlSite,
     siteName: site.nom,
-    title: `${site.nom} — Dons de matériel, France ↔ Congo`,
+    title: `${site.nom} — Dons de matériel, en France et au Congo`,
     description: site.description,
   },
   twitter: {

@@ -24,7 +24,7 @@ import { trouverPhotoBanniere } from "@/lib/visuels";
 export const metadata: Metadata = {
   title: "Nos services",
   description:
-    "Collecte et effacement des données pour les entreprises partout en France ; équipement des écoles au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
+    "Collecte et effacement des données pour les entreprises partout en France ; équipement d'écoles et d'associations en France et au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
   alternates: { canonical: "/services" },
 };
 
@@ -74,7 +74,7 @@ const servicesBeneficiaires = [
     icone: FileText,
     titre: "Étude de votre demande",
     texte:
-      "Vous décrivez votre structure et vos besoins. Notre relais local vérifie sur place les conditions d'accueil.",
+      "Vous décrivez votre structure et vos besoins. Nous vérifions avec vous, ou avec notre relais local au Congo, les conditions d'accueil.",
   },
   {
     icone: Warehouse,
@@ -86,13 +86,13 @@ const servicesBeneficiaires = [
     icone: Wrench,
     titre: "Installation et prise en main",
     texte:
-      "Nos partenaires locaux accompagnent l'installation et la première prise en main, pour un usage dès la première semaine.",
+      "Notre équipe en France, nos partenaires locaux au Congo accompagnent l'installation et la première prise en main, pour un usage dès la première semaine.",
   },
   {
     icone: Handshake,
     titre: "Suivi après livraison",
     texte:
-      "Nous repassons quelques mois plus tard : usage réel, pannes éventuelles, dotation complétée au convoi suivant.",
+      "Nous repassons quelques mois plus tard : usage réel, pannes éventuelles, dotation complétée à la livraison suivante.",
   },
 ] as const;
 
@@ -102,7 +102,7 @@ export default function PageServices() {
       <BannierePage
         surtitre="Nos services"
         titre="Une même chaîne, de la collecte à la formation"
-        chapo="Collecter le matériel des entreprises partout en France, équiper des structures au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
+        chapo="Collecter le matériel des entreprises partout en France, équiper des structures en France et au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
         ton="rouge"
         photo={trouverPhotoBanniere("services")}
       />
@@ -157,9 +157,9 @@ export default function PageServices() {
         <div className="contenu">
           <TitreSection
             id="titre-beneficiaires"
-            surtitre="Pour les structures au Congo"
+            surtitre="Pour les structures en France et au Congo"
             titre="Écoles, mairies et associations : comment être équipé"
-            chapo="Demandes examinées au fil des arrivages. Priorité aux structures à public scolaire disposant d'un local sécurisable et alimenté en électricité."
+            chapo="Demandes examinées au fil des collectes et des arrivages. Priorité aux structures à public scolaire disposant d'un local sécurisable et alimenté en électricité."
           />
 
           <ul className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -231,12 +231,14 @@ export default function PageServices() {
               {
                 icone: Wrench,
                 titre: "Remis en état sur place",
-                texte: "Diagnostic, réparation et test dans des recycleries partenaires à Kinshasa.",
+                texte:
+                  "Diagnostic, réparation et test dans des recycleries partenaires à Kinshasa.",
               },
               {
                 icone: Users,
                 titre: "Des jeunes formés",
-                texte: "Chaque réparation est un atelier : les jeunes acquièrent un vrai savoir-faire.",
+                texte:
+                  "Chaque réparation est un atelier : les jeunes acquièrent un vrai savoir-faire.",
               },
             ].map((bloc) => (
               <li key={bloc.titre}>
@@ -269,8 +271,8 @@ export default function PageServices() {
                 Un centre de formation aux métiers de l&apos;informatique
               </h2>
               <p className="text-doux mt-3 leading-relaxed">
-                À Kinshasa, un centre de formation voit le jour : maintenance, réparation et bases du
-                numérique, pour donner aux jeunes un métier autour du matériel qui arrive.
+                À Kinshasa, un centre de formation voit le jour : maintenance, réparation et bases
+                du numérique, pour donner aux jeunes un métier autour du matériel qui arrive.
               </p>
               <p className="text-doux mt-3 text-sm">
                 Le projet est en cours de montage. Écrivez-nous pour suivre son ouverture ou y

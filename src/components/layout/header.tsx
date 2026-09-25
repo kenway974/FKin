@@ -42,7 +42,7 @@ export function Header() {
           </span>
         </Link>
 
-        <nav aria-label="Navigation principale" className="hidden lg:block">
+        <nav aria-label="Navigation principale" className="hidden xl:block">
           <ul className="flex items-center gap-1">
             {navigation.map((lien) => (
               <li key={lien.href}>
@@ -76,7 +76,7 @@ export function Header() {
             onClick={() => setOuvert((v) => !v)}
             aria-expanded={ouvert}
             aria-controls="menu-mobile"
-            className="bg-nuage text-marine -mr-1 inline-flex size-11 items-center justify-center rounded-full lg:hidden"
+            className="bg-nuage text-marine -mr-1 inline-flex size-11 items-center justify-center rounded-full xl:hidden"
           >
             {ouvert ? (
               <X className="size-6" aria-hidden="true" />
@@ -92,7 +92,7 @@ export function Header() {
         <nav
           id="menu-mobile"
           aria-label="Navigation principale (mobile)"
-          className="contenu pb-4 lg:hidden"
+          className="contenu pb-4 xl:hidden"
         >
           <ul className="forme-coeur bg-marine flex flex-col p-3 shadow-xl">
             {navigation.map((lien) => (

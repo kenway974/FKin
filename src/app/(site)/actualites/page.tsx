@@ -10,7 +10,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Actualités",
   description:
-    "Comptes rendus de convois, retours de terrain et nouvelles des structures équipées au Congo.",
+    "Comptes rendus de convois, retours de terrain et nouvelles des structures équipées en France et au Congo.",
   alternates: { canonical: "/actualites" },
   openGraph: {
     title: "Actualités",
@@ -51,7 +51,7 @@ export default async function PageActualites() {
       <BannierePage
         surtitre="Actualités"
         titre="Nouvelles des convois et du terrain"
-        chapo="Ce qui se passe entre deux livraisons : départ d'un conteneur, installation d'une salle, difficultés rencontrées."
+        chapo="Ce qui se passe entre deux livraisons : livraison d'un lot, départ d'un conteneur, installation d'une salle, difficultés rencontrées."
         ton="rouge"
         photo={trouverPhotoBanniere("actualites")}
       />

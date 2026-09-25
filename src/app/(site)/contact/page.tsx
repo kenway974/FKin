@@ -11,7 +11,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Entreprise en France souhaitant donner du matériel, ou structure au Congo cherchant à être équipée : écrivez-nous, nous répondons sous 72 heures ouvrées.",
+    "Entreprise en France souhaitant donner du matériel, ou structure en France ou au Congo cherchant à être équipée : écrivez-nous, nous répondons sous 72 heures ouvrées.",
   alternates: { canonical: "/contact" },
 };
 
@@ -71,8 +71,8 @@ export default function PageContact() {
                 </p>
                 <p className="text-doux flex gap-2.5 text-sm">
                   <MapPin className="text-rouge mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                  Collecte partout en France. Distribution à Kinshasa et dans les provinces
-                  desservies par nos partenaires.
+                  Collecte partout en France. Distribution en France, et au Congo à Kinshasa et dans
+                  les provinces desservies par nos partenaires.
                 </p>
               </CardBody>
             </Card>

@@ -1,8 +1,9 @@
-# Respusse — France ↔ Congo
+# Respusse — France & Congo
 
 Site vitrine, blog et back-office de **Respusse**, association qui collecte du
 matériel (informatique, électrique, scolaire) auprès d'entreprises partout en
-France et l'achemine vers des écoles, mairies et associations au Congo.
+France et le redistribue à des écoles, mairies et associations, en France
+comme au Congo.
 
 Le site poursuit deux objectifs :
 
@@ -371,14 +372,14 @@ affiche une illustration SVG (une scène « bureaux franciliens → conteneur �
 `public/bannieres/` et la bannière bascule automatiquement sur votre
 photographie**, sans toucher au code :
 
-| Fichier | Page |
-| --- | --- |
-| `public/bannieres/accueil.jpg` | Accueil |
-| `public/bannieres/services.jpg` | Nos services |
-| `public/bannieres/realisations.jpg` | Réalisations |
+| Fichier                                  | Page              |
+| ---------------------------------------- | ----------------- |
+| `public/bannieres/accueil.jpg`           | Accueil           |
+| `public/bannieres/services.jpg`          | Nos services      |
+| `public/bannieres/realisations.jpg`      | Réalisations      |
 | `public/bannieres/comment-ca-marche.jpg` | Comment ça marche |
-| `public/bannieres/actualites.jpg` | Actualités |
-| `public/bannieres/contact.jpg` | Contact |
+| `public/bannieres/actualites.jpg`        | Actualités        |
+| `public/bannieres/contact.jpg`           | Contact           |
 
 Les extensions `.jpg`, `.jpeg`, `.png`, `.webp` et `.avif` sont reconnues.
 Format conseillé : 2000 × 1000 px environ, moins de 400 ko. Un voile dégradé

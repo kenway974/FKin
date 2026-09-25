@@ -8,8 +8,9 @@ reprenant le code comprenne les intentions initiales.
 ## 1. Contexte
 
 La structure collecte du matériel (informatique, électrique, scolaire) auprès
-d'entreprises d'Île-de-France, puis l'achemine vers des écoles, mairies et
-associations au Congo — notamment à Kinshasa — où il sert à l'enseignement.
+d'entreprises partout en France, puis le redistribue à des écoles, mairies et
+associations, en France comme au Congo — notamment à Kinshasa — où il sert à
+l'enseignement.
 
 Le site doit **prouver que la démarche est réelle et aboutie** afin de
 convaincre les entreprises de donner, et présenter clairement les services
@@ -17,10 +18,10 @@ proposés aux structures bénéficiaires.
 
 ## 2. Double audience
 
-| Audience                                   | Attentes                                                                                          | Contraintes techniques                                |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| **Entreprises donatrices** (Île-de-France) | Preuve de sérieux, transparence, sécurité des données, impact concret, pièces exploitables en RSE | Consultation majoritairement sur ordinateur de bureau |
-| **Structures bénéficiaires** (Congo)       | Comprendre les services et la marche à suivre pour en bénéficier                                  | Smartphone, connexion lente et coûteuse               |
+| Audience                                     | Attentes                                                                                          | Contraintes techniques                                |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| **Entreprises donatrices** (Île-de-France)   | Preuve de sérieux, transparence, sécurité des données, impact concret, pièces exploitables en RSE | Consultation majoritairement sur ordinateur de bureau |
+| **Structures bénéficiaires** (France, Congo) | Comprendre les services et la marche à suivre pour en bénéficier                                  | Smartphone, connexion lente et coûteuse               |
 
 La contrainte « connexion lente » prime sur les effets visuels : elle a guidé
 les choix de police, de JavaScript et de stratégie de cache.

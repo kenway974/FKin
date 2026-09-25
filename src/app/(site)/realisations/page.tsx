@@ -13,7 +13,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Réalisations",
   description:
-    "Les projets menés à leur terme : lieu, matériel livré et résultat obtenu pour chaque école, mairie ou association équipée au Congo.",
+    "Les projets menés à leur terme : lieu, matériel livré et résultat obtenu pour chaque école, mairie ou association équipée, en France comme au Congo.",
   alternates: { canonical: "/realisations" },
   openGraph: {
     title: "Réalisations",

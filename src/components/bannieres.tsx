@@ -15,6 +15,14 @@ import { Coeur, TRACE_COEUR, Vague } from "@/components/formes";
  * (`sujet`, en général une vidéo sans fond) se tient debout sur la vague, les
  * pieds sur le bas de l'écran.
  *
+ * Proportions : la vague et le sujet forment une seule « scène », dont la
+ * taille découle de la **hauteur** de l'écran. Sur grand écran, la scène a le
+ * format fixe de son dessin (12:7), collée en bas à droite ; le sujet y occupe
+ * toujours 88 % de la hauteur, centré au même endroit de la vague. Le rapport
+ * entre la vague, les enfants et le titre reste donc le même d'un portable
+ * 13 pouces à un écran 27 pouces. Sur téléphone et tablette, la scène passe
+ * sous le texte et occupe le bas de l'écran.
+ *
  * Le texte est réduit à l'essentiel : un titre et deux actions. Tout le
  * reste du discours est porté par les sections suivantes.
  */
@@ -29,36 +37,41 @@ export function BanniereAccueil({
     // Plein écran : toute la largeur, toute la hauteur visible sous l'en-tête
     // (4 rem sur mobile, 5 rem au-delà). `svh` plutôt que `vh` : sur mobile,
     // la hauteur ne saute pas quand la barre d'adresse se replie.
-    <section className="bg-marine relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden md:min-h-[calc(100svh-5rem)]">
-      <FondVague />
+    <section className="bg-marine relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden md:min-h-[calc(100svh-5rem)] lg:block">
+      <div
+        className="from-marine-fonce via-marine to-marine-clair absolute inset-0 -z-20 bg-linear-to-br"
+        aria-hidden="true"
+      />
 
-      <div className="contenu relative flex flex-1 flex-col justify-between md:grid md:grid-cols-[1.1fr_1fr] md:items-stretch">
-        <div className="relative z-10 pt-10 pb-6 text-white md:self-center md:py-16">
-          {children}
+      <div className="contenu relative z-10 pt-10 pb-8 text-white sm:pt-14 lg:flex lg:min-h-[inherit] lg:items-center lg:py-16">
+        <div className="lg:max-w-[min(38rem,44vw)]">{children}</div>
+      </div>
+
+      {/* Scène : vague + sujet, dimensionnés ensemble. */}
+      <div className="relative mt-auto h-[50svh] min-h-64 w-full lg:absolute lg:right-0 lg:bottom-0 lg:mt-0 lg:aspect-[12/7] lg:h-[86%] lg:w-auto xl:h-full">
+        <VagueScene />
+        <div className="absolute bottom-0 left-1/2 h-full -translate-x-1/2 lg:left-[76%] lg:h-[88%]">
+          {sujet}
         </div>
-
-        {/* Sujet : sa hauteur suit celle de l'écran, pieds posés sur le bas. */}
-        <div className="relative flex items-end justify-center md:justify-end">{sujet}</div>
       </div>
     </section>
   );
 }
 
 /**
- * Décor de la bannière d'accueil : deux compositions, une par format, pour
- * que la vague passe toujours **sous les pieds** du sujet — sur la droite en
- * paysage, en bas de la carte en portrait.
+ * Décor de la scène : deux compositions, une par format, pour que la vague
+ * passe toujours **sous les pieds** du sujet. Chacune est dessinée dans le
+ * repère de la scène, si bien qu'elle grandit exactement comme le sujet.
  */
-function FondVague() {
+function VagueScene() {
   return (
     <div className="absolute inset-0 -z-10" aria-hidden="true">
-      <div className="from-marine-fonce via-marine to-marine-clair absolute inset-0 bg-linear-to-br" />
-
-      {/* Portrait (téléphone) */}
+      {/* Portrait (téléphone, tablette) : la vague déborde au-dessus de la
+          scène pour que le ruban passe derrière les têtes. */}
       <svg
-        viewBox="0 0 400 800"
+        viewBox="0 0 400 520"
         preserveAspectRatio="none"
-        className="absolute inset-x-0 bottom-0 h-[62%] w-full md:hidden"
+        className="absolute inset-x-0 bottom-0 h-[118%] w-full lg:hidden"
         focusable="false"
       >
         <defs>
@@ -66,30 +79,35 @@ function FondVague() {
             <stop offset="0" stopColor="#42b0e3" />
             <stop offset="1" stopColor="#0474a8" />
           </linearGradient>
+          <radialGradient id="halo-p" cx="0.5" cy="0.62" r="0.45">
+            <stop offset="0" stopColor="#8fd3f4" stopOpacity="0.55" />
+            <stop offset="1" stopColor="#8fd3f4" stopOpacity="0" />
+          </radialGradient>
         </defs>
-        <path d="M0 800V300C110 210 250 250 400 150V800Z" fill="url(#vague-bleue-p)" />
+        <path d="M0 520V118C120 52 260 92 400 22V520Z" fill="url(#vague-bleue-p)" />
+        <rect width="400" height="520" fill="url(#halo-p)" />
         <path
-          d="M-20 285C100 195 250 238 420 132"
+          d="M-20 110C110 38 255 80 420 8"
           fill="none"
           stroke="#ef433f"
-          strokeWidth="26"
+          strokeWidth="22"
           strokeLinecap="round"
         />
         <path
-          d="M-20 262C100 172 250 215 420 109"
+          d="M-20 90C110 18 255 60 420 -12"
           fill="none"
           stroke="#fff"
           strokeOpacity="0.85"
-          strokeWidth="6"
+          strokeWidth="5"
           strokeLinecap="round"
         />
       </svg>
 
-      {/* Paysage (tablette, ordinateur) */}
+      {/* Paysage (ordinateur) : format fixe 12:7, identique à la scène. */}
       <svg
         viewBox="0 0 1200 700"
-        preserveAspectRatio="xMaxYMax slice"
-        className="absolute inset-0 hidden size-full md:block"
+        preserveAspectRatio="none"
+        className="absolute inset-0 hidden size-full lg:block"
         focusable="false"
       >
         <defs>
@@ -98,24 +116,29 @@ function FondVague() {
             <stop offset="0.55" stopColor="#0495d4" />
             <stop offset="1" stopColor="#055a82" />
           </linearGradient>
+          <radialGradient id="halo-l" cx="0.76" cy="0.6" r="0.3">
+            <stop offset="0" stopColor="#8fd3f4" stopOpacity="0.5" />
+            <stop offset="1" stopColor="#8fd3f4" stopOpacity="0" />
+          </radialGradient>
         </defs>
         <path
-          d="M560 700C590 520 690 380 880 300S1150 170 1200 40V700Z"
+          d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z"
           fill="url(#vague-bleue-l)"
         />
+        <path d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z" fill="url(#halo-l)" />
         <path
-          d="M520 740C555 520 665 360 860 278S1130 150 1215 10"
+          d="M500 740C540 505 665 345 865 268S1135 140 1215 0"
           fill="none"
           stroke="#ef433f"
-          strokeWidth="40"
+          strokeWidth="34"
           strokeLinecap="round"
         />
         <path
-          d="M478 740C515 505 628 338 832 252S1100 118 1190 -20"
+          d="M462 740C505 490 630 322 838 242S1105 108 1190 -30"
           fill="none"
           stroke="#fff"
           strokeOpacity="0.85"
-          strokeWidth="9"
+          strokeWidth="8"
           strokeLinecap="round"
         />
       </svg>

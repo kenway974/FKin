@@ -13,7 +13,7 @@ import { urlSite } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Comment ça marche",
   description:
-    "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école au Congo, étape par étape et avec les délais.",
+    "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école, en France ou au Congo, étape par étape et avec les délais.",
   alternates: { canonical: "/comment-ca-marche" },
 };
 
@@ -54,17 +54,17 @@ const etapes = [
   },
   {
     numero: "05",
-    titre: "Palettisation et départ en conteneur",
-    delai: "Selon le calendrier des convois",
+    titre: "Livraison en France ou départ en conteneur",
+    delai: "Quelques jours à cinq semaines",
     texte:
-      "Les lots sont palettisés puis chargés en conteneur au Havre ou à Anvers. La traversée jusqu'à Matadi dure environ cinq semaines.",
+      "En France, le lot est livré directement à la structure. Pour le Congo, il est palettisé puis chargé en conteneur au Havre ou à Anvers : la traversée jusqu'à Matadi dure environ cinq semaines.",
   },
   {
     numero: "06",
-    titre: "Dédouanement et acheminement local",
+    titre: "Dédouanement et acheminement (Congo)",
     delai: "1 à 3 semaines",
     texte:
-      "Notre partenaire prend en charge le dédouanement puis la route jusqu'à la structure. C'est l'étape la plus incertaine.",
+      "Pour le Congo uniquement : notre partenaire prend en charge le dédouanement puis la route jusqu'à la structure. C'est l'étape la plus incertaine.",
   },
   {
     numero: "07",
@@ -86,9 +86,9 @@ export default function PageCommentCaMarche() {
   const donneesStructurees = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "Le parcours d'un don de matériel, de la France au Congo",
+    name: "Le parcours d'un don de matériel, de l'entreprise à la salle de classe",
     description:
-      "Les huit étapes suivies par un lot de matériel, de son signalement par une entreprise en France à sa mise en service dans une structure au Congo.",
+      "Les huit étapes suivies par un lot de matériel, de son signalement par une entreprise en France à sa mise en service dans une structure, en France ou au Congo.",
     url: `${urlSite}/comment-ca-marche`,
     step: etapes.map((etape, index) => ({
       "@type": "HowToStep",
@@ -146,9 +146,10 @@ export default function PageCommentCaMarche() {
           <div className="mt-10">
             <Alert titre="Pourquoi ces délais ?">
               <p>
-                La traversée maritime et le dédouanement pèsent à eux seuls la moitié du délai. Nous
-                préférons annoncer un calendrier réaliste : un lot enlevé en janvier arrive
-                généralement en salle de classe entre avril et mai.
+                En France, un lot enlevé est généralement installé en quelques semaines. Pour le
+                Congo, la traversée maritime et le dédouanement pèsent à eux seuls la moitié du
+                délai : un lot enlevé en janvier arrive généralement en salle de classe entre avril
+                et mai. Nous préférons annoncer un calendrier réaliste.
               </p>
             </Alert>
           </div>
@@ -170,9 +171,10 @@ export default function PageCommentCaMarche() {
             </Card>
             <Card>
               <CardBody className="space-y-3">
-                <CardTitre className="text-lg">Vous êtes une structure au Congo</CardTitre>
+                <CardTitre className="text-lg">Vous êtes une structure à équiper</CardTitre>
                 <p className="text-doux text-sm">
-                  Déposez votre demande : elle sera examinée lors du prochain arrivage.
+                  En France ou au Congo, déposez votre demande : elle sera examinée au fil des
+                  collectes.
                 </p>
                 <Button asChild variante="secondaire">
                   <Link href="/contact?profil=beneficiaire">

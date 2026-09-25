@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Donnez une seconde vie à votre matériel",
   description:
-    "Nous collectons le matériel informatique, électrique et scolaire des entreprises partout en France et l'acheminons vers des écoles et associations au Congo. Traçabilité, reçus, comptes rendus d'usage.",
+    "Nous collectons le matériel informatique, électrique et scolaire des entreprises partout en France et le redistribuons à des écoles et associations, en France comme au Congo. Traçabilité, reçus, comptes rendus d'usage.",
   alternates: { canonical: "/" },
 };
 
@@ -38,13 +38,13 @@ const etapes = [
     icone: Ship,
     ton: "rouge" as const,
     titre: "Préparation et acheminement",
-    texte: "Matériel testé, données effacées, conteneur vers Kinshasa.",
+    texte: "Matériel testé, données effacées, livraison en France ou conteneur vers Kinshasa.",
   },
   {
     icone: School,
     ton: "marine" as const,
-    titre: "Mise en service au Congo",
-    texte: "Installation en école ou mairie, compte rendu d'usage.",
+    titre: "Mise en service sur place",
+    texte: "Installation en école, mairie ou association, compte rendu d'usage.",
   },
 ] as const;
 
@@ -75,15 +75,15 @@ export default async function PageAccueil() {
               { src: "/heros/enfants-detoures.webm", type: "video/webm" },
             ]}
             poster="/heros/enfants-detoures.webp"
-            largeur={640}
+            largeur={662}
             hauteur={900}
             alt="Trois écoliers en survêtement bleu, souriants, font coucou"
-            className="h-[50svh] md:h-[min(82svh,54rem)]"
+            className="h-full"
           />
         }
       >
-        <h1 className="anim-entree text-[2.6rem] leading-[1.02] font-bold text-balance sm:text-5xl lg:text-7xl">
-          Ce qui dort chez vous <span className="text-rouge-clair">fait école</span> là-bas.
+        <h1 className="anim-entree text-[clamp(2.5rem,9vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance lg:text-[clamp(3.5rem,4.8vw,5.75rem)]">
+          Ce qui dort chez vous <span className="text-rouge-clair">fait école</span> ailleurs.
         </h1>
 
         <div className="anim-entree anim-retard-2 mt-8 flex flex-wrap items-center gap-x-8 gap-y-5 md:mt-10">
@@ -105,7 +105,7 @@ export default async function PageAccueil() {
           "Enlèvement gratuit partout en France",
           "Effacement certifié des disques",
           "Inventaire et attestation de don",
-          "Acheminement par conteneur",
+          "Distribution en France et au Congo",
           "Installation par nos relais locaux",
           "Compte rendu d'usage à 6 mois",
         ]}
@@ -224,10 +224,13 @@ export default async function PageAccueil() {
             </ol>
 
             <BandeauAccent ton="marine" className="anim-defilement mt-12">
-              <p className="font-titre text-xl font-semibold">Comptez trois à quatre mois</p>
+              <p className="font-titre text-xl font-semibold">
+                Quelques semaines en France, trois à quatre mois pour le Congo
+              </p>
               <p className="mt-1.5 leading-relaxed text-white/85">
-                Un lot enlevé en janvier arrive généralement en salle de classe entre avril et mai —
-                la traversée maritime et le dédouanement pèsent la moitié du délai.
+                En France, le lot est livré directement. Pour le Congo, un lot enlevé en janvier
+                arrive généralement en salle de classe entre avril et mai — la traversée maritime et
+                le dédouanement pèsent la moitié du délai.
               </p>
             </BandeauAccent>
 
@@ -275,10 +278,12 @@ export default async function PageAccueil() {
               <span className="bg-bleu-vif inline-flex size-14 items-center justify-center rounded-full text-white">
                 <GraduationCap className="size-7" aria-hidden="true" />
               </span>
-              <h3 className="mt-5 text-2xl font-semibold">Vous êtes une structure au Congo</h3>
+              <h3 className="mt-5 text-2xl font-semibold">
+                Vous êtes une école ou une association
+              </h3>
               <p className="text-doux mt-3 leading-relaxed">
-                École, mairie ou association : adressez-nous une demande d&apos;équipement. Nous
-                examinons chaque dossier avec nos relais locaux, selon le matériel disponible.
+                En France comme au Congo : adressez-nous une demande d&apos;équipement. Nous
+                examinons chaque dossier, avec nos relais locaux, selon le matériel disponible.
               </p>
               <Button asChild variante="courbe" className="mt-6">
                 <Link href="/services#beneficiaires">

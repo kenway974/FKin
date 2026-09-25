@@ -86,7 +86,7 @@ export function FormulaireContact() {
     {
       valeur: "beneficiaire" as const,
       libelle: "Une structure bénéficiaire",
-      precision: "Au Congo, je cherche à être équipée.",
+      precision: "En France ou au Congo, je cherche à être équipée.",
       icone: GraduationCap,
     },
   ];
