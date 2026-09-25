@@ -495,3 +495,56 @@ p {
     transform: scaleX(1.08) scaleY(0.6);
   }
 }
+
+/* --------------------------------------------------------------------------
+   Le voyage d'un don
+   --------------------------------------------------------------------------
+   Chaque tronçon de route se dessine pendant qu'il traverse l'écran. Le SVG
+   porte une chronologie de défilement nommée ; son tracé rouge (longueur
+   normalisée à 1 par `pathLength`) s'y cale. Sans prise en charge, la route
+   est simplement affichée entière.
+   -------------------------------------------------------------------------- */
+
+.trace-dessin {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@keyframes dessin-trace {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes arrivee-pastille {
+  from {
+    transform: scale(0.55);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .troncon {
+      view-timeline-name: --troncon;
+    }
+    .troncon .trace-dessin {
+      animation: dessin-trace linear both;
+      animation-timeline: --troncon;
+      animation-range: entry 20% cover 60%;
+    }
+    /* La pastille « s'allume » quand la route l'atteint. */
+    .anim-pastille {
+      animation: arrivee-pastille cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}

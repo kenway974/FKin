@@ -1,11 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Building2, GraduationCap, Recycle, School, Ship, Truck } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  HeartHandshake,
+  Recycle,
+  School,
+  ShieldCheck,
+  Ship,
+  Truck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
-import { BandeauAccent, BanniereAccueil, RubanDefilant } from "@/components/bannieres";
+import { BanniereAccueil, RubanDefilant } from "@/components/bannieres";
+import { Bifurcation, Destination, Etape, Troncon } from "@/components/voyage";
 import { Coeur, Vague } from "@/components/formes";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
@@ -21,34 +30,6 @@ export const metadata: Metadata = {
 };
 
 /**
- * Les trois temps du parcours d'un don. Repris (en version détaillée) sur la
- * page « Comment ça marche » — la source de vérité éditoriale reste ici.
- *
- * Les couleurs alternent bleu, rouge, marine : les trois teintes du logo,
- * dans l'ordre où l'œil les lit sur le cœur.
- */
-const etapes = [
-  {
-    icone: Truck,
-    ton: "bleu" as const,
-    titre: "Collecte partout en France",
-    texte: "Enlèvement sur votre site, inventaire signé.",
-  },
-  {
-    icone: Ship,
-    ton: "rouge" as const,
-    titre: "Préparation et acheminement",
-    texte: "Matériel testé, données effacées, livraison en France ou conteneur vers Kinshasa.",
-  },
-  {
-    icone: School,
-    ton: "marine" as const,
-    titre: "Mise en service sur place",
-    texte: "Installation en école, mairie ou association, compte rendu d'usage.",
-  },
-] as const;
-
-/**
  * Vitesses de parallaxe des éléments d'une même rangée : chaque colonne glisse
  * un peu plus que la précédente, ce qui décale doucement les cartes au
  * défilement et donne de la profondeur à la grille. Sur téléphone, où les
@@ -60,13 +41,6 @@ const vitesses = [
   "[--parallaxe:1rem] md:[--parallaxe:2rem]",
   "[--parallaxe:1rem] md:[--parallaxe:3.25rem]",
 ] as const;
-
-/** Classes des pastilles numérotées, par ton. */
-const pastilles = {
-  bleu: "bg-bleu-vif text-white",
-  rouge: "bg-rouge-vif text-white",
-  marine: "bg-marine text-white",
-} as const;
 
 export default async function PageAccueil() {
   // Requêtes indépendantes : lancées en parallèle pour ne pas additionner les
@@ -118,7 +92,7 @@ export default async function PageAccueil() {
             </Link>
           </Button>
           <Button asChild variante="courbe-clair" className="text-base">
-            <Link href="/realisations">Voir nos réalisations</Link>
+            <Link href="/contact?profil=beneficiaire">Besoin de matériel ?</Link>
           </Button>
         </div>
       </BanniereAccueil>
@@ -135,11 +109,172 @@ export default async function PageAccueil() {
         ]}
       />
 
+      {/* ----------------------------------------------------- Le voyage d'un don */}
+      <section aria-labelledby="titre-voyage" className="py-16 md:py-24">
+        <div className="contenu">
+          <TitreSection
+            id="titre-voyage"
+            surtitre="Le voyage d'un don"
+            titre="De votre bureau à une salle de classe"
+            chapo="Suivez le trajet d'un ordinateur dont vous n'avez plus l'usage. Vous n'avez rien à organiser : nous prenons tout en charge."
+            centre
+          />
+
+          <ol className="mx-auto mt-14 max-w-5xl md:mt-20">
+            <Etape
+              numero={1}
+              lieu="Chez vous"
+              titre="Vous nous signalez le matériel"
+              icone={Building2}
+              ton="bleu"
+              cote="gauche"
+              repere={{ valeur: "72 h", libelle: "pour une réponse claire" }}
+              action={
+                <Button asChild>
+                  <Link href="/contact?profil=entreprise">
+                    Signaler du matériel
+                    <ArrowRight aria-hidden="true" />
+                  </Link>
+                </Button>
+              }
+            >
+              <p>
+                Ordinateurs, écrans, onduleurs, mobilier scolaire… Un message suffit : nature du
+                matériel, quantité, adresse et date de libération du local.
+              </p>
+            </Etape>
+
+            <Troncon sens="droite" />
+
+            <Etape
+              numero={2}
+              lieu="Sur la route"
+              titre="Nous venons le chercher"
+              icone={Truck}
+              ton="rouge"
+              cote="droite"
+              repere={{ valeur: "0 €", libelle: "enlèvement partout en France" }}
+            >
+              <p>
+                Notre équipe se déplace au créneau convenu, assure la manutention et vous remet un
+                inventaire signé et une attestation de don.
+              </p>
+            </Etape>
+
+            <Troncon sens="gauche" />
+
+            <Etape
+              numero={3}
+              lieu="À l'atelier"
+              titre="Testé, effacé, remis en état"
+              icone={ShieldCheck}
+              ton="marine"
+              cote="gauche"
+              repere={{ valeur: "100 %", libelle: "des disques effacés ou détruits" }}
+            >
+              <p>
+                Chaque équipement est testé. Les données sont effacées, certificat à l&apos;appui.
+                Ce qui est réparable part en atelier plutôt qu&apos;à la benne.
+              </p>
+            </Etape>
+
+            <Bifurcation
+              gauche={
+                <Destination
+                  pays="En France"
+                  titre="Livré directement"
+                  delai="Quelques semaines"
+                  icone={Truck}
+                  ton="bleu"
+                >
+                  <p>
+                    Écoles, mairies et associations en France reçoivent le matériel en direct, sans
+                    intermédiaire.
+                  </p>
+                </Destination>
+              }
+              droite={
+                <Destination
+                  pays="Au Congo"
+                  titre="Par conteneur, jusqu'à Kinshasa"
+                  delai="3 à 4 mois"
+                  icone={Ship}
+                  ton="rouge"
+                >
+                  <p>
+                    Départ du Havre ou d&apos;Anvers, cinq semaines de traversée, puis dédouanement
+                    et route jusqu&apos;à la structure avec nos relais locaux.
+                  </p>
+                </Destination>
+              }
+              apres={
+                <div className="forme-coeur bg-nuage flex flex-col items-start gap-5 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+                  <div>
+                    <p className="font-titre text-xl font-semibold">
+                      Vous êtes une école, une mairie ou une association ?
+                    </p>
+                    <p className="text-doux mt-1">
+                      En France comme au Congo, déposez votre demande d&apos;équipement.
+                    </p>
+                  </div>
+                  <Button asChild variante="secondaire" className="shrink-0">
+                    <Link href="/contact?profil=beneficiaire">
+                      Demander un équipement
+                      <ArrowRight aria-hidden="true" />
+                    </Link>
+                  </Button>
+                </div>
+              }
+            />
+
+            <Etape
+              numero={4}
+              lieu="En classe"
+              titre="Installé, allumé, utilisé"
+              icone={School}
+              ton="bleu"
+              cote="droite"
+              repere={{ valeur: "Jour J", libelle: "prise en main sur place" }}
+            >
+              <p>
+                Le matériel est installé, raccordé et testé avec une personne référente. Les
+                enseignants et les agents le prennent en main dès la livraison.
+              </p>
+            </Etape>
+
+            <Troncon sens="droite" />
+
+            <Etape
+              numero={5}
+              lieu="Six mois plus tard"
+              titre="Nous vous racontons la suite"
+              icone={HeartHandshake}
+              ton="rouge"
+              cote="gauche"
+              repere={{ valeur: "6 mois", libelle: "jusqu'au compte rendu d'usage" }}
+              action={
+                <Button asChild variante="courbe">
+                  <Link href="/realisations">
+                    Voir nos réalisations
+                    <ArrowRight aria-hidden="true" />
+                  </Link>
+                </Button>
+              }
+            >
+              <p>
+                Nous repassons constater l&apos;usage réel. Le compte rendu vous est envoyé : de
+                quoi nourrir votre rapport RSE avec du concret.
+              </p>
+            </Etape>
+          </ol>
+        </div>
+      </section>
+
       {/* ------------------------------------------------------------- Chiffres */}
       {/* Masquée tant qu'aucun projet n'est publié : mieux vaut pas de section
           du tout qu'une rangée de zéros. */}
       {statistiques.projets > 0 ? (
-        <Section>
+        <Section fond="nuage">
           <div className="contenu">
             <TitreSection
               surtitre="Notre action en bref"
@@ -171,7 +306,7 @@ export default async function PageAccueil() {
               <ChiffreCle
                 valeur={String(statistiques.articles)}
                 libelle="comptes rendus publiés"
-                precision="Convois, installations, retours de terrain"
+                precision="Livraisons, installations, retours de terrain"
               />
               <ChiffreCle
                 valeur="100 %"
@@ -182,129 +317,6 @@ export default async function PageAccueil() {
           </div>
         </Section>
       ) : null}
-
-      {/* --------------------------------------------------------- Les 3 temps */}
-      <section aria-labelledby="titre-parcours" className="mt-14 md:mt-20">
-        <Vague className="text-nuage" retourne />
-        <div className="bg-nuage motif-tissu py-14 md:py-20">
-          <div className="contenu">
-            <TitreSection
-              id="titre-parcours"
-              surtitre="Comment ça fonctionne"
-              titre="Trois temps, de votre local à une salle de classe"
-              chapo="Vous n'avez rien à organiser : nous prenons en charge tout le parcours."
-            />
-
-            <ol className="anim-defilement relative mt-12 grid gap-6 md:grid-cols-3">
-              {etapes.map((etape, index) => (
-                <li
-                  key={etape.titre}
-                  className={cn("parallaxe-vue relative flex flex-col", vitesses[index])}
-                >
-                  <span
-                    className={cn(
-                      "font-titre ring-nuage relative z-10 mx-auto flex size-16 items-center justify-center rounded-full text-2xl font-bold shadow-lg ring-8 md:mx-0",
-                      pastilles[etape.ton],
-                    )}
-                  >
-                    {index + 1}
-                  </span>
-                  <Card
-                    className={cn(
-                      "carte-relief mt-5 flex-1",
-                      index % 2 === 1 && "forme-coeur-inverse",
-                    )}
-                  >
-                    <CardBody className="space-y-3">
-                      <etape.icone
-                        className={cn(
-                          "size-7",
-                          etape.ton === "bleu" && "text-bleu",
-                          etape.ton === "rouge" && "text-rouge",
-                          etape.ton === "marine" && "text-marine",
-                        )}
-                        aria-hidden="true"
-                      />
-                      <CardTitre>{etape.titre}</CardTitre>
-                      <p className="text-doux leading-relaxed">{etape.texte}</p>
-                    </CardBody>
-                  </Card>
-                </li>
-              ))}
-            </ol>
-
-            <BandeauAccent ton="marine" className="parallaxe-vue mt-12 [--parallaxe:1.5rem]">
-              <p className="font-titre text-xl font-semibold">
-                Quelques semaines en France, trois à quatre mois pour le Congo
-              </p>
-              <p className="mt-1.5 leading-relaxed text-white/85">
-                En France, le lot est livré directement. Pour le Congo, un lot enlevé en janvier
-                arrive généralement en salle de classe entre avril et mai — la traversée maritime et
-                le dédouanement pèsent la moitié du délai.
-              </p>
-            </BandeauAccent>
-
-            <div className="mt-10">
-              <Button asChild variante="courbe">
-                <Link href="/comment-ca-marche">
-                  Le parcours détaillé d&apos;un don
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-        <Vague className="text-nuage" />
-      </section>
-
-      {/* ------------------------------------------------------- Deux audiences */}
-      <Section>
-        <div className="contenu">
-          <TitreSection
-            surtitre="À qui nous nous adressons"
-            titre="Deux interlocuteurs, deux besoins"
-          />
-          <div className="anim-defilement mt-10 grid gap-6 md:grid-cols-2">
-            <div className="forme-coeur bg-rouge-voile parallaxe-vue relative isolate overflow-hidden p-7 [--parallaxe:1rem] md:p-9 md:[--parallaxe:0.75rem]">
-              <Coeur className="text-rouge-vif -right-14 -bottom-16 -z-10 w-44 opacity-10" />
-              <span className="bg-rouge-vif inline-flex size-14 items-center justify-center rounded-full text-white">
-                <Building2 className="size-7" aria-hidden="true" />
-              </span>
-              <h3 className="mt-5 text-2xl font-semibold">Vous êtes une entreprise en France</h3>
-              <p className="text-doux mt-3 leading-relaxed">
-                Une alternative à la benne : nous organisons l&apos;enlèvement, effaçons les données
-                et vous remettons inventaire et compte rendu d&apos;usage pour votre rapport RSE.
-              </p>
-              <Button asChild variante="courbe" className="mt-6">
-                <Link href="/services#entreprises">
-                  Ce que nous proposons aux entreprises
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-            </div>
-
-            <div className="forme-coeur-inverse bg-bleu-voile parallaxe-vue relative isolate overflow-hidden p-7 [--parallaxe:1rem] md:p-9 md:[--parallaxe:2.5rem]">
-              <Coeur className="text-bleu-vif -right-14 -bottom-16 -z-10 w-44 opacity-10" />
-              <span className="bg-bleu-vif inline-flex size-14 items-center justify-center rounded-full text-white">
-                <GraduationCap className="size-7" aria-hidden="true" />
-              </span>
-              <h3 className="mt-5 text-2xl font-semibold">
-                Vous êtes une école ou une association
-              </h3>
-              <p className="text-doux mt-3 leading-relaxed">
-                En France comme au Congo : adressez-nous une demande d&apos;équipement. Nous
-                examinons chaque dossier, avec nos relais locaux, selon le matériel disponible.
-              </p>
-              <Button asChild variante="courbe" className="mt-6">
-                <Link href="/services#beneficiaires">
-                  Ce que nous proposons aux bénéficiaires
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Section>
 
       {/* -------------------------------------- Au-delà de la distribution (Congo) */}
       <section className="relative isolate">
@@ -430,36 +442,55 @@ export default async function PageAccueil() {
         </Section>
       ) : null}
 
-      {/* ------------------------------------------------------------- CTA final */}
-      <section className="contenu py-14 md:py-20">
-        <div className="from-bleu-vif to-bleu-fonce relative isolate overflow-hidden rounded-[2rem] rounded-bl-lg bg-linear-to-br px-6 py-14 text-center md:rounded-[3rem] md:rounded-bl-xl md:px-12 md:py-20">
-          <Coeur className="-right-12 -bottom-16 -z-10 w-64 text-white/10 md:w-96" />
-          <div className="parallaxe-vue mx-auto max-w-3xl [--parallaxe:1.5rem]">
-            <h2 className="text-3xl font-bold text-white md:text-5xl">
-              Un local à vider ? Parlons-en avant la benne.
+      {/* ------------------------------------------- Deux portes d'entrée (CTA) */}
+      {/* Les deux publics, côte à côte, chacun avec sa couleur et son action :
+          c'est la dernière chose vue avant le pied de page. */}
+      <section aria-label="Nous contacter" className="contenu py-14 md:py-20">
+        <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+          <div className="forme-coeur from-rouge-vif to-rouge-fonce parallaxe-vue relative isolate overflow-hidden bg-linear-to-br p-8 text-white [--parallaxe:1rem] md:p-12 md:[--parallaxe:0.75rem]">
+            <Coeur className="-right-12 -bottom-14 -z-10 w-60 text-white/10 md:w-72" />
+            <p className="text-sm font-extrabold tracking-[0.14em] text-white/80 uppercase">
+              Donateurs
+            </p>
+            <h2 className="mt-2 text-3xl font-bold md:text-4xl">
+              Du matériel qui dort chez vous ?
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-white/90">
-              Décrivez-nous le matériel et son volume. Réponse claire sous 72 heures.
+            <p className="mt-3 max-w-md leading-relaxed text-white/90">
+              Entreprises, collectivités : décrivez-nous le lot, nous répondons sous 72 heures et
+              venons le chercher gratuitement.
             </p>
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-5">
-              <Button asChild taille="lg" variante="clair">
-                <Link href="/contact?profil=entreprise">
-                  Proposer un don de matériel
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button asChild variante="courbe-clair" className="text-base">
-                <Link href="/contact?profil=beneficiaire">Demander un équipement</Link>
-              </Button>
-            </div>
-            <p className="mt-8 text-sm text-white/80">
-              Ou écrivez-nous directement à{" "}
-              <a href={`mailto:${site.email}`} className="font-bold text-white underline">
-                {site.email}
-              </a>
+            <Button asChild taille="lg" variante="clair" className="mt-8">
+              <Link href="/contact?profil=entreprise">
+                Proposer un don
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="forme-coeur-inverse from-bleu-vif to-bleu-fonce parallaxe-vue relative isolate overflow-hidden bg-linear-to-br p-8 text-white [--parallaxe:1rem] md:p-12 md:[--parallaxe:2.25rem]">
+            <Coeur className="-right-12 -bottom-14 -z-10 w-60 text-white/10 md:w-72" />
+            <p className="text-sm font-extrabold tracking-[0.14em] text-white/80 uppercase">
+              Bénéficiaires
             </p>
+            <h2 className="mt-2 text-3xl font-bold md:text-4xl">Besoin d&apos;équipement ?</h2>
+            <p className="mt-3 max-w-md leading-relaxed text-white/90">
+              Écoles, mairies, associations, en France ou au Congo : présentez votre structure et
+              vos besoins.
+            </p>
+            <Button asChild taille="lg" variante="clair" className="mt-8">
+              <Link href="/contact?profil=beneficiaire">
+                Demander un équipement
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
           </div>
         </div>
+        <p className="text-doux mt-8 text-center text-sm">
+          Ou écrivez-nous directement à{" "}
+          <a href={`mailto:${site.email}`} className="text-encre font-bold underline">
+            {site.email}
+          </a>
+        </p>
       </section>
     </>
   );

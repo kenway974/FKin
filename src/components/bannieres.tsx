@@ -35,16 +35,19 @@ export function BanniereAccueil({
   children: React.ReactNode;
 }) {
   return (
-    // Plein écran : toute la largeur, toute la hauteur visible sous l'en-tête
-    // (4 rem sur mobile, 5 rem au-delà). `svh` plutôt que `vh` : sur mobile,
-    // la hauteur ne saute pas quand la barre d'adresse se replie.
-    <section className="bg-marine relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden md:min-h-[calc(100svh-5rem)] lg:block">
+    // Plein écran : toute la largeur, toute la hauteur visible. `svh` plutôt
+    // que `vh` : sur mobile, la hauteur ne saute pas quand la barre d'adresse
+    // se replie.
+    //
+    // Le héros remonte sous l'en-tête (marge négative de sa hauteur) : sur
+    // l'accueil, l'en-tête est translucide et se fond dans le marine.
+    <section className="bg-marine relative isolate -mt-16 flex min-h-svh flex-col overflow-hidden pt-16 md:-mt-20 md:pt-20 lg:block">
       <div
         className="from-marine-fonce via-marine to-marine-clair absolute inset-0 -z-20 bg-linear-to-br"
         aria-hidden="true"
       />
 
-      <div className="contenu relative z-10 pt-8 pb-12 text-white sm:pt-14 sm:pb-16 lg:flex lg:min-h-[inherit] lg:items-center lg:py-16">
+      <div className="contenu relative z-10 pt-8 pb-12 text-white sm:pt-14 sm:pb-16 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:py-16">
         {/* Le texte descend un peu moins vite que la page : premier plan de
             lecture, il reste en vue un instant de plus. */}
         <div className="parallaxe [--parallaxe:3rem] lg:max-w-[min(38rem,44vw)]">{children}</div>
