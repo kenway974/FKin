@@ -17,8 +17,8 @@ export default function ErreurGlobale({
       <body
         style={{
           fontFamily: "system-ui, sans-serif",
-          backgroundColor: "#fdfaf6",
-          color: "#2b211a",
+          backgroundColor: "#f8fbfe",
+          color: "#16233f",
           display: "flex",
           minHeight: "100vh",
           alignItems: "center",
@@ -31,7 +31,7 @@ export default function ErreurGlobale({
           <h1 style={{ fontSize: "1.75rem", marginBottom: "0.75rem" }}>
             Le site rencontre un problème
           </h1>
-          <p style={{ color: "#6b5a4c", marginBottom: "1.5rem" }}>
+          <p style={{ color: "#4f5b74", marginBottom: "1.5rem" }}>
             Merci de réessayer dans quelques instants.
             {error.digest ? ` Référence : ${error.digest}` : ""}
           </p>
@@ -39,7 +39,7 @@ export default function ErreurGlobale({
             type="button"
             onClick={reset}
             style={{
-              backgroundColor: "#9c4a1f",
+              backgroundColor: "#d72e2b",
               color: "white",
               border: "none",
               borderRadius: "0.75rem",

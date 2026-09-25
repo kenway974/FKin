@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardTitre } from "@/components/ui/card";
@@ -114,26 +115,28 @@ export default function PageCommentCaMarche() {
 
       <Section>
         <div className="contenu">
-          <ol className="space-y-4">
-            {etapes.map((etape) => (
-              <li key={etape.numero}>
-                <Card>
-                  <CardBody className="flex flex-col gap-4 sm:flex-row sm:gap-6">
-                    <div className="flex shrink-0 items-center gap-3 sm:flex-col sm:items-start">
-                      <span
-                        aria-hidden="true"
-                        className="font-titre text-rouge/40 text-3xl font-bold"
-                      >
-                        {etape.numero}
-                      </span>
-                      <span className="bg-bleu-voile rounded-full px-2.5 py-1 text-xs font-semibold text-[#7a4a08]">
-                        {etape.delai}
-                      </span>
-                    </div>
-                    <div className="space-y-1.5">
-                      <CardTitre className="text-lg">{etape.titre}</CardTitre>
-                      <p className="text-doux text-sm leading-relaxed">{etape.texte}</p>
-                    </div>
+          {/* Frise verticale : une pastille numérotée par étape, reliées par un
+              fil en pointillés. Les couleurs du logo alternent pour rythmer la
+              lecture. */}
+          <ol className="before:border-bordure relative space-y-5 before:absolute before:top-8 before:bottom-8 before:left-7 before:border-l-[3px] before:border-dotted md:before:left-8">
+            {etapes.map((etape, index) => (
+              <li key={etape.numero} className="relative flex gap-4 md:gap-6">
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "font-titre ring-fond relative z-10 flex size-14 shrink-0 items-center justify-center rounded-full text-xl font-bold text-white ring-6 md:size-16 md:text-2xl",
+                    ["bg-bleu-vif", "bg-rouge-vif", "bg-marine"][index % 3],
+                  )}
+                >
+                  {etape.numero}
+                </span>
+                <Card className={cn("flex-1", index % 2 === 1 && "forme-coeur-inverse")}>
+                  <CardBody className="space-y-2">
+                    <span className="bg-bleu-voile text-bleu-fonce inline-flex rounded-full px-3 py-1 text-xs font-bold">
+                      {etape.delai}
+                    </span>
+                    <CardTitre className="text-xl">{etape.titre}</CardTitre>
+                    <p className="text-doux leading-relaxed">{etape.texte}</p>
                   </CardBody>
                 </Card>
               </li>

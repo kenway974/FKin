@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
  * alpha, Safari exige un HEVC spécial qu'on ne sait produire que sur Mac.
  *
  * On contourne le problème avec la technique du « stacked alpha » :
- *   - un MP4 H.264 ordinaire, lu partout, contient deux images empilées :
+ *   - une vidéo ordinaire (MP4 H.264, WebM en secours), lue partout, contient deux images empilées :
  *     l'image couleur en haut, le masque de détourage (en niveaux de gris)
  *     en bas ;
  *   - un petit shader WebGL recompose les deux à chaque image et dessine le
@@ -27,15 +27,19 @@ import { cn } from "@/lib/utils";
  * animations. La vidéo est aussi mise en pause dès qu'elle sort de l'écran.
  */
 export function VideoDetouree({
-  src,
+  sources,
   poster,
   largeur,
   hauteur,
   alt,
   className,
 }: {
-  /** MP4 « empilé » : couleur en haut, masque en bas (hauteur = 2 × `hauteur`). */
-  src: string;
+  /**
+   * Fichiers « empilés » (couleur en haut, masque en bas, hauteur = 2 ×
+   * `hauteur`), par ordre de préférence. Le MP4 H.264 couvre Safari, Chrome et
+   * Edge ; le WebM VP9 couvre les navigateurs livrés sans décodeur H.264.
+   */
+  sources: readonly { src: string; type: string }[];
   /** Image détourée de repli (WebP ou PNG transparent). */
   poster: string;
   /** Dimensions d'une image (et non du fichier empilé). */
@@ -153,14 +157,17 @@ export function VideoDetouree({
       />
       <video
         ref={refVideo}
-        src={src}
         muted
         loop
         playsInline
         preload="auto"
         aria-hidden="true"
         className="hidden"
-      />
+      >
+        {sources.map((source) => (
+          <source key={source.src} src={source.src} type={source.type} />
+        ))}
+      </video>
     </div>
   );
 }

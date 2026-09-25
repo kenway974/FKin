@@ -70,9 +70,12 @@ export default async function PageAccueil() {
       <BanniereAccueil
         sujet={
           <VideoDetouree
-            src="/heros/enfants-detoures.mp4"
+            sources={[
+              { src: "/heros/enfants-detoures.mp4", type: "video/mp4" },
+              { src: "/heros/enfants-detoures.webm", type: "video/webm" },
+            ]}
             poster="/heros/enfants-detoures.webp"
-            largeur={720}
+            largeur={612}
             hauteur={900}
             alt="Trois écoliers en survêtement bleu, souriants, font coucou"
             className="w-full"
@@ -292,7 +295,7 @@ export default async function PageAccueil() {
       <section className="relative isolate">
         <Vague className="text-marine" retourne />
         <div className="bg-marine relative overflow-hidden py-14 text-white md:py-20">
-          <Coeur className="text-bleu-vif -top-16 -right-20 -z-0 w-80 opacity-10 md:w-[26rem]" />
+          <Coeur className="text-bleu-vif -right-16 -bottom-20 w-80 opacity-10 md:w-[26rem]" />
           <div className="contenu relative">
             <p className="text-rouge-clair mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
               <span

@@ -126,7 +126,7 @@ export function FormulaireContact() {
                 value={profil.valeur}
                 {...register("typeEmetteur")}
                 aria-describedby={errors.typeEmetteur ? "erreur-profil" : undefined}
-                className="mt-1 size-4 shrink-0 accent-[#9c4a1f]"
+                className="accent-bleu mt-1 size-4 shrink-0"
               />
               <span>
                 <span className="text-encre flex items-center gap-2 font-semibold">

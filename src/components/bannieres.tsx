@@ -36,7 +36,7 @@ export function BanniereAccueil({
           </div>
 
           {/* Sujet : posé sur le bord bas de la carte, sans marge. */}
-          <div className="relative mx-auto -mt-2 w-[82%] max-w-[26rem] self-end sm:w-[60%] md:mx-0 md:mt-0 md:w-full md:max-w-none md:justify-self-center lg:w-[92%]">
+          <div className="relative mx-auto -mt-2 w-[82%] max-w-[26rem] self-end sm:w-[60%] md:mt-0 md:w-full md:max-w-[21rem] md:justify-self-center lg:max-w-[24rem]">
             {sujet}
           </div>
         </div>
@@ -157,7 +157,7 @@ export function BannierePage({
           <div className="voile-banniere absolute inset-0 -z-10" aria-hidden="true" />
         </>
       ) : (
-        <Coeur className="-top-14 -right-10 -z-10 w-64 text-white/10 md:-top-20 md:w-96" />
+        <Coeur className="right-16 bottom-20 -z-10 hidden w-56 -rotate-12 text-white/10 md:block lg:right-28 lg:w-72" />
       )}
 
       <div className="contenu relative pt-14 pb-20 text-white md:pt-20 md:pb-28">

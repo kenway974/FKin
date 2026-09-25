@@ -16,40 +16,38 @@ export const contentType = "image/png";
 
 export default function Image() {
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          backgroundColor: "#fdfaf6",
-          padding: 72,
-          fontFamily: "sans-serif",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-          <img src={pictogrammeDataUri} width={87} height={64} alt="" />
-          <div style={{ fontSize: 34, fontWeight: 700, color: "#16263c" }}>{site.nom}</div>
-        </div>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        backgroundColor: "#f8fbfe",
+        padding: 72,
+        fontFamily: "sans-serif",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
+        <img src={pictogrammeDataUri} width={87} height={64} alt="" />
+        <div style={{ fontSize: 34, fontWeight: 700, color: "#1a2c50" }}>{site.nom}</div>
+      </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ fontSize: 62, fontWeight: 700, color: "#16263c", lineHeight: 1.15 }}>
-            Le matériel dont vous n&apos;avez plus l&apos;usage devient une salle de classe équipée.
-          </div>
-          <div style={{ fontSize: 30, color: "#5a6b7a" }}>
-            Collecte partout en France · Distribution au Congo
-          </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div style={{ fontSize: 62, fontWeight: 700, color: "#1a2c50", lineHeight: 1.15 }}>
+          Le matériel dont vous n&apos;avez plus l&apos;usage devient une salle de classe équipée.
         </div>
-
-        <div style={{ display: "flex", height: 12, width: "100%" }}>
-          <div style={{ flex: 2, backgroundColor: "#16263c" }} />
-          <div style={{ flex: 1, backgroundColor: "#2f6fb0" }} />
-          <div style={{ flex: 1, backgroundColor: "#d1463a" }} />
+        <div style={{ fontSize: 30, color: "#4f5b74" }}>
+          Collecte partout en France · Distribution au Congo
         </div>
       </div>
-    ),
+
+      <div style={{ display: "flex", height: 12, width: "100%" }}>
+        <div style={{ flex: 2, backgroundColor: "#1a2c50" }} />
+        <div style={{ flex: 1, backgroundColor: "#0495d4" }} />
+        <div style={{ flex: 1, backgroundColor: "#ef433f" }} />
+      </div>
+    </div>,
     size,
   );
 }

@@ -60,22 +60,25 @@ const variantesBouton = cva(
       },
     },
     compoundVariants: [
-      // Pilules : quand une icône est présente, le bord droit se resserre pour
-      // que la pastille vienne presque toucher le contour de la gélule.
+      // Pilules : quand une icône est présente, le bord de son côté se resserre
+      // pour que la pastille vienne presque toucher le contour de la gélule.
       {
         variante: ["principal", "secondaire", "clair"],
         taille: "sm",
-        className: "has-[>svg]:pr-1 [&>svg]:size-8 [&>svg]:p-2",
+        className:
+          "has-[>svg:last-child]:pr-1 has-[>svg:first-child]:pl-1 [&>svg]:size-8 [&>svg]:p-2",
       },
       {
         variante: ["principal", "secondaire", "clair"],
         taille: "md",
-        className: "has-[>svg]:pr-1.5 [&>svg]:size-9 [&>svg]:p-2.5",
+        className:
+          "has-[>svg:last-child]:pr-1.5 has-[>svg:first-child]:pl-1.5 [&>svg]:size-9 [&>svg]:p-2.5",
       },
       {
         variante: ["principal", "secondaire", "clair"],
         taille: "lg",
-        className: "has-[>svg]:pr-1.5 [&>svg]:size-11 [&>svg]:p-3",
+        className:
+          "has-[>svg:last-child]:pr-1.5 has-[>svg:first-child]:pl-1.5 [&>svg]:size-11 [&>svg]:p-3",
       },
       // Les traits n'ont ni hauteur fixe ni marge interne : ils s'alignent sur
       // le texte qui les entoure, quelle que soit la taille demandée.
