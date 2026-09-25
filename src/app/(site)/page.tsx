@@ -75,7 +75,7 @@ export default async function PageAccueil() {
               { src: "/heros/enfants-detoures.webm", type: "video/webm" },
             ]}
             poster="/heros/enfants-detoures.webp"
-            largeur={612}
+            largeur={640}
             hauteur={900}
             alt="Trois écoliers en survêtement bleu, souriants, font coucou"
             className="h-[50svh] md:h-[min(82svh,54rem)]"
