@@ -3,67 +3,55 @@
 /* ==========================================================================
    Thème — Tailwind CSS v4
    --------------------------------------------------------------------------
-   Palette « terre & solidarité » : un fond sable chaud, un brun profond pour
-   le texte, une terracotta comme couleur principale et un vert profond comme
-   accent (croissance, éducation).
+   Palette de la marque, relevée sur le logo (livre-cœur) : un bleu, un rouge
+   et le marine de la base du livre. Rien d'autre : pas de beige, pas de brun.
+   Les fonds clairs sont très légèrement teintés de bleu pour que le blanc ne
+   paraisse jamais « cassé » à côté du marine.
 
-   Les contrastes ont été choisis pour dépasser le seuil WCAG AA (4,5:1) sur
-   le fond clair :
-     foreground #2B211A sur #FDFAF6 → ~14:1
-     muted      #6B5A4C sur #FDFAF6 → ~5,7:1
-     terre      #9C4A1F sur #FDFAF6 → ~6,3:1
-     vert       #2F6B4F sur #FDFAF6 → ~6,0:1
-   L'ocre, moins contrasté, ne sert jamais à du texte courant : uniquement à
-   des filets, des puces et des aplats décoratifs.
+   Chaque couleur existe en deux intensités :
+     - la teinte « vif », identique au logo, réservée aux aplats décoratifs,
+       aux courbes et aux pictogrammes ;
+     - la teinte de base, légèrement assombrie, qui passe le seuil WCAG AA
+       (4,5:1) en texte sur fond clair comme en texte blanc sur elle :
+         bleu   #0474A8 sur #FFFFFF → ~5,0:1
+         rouge  #D72E2B sur #FFFFFF → ~4,6:1
+         encre  #16233F sur #F8FBFE → ~15:1
+         doux   #4F5B74 sur #F8FBFE → ~6,6:1
    ========================================================================== */
 
 @theme {
-  --color-fond: #fdfaf6;
-  --color-sable: #f6efe6;
-  --color-sable-fonce: #ede0ce;
-  --color-encre: #2b211a;
-  --color-doux: #6b5a4c;
-  --color-bordure: #e4d6c4;
+  --color-fond: #f8fbfe;
+  --color-nuage: #edf4fa;
+  --color-nuage-fonce: #dbe8f3;
+  --color-encre: #16233f;
+  --color-doux: #4f5b74;
+  --color-bordure: #d8e3ee;
 
-  --color-terre: #9c4a1f;
-  --color-terre-clair: #c2703d;
-  --color-terre-fonce: #7a3915;
-  --color-terre-voile: #f7e9df;
+  --color-marine: #1a2c50;
+  --color-marine-clair: #26406f;
+  --color-marine-fonce: #111d36;
 
-  --color-vert: #2f6b4f;
-  --color-vert-fonce: #24523c;
-  --color-vert-voile: #e4efe8;
+  --color-bleu: #0474a8;
+  --color-bleu-vif: #0495d4;
+  --color-bleu-clair: #42b0e3;
+  --color-bleu-fonce: #055a82;
+  --color-bleu-voile: #e3f2fa;
 
-  --color-ocre: #c97b1e;
-  --color-ocre-fonce: #9a5c11;
-  --color-ocre-voile: #fbf0dc;
-
-  /* Couleurs d'appoint, introduites pour donner du relief aux bannières et aux
-     illustrations sans sortir de la famille terre / végétal.
-     `indigo` et `brique` ne servent qu'à des aplats et à du texte sur fond
-     clair : leur contraste sur #FDFAF6 dépasse 6:1. */
-  --color-indigo: #2f4858;
-  --color-indigo-voile: #e6edf1;
-  --color-brique: #b4472f;
-  --color-soleil: #e8a33d;
-  --color-soleil-voile: #fdf3e2;
-
-  /* Couleurs de la marque, relevées directement sur le logo (livre-cœur).
-     Elles sont réservées au héros de l'accueil, qui porte l'identité ; le
-     reste du site garde la famille terre, plus chaleureuse en lecture longue. */
-  --color-marine: #182448;
-  --color-marine-clair: #24345f;
-  --color-bleu: #0090cc;
-  --color-bleu-clair: #35a9dd;
-  --color-rouge: #e43c3c;
-  --color-rouge-clair: #f0603c;
+  --color-rouge: #d72e2b;
+  --color-rouge-vif: #ef433f;
+  --color-rouge-clair: #fc6844;
+  --color-rouge-fonce: #b0221f;
+  --color-rouge-voile: #fdeceb;
 
   --font-sans:
     var(--police-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  --font-titre: var(--police-titre), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-titre:
+    var(--police-titre), ui-rounded, var(--police-sans), ui-sans-serif, system-ui, sans-serif;
 
-  --radius-douce: 0.75rem;
+  /* Formes : aucune arête vive. Les cartes reprennent la silhouette du logo —
+     de grands arrondis, et un coin plus serré, comme la pointe du cœur. */
+  --radius-douce: 1.25rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -88,7 +76,8 @@ h1,
 h2,
 h3 {
   font-family: var(--font-titre);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
+  font-weight: 600;
   text-wrap: balance;
 }
 
@@ -98,7 +87,7 @@ p {
 
 /* Focus clavier toujours visible — jamais de `outline: none` sec. */
 :focus-visible {
-  outline: 3px solid var(--color-vert);
+  outline: 3px solid var(--color-bleu);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -135,20 +124,15 @@ p {
   }
 }
 
-/* Motif discret de « tissu » utilisé sur les sections sable. */
+/* Semis de points très pâles, posé sur les sections « nuage » pour éviter
+   l'aplat plat sans ajouter de bruit. Le nom est conservé pour ne pas toucher
+   aux pages qui l'utilisent déjà. */
 @utility motif-tissu {
-  background-image:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--color-ocre) 6%, transparent) 25%,
-      transparent 25%
-    ),
-    linear-gradient(
-      225deg,
-      color-mix(in srgb, var(--color-ocre) 6%, transparent) 25%,
-      transparent 25%
-    );
-  background-size: 28px 28px;
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--color-bleu-vif) 14%, transparent) 1.2px,
+    transparent 1.6px
+  );
+  background-size: 22px 22px;
 }
 
 /* --------------------------------------------------------------------------
@@ -286,7 +270,7 @@ p {
   &:focus-within {
     transform: translateY(-4px);
     box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--color-encre) 32%, transparent);
-    border-color: color-mix(in srgb, var(--color-terre) 45%, transparent);
+    border-color: color-mix(in srgb, var(--color-rouge) 45%, transparent);
   }
 }
 
@@ -312,66 +296,17 @@ p {
   );
 }
 
-/* Voile latéral, utilisé quand le fond est l'illustration : le texte occupe la
-   gauche, la scène reste donc pleinement visible à droite et en bas. */
-@utility voile-lateral {
-  background:
-    linear-gradient(
-      to right,
-      color-mix(in srgb, var(--color-encre) 82%, transparent) 0%,
-      color-mix(in srgb, var(--color-encre) 62%, transparent) 42%,
-      color-mix(in srgb, var(--color-encre) 18%, transparent) 78%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-encre) 45%, transparent) 0%,
-      transparent 35%
-    );
-}
-
-/* Sur mobile, le texte occupe toute la largeur : un voile latéral masquerait
-   entièrement l'illustration. On bascule donc sur un voile vertical, sombre
-   derrière le texte et transparent en bas, où vit la scène. */
-@media (width < 48rem) {
-  .voile-lateral {
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-encre) 78%, transparent) 0%,
-      color-mix(in srgb, var(--color-encre) 72%, transparent) 55%,
-      color-mix(in srgb, var(--color-encre) 25%, transparent) 88%,
-      transparent 100%
-    );
-  }
-}
-
-/* Dégradé chaud, utilisé en repli quand aucune photo n'est disponible. */
-@utility degrade-terre {
-  background-image:
-    radial-gradient(
-      ellipse 80% 60% at 15% 0%,
-      color-mix(in srgb, var(--color-soleil) 55%, transparent),
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse 70% 70% at 90% 30%,
-      color-mix(in srgb, var(--color-brique) 60%, transparent),
-      transparent 65%
-    ),
-    linear-gradient(150deg, var(--color-terre-fonce), var(--color-indigo));
-}
-
-/* Filet tricolore, repris du logo. Sert de séparateur entre deux sections. */
+/* Filet aux couleurs du cœur du logo : bleu, puis rouge, avec des extrémités
+   arrondies. Sert de séparateur fin entre deux zones. */
 @utility filet-tricolore {
-  height: 5px;
+  height: 6px;
+  border-radius: 999px;
   background: linear-gradient(
     to right,
-    var(--color-terre) 0%,
-    var(--color-terre) 45%,
-    var(--color-ocre) 45%,
-    var(--color-ocre) 72%,
-    var(--color-vert) 72%,
-    var(--color-vert) 100%
+    var(--color-bleu-vif) 0%,
+    var(--color-bleu-vif) 50%,
+    var(--color-rouge-vif) 50%,
+    var(--color-rouge-vif) 100%
   );
 }
 
@@ -385,10 +320,10 @@ p {
 @keyframes pulsation-douce {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-soleil) 55%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-rouge-clair) 55%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-soleil) 0%, transparent);
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-rouge-clair) 0%, transparent);
   }
 }
 
@@ -398,18 +333,6 @@ p {
   }
   to {
     transform: translateX(220%) skewX(-18deg);
-  }
-}
-
-@keyframes respiration-soleil {
-  0%,
-  100% {
-    opacity: 0.85;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.06);
   }
 }
 
@@ -470,13 +393,6 @@ p {
   }
 }
 
-/* Le soleil de la bannière « respire » lentement. */
-@utility respire-soleil {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: respiration-soleil 7s ease-in-out infinite;
-}
-
 /* Dégradé animé, pour les grands aplats de bannière. Le fond doit être un
    `background` de type gradient avec `background-size: 200% 200%`. */
 @utility fond-anime {
@@ -504,5 +420,52 @@ p {
   &:hover::after,
   &:focus-visible::after {
     transform: scaleX(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Formes de la marque
+   --------------------------------------------------------------------------
+   Le logo n'a aucune arête : un cœur, des pages de livre qui s'incurvent. Le
+   site reprend ces deux idées — des arrondis généreux avec un coin plus serré
+   (la pointe du cœur), et des courbes en guise de séparations.
+   -------------------------------------------------------------------------- */
+
+/* Silhouette « cœur » : trois grands arrondis, un coin serré en bas à gauche. */
+@utility forme-coeur {
+  border-radius: 2rem 2rem 2rem 0.5rem;
+}
+
+/* Variante miroir, pour alterner d'une carte à l'autre. */
+@utility forme-coeur-inverse {
+  border-radius: 2rem 2rem 0.5rem 2rem;
+}
+
+/* Trait courbe sous un lien : une vague dessinée, qui se tend au survol.
+   Le tracé est un SVG en masque, coloré par `currentColor` : il prend donc
+   automatiquement la couleur du texte, sur fond clair comme sur fond sombre. */
+@utility trait-courbe {
+  position: relative;
+  padding-bottom: 0.55rem;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0.5rem;
+    background: var(--couleur-trait, currentColor);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 7 C 22 1, 38 1, 60 5 S 100 9, 118 3' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")
+      center / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 7 C 22 1, 38 1, 60 5 S 100 9, 118 3' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")
+      center / 100% 100% no-repeat;
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1.08) scaleY(0.6);
   }
 }

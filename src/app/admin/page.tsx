@@ -77,7 +77,7 @@ export default async function PageAdmin() {
             <Card className="h-full transition-shadow hover:shadow-md">
               <CardBody className="space-y-1">
                 <span className="text-doux flex items-center gap-2 text-sm font-semibold">
-                  <carte.icone className="text-terre size-4" aria-hidden="true" />
+                  <carte.icone className="text-rouge size-4" aria-hidden="true" />
                   {carte.titre}
                 </span>
                 <p className="font-titre text-3xl font-bold">{carte.valeur}</p>
@@ -116,7 +116,7 @@ export default async function PageAdmin() {
                   <Card className="transition-shadow hover:shadow-md">
                     <CardBody className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4">
                       {!message.lu ? (
-                        <span className="bg-terre rounded-full px-2 py-0.5 text-xs font-bold text-white">
+                        <span className="bg-rouge rounded-full px-2 py-0.5 text-xs font-bold text-white">
                           Nouveau
                         </span>
                       ) : null}

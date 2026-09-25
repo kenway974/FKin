@@ -108,7 +108,7 @@ export default function PageCommentCaMarche() {
         surtitre="Comment ça marche"
         titre="Le parcours complet d'un don"
         chapo="Du signalement d'un lot à l'installation des élèves devant les postes : trois à quatre mois. Voici ce qui se passe, délais réels compris."
-        ton="indigo"
+        ton="marine"
         photo={trouverPhotoBanniere("comment-ca-marche")}
       />
 
@@ -122,11 +122,11 @@ export default function PageCommentCaMarche() {
                     <div className="flex shrink-0 items-center gap-3 sm:flex-col sm:items-start">
                       <span
                         aria-hidden="true"
-                        className="font-titre text-terre/40 text-3xl font-bold"
+                        className="font-titre text-rouge/40 text-3xl font-bold"
                       >
                         {etape.numero}
                       </span>
-                      <span className="bg-ocre-voile rounded-full px-2.5 py-1 text-xs font-semibold text-[#7a4a08]">
+                      <span className="bg-bleu-voile rounded-full px-2.5 py-1 text-xs font-semibold text-[#7a4a08]">
                         {etape.delai}
                       </span>
                     </div>

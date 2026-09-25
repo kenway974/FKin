@@ -35,17 +35,17 @@ export default async function PageAdminMessages() {
                     className={
                       message.lu
                         ? "transition-shadow hover:shadow-md"
-                        : "border-l-terre border-l-4 transition-shadow hover:shadow-md"
+                        : "border-l-rouge border-l-4 transition-shadow hover:shadow-md"
                     }
                   >
                     <CardBody className="space-y-2">
                       <div className="flex flex-wrap items-center gap-2">
                         {!message.lu ? (
-                          <Badge ton="terre">
+                          <Badge ton="rouge">
                             <span className="sr-only">Message </span>Non lu
                           </Badge>
                         ) : null}
-                        <Badge ton={message.type_emetteur === "entreprise" ? "ocre" : "vert"}>
+                        <Badge ton={message.type_emetteur === "entreprise" ? "marine" : "bleu"}>
                           <Icone className="size-3.5" aria-hidden="true" />
                           {libellesEmetteur[message.type_emetteur]}
                         </Badge>

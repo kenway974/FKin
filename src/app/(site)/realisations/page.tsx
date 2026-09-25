@@ -61,7 +61,7 @@ export default async function PageRealisations() {
         surtitre="Réalisations"
         titre="Ce que le matériel est devenu"
         chapo="Chaque fiche indique le lieu, le matériel livré et ce qu'il a permis de faire. De quoi vérifier que la démarche va au bout."
-        ton="vert"
+        ton="bleu"
         photo={trouverPhotoBanniere("realisations")}
       />
 
@@ -90,7 +90,7 @@ export default async function PageRealisations() {
             </EtatVide>
           )}
 
-          <div className="rounded-douce border-bordure bg-sable mt-12 border p-6 md:p-8">
+          <div className="rounded-douce border-bordure bg-nuage mt-12 border p-6 md:p-8">
             <h2 className="font-titre text-2xl font-bold">
               Votre entreprise peut être le point de départ du prochain projet
             </h2>

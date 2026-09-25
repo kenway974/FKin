@@ -105,7 +105,7 @@ export function TeleversementImage({
   }
 
   return (
-    <div className="rounded-douce border-bordure bg-sable/50 space-y-3 border p-4">
+    <div className="rounded-douce border-bordure bg-nuage/50 space-y-3 border p-4">
       <Champ>
         <Label htmlFor={identifiant}>Image</Label>
 
@@ -140,7 +140,7 @@ export function TeleversementImage({
         ) : null}
 
         <div className="flex flex-wrap items-center gap-3">
-          <label className="rounded-douce border-terre text-terre hover:bg-terre-voile inline-flex h-9 cursor-pointer items-center gap-2 border-2 px-3 text-sm font-medium">
+          <label className="rounded-douce border-rouge text-rouge hover:bg-rouge-voile inline-flex h-9 cursor-pointer items-center gap-2 border-2 px-3 text-sm font-medium">
             <ImageUp className="size-4" aria-hidden="true" />
             {enCours ? "Téléversement…" : valeur ? "Remplacer l'image" : "Choisir une image"}
             <input

@@ -46,7 +46,7 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
       <Card>
         <CardBody className="space-y-5">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge ton={message.type_emetteur === "entreprise" ? "ocre" : "vert"}>
+            <Badge ton={message.type_emetteur === "entreprise" ? "marine" : "bleu"}>
               <Icone className="size-3.5" aria-hidden="true" />
               {libellesEmetteur[message.type_emetteur]}
             </Badge>
@@ -57,7 +57,7 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
 
           <h1 className="font-titre text-2xl font-bold">{message.sujet}</h1>
 
-          <dl className="rounded-douce bg-sable grid gap-x-6 gap-y-2 p-4 text-sm sm:grid-cols-2">
+          <dl className="rounded-douce bg-nuage grid gap-x-6 gap-y-2 p-4 text-sm sm:grid-cols-2">
             <div>
               <dt className="font-semibold">Nom</dt>
               <dd className="text-doux">{message.nom}</dd>
@@ -67,7 +67,7 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
               <dd>
                 <a
                   href={`mailto:${message.email}`}
-                  className="text-terre underline underline-offset-4"
+                  className="text-rouge underline underline-offset-4"
                 >
                   {message.email}
                 </a>
@@ -85,7 +85,7 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
                 <dd>
                   <a
                     href={`tel:${message.telephone.replace(/\s/g, "")}`}
-                    className="text-terre underline underline-offset-4"
+                    className="text-rouge underline underline-offset-4"
                   >
                     {message.telephone}
                   </a>

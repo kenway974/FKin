@@ -37,7 +37,7 @@ export default async function PageAdminProjets() {
             <li key={projet.id}>
               <Card>
                 <CardBody className="flex flex-wrap items-start gap-4">
-                  <div className="rounded-douce border-bordure bg-sable relative aspect-[4/3] w-28 shrink-0 overflow-hidden border">
+                  <div className="rounded-douce border-bordure bg-nuage relative aspect-[4/3] w-28 shrink-0 overflow-hidden border">
                     {projet.image_url ? (
                       <Image
                         src={projet.image_url}
@@ -56,7 +56,7 @@ export default async function PageAdminProjets() {
 
                   <div className="min-w-56 flex-1 space-y-1.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Badge ton={projet.publie ? "vert" : "ocre"}>
+                      <Badge ton={projet.publie ? "bleu" : "marine"}>
                         {projet.publie ? "Visible" : "Masqué"}
                       </Badge>
                       <Badge>Ordre {projet.ordre}</Badge>
@@ -68,7 +68,7 @@ export default async function PageAdminProjets() {
                     </div>
 
                     <h2 className="text-lg font-semibold">
-                      <Link href={`/admin/projets/${projet.id}`} className="hover:text-terre">
+                      <Link href={`/admin/projets/${projet.id}`} className="hover:text-rouge">
                         {projet.titre}
                       </Link>
                     </h2>
@@ -79,7 +79,7 @@ export default async function PageAdminProjets() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2">
-                    <Button asChild variante="contour" taille="sm">
+                    <Button asChild variante="courbe" taille="sm">
                       <Link href={`/admin/projets/${projet.id}`}>
                         <Pencil className="size-4" aria-hidden="true" />
                         Modifier

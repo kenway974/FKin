@@ -23,7 +23,7 @@ export function Label({
 }
 
 const styleChamp =
-  "w-full rounded-douce border border-bordure bg-white px-3.5 py-2.5 text-encre placeholder:text-doux/70 disabled:cursor-not-allowed disabled:bg-sable aria-invalid:border-red-700";
+  "w-full rounded-douce border border-bordure bg-white px-3.5 py-2.5 text-encre placeholder:text-doux/70 disabled:cursor-not-allowed disabled:bg-nuage aria-invalid:border-red-700";
 
 export function Input({ className, ...proprietes }: React.ComponentProps<"input">) {
   return <input className={cn(styleChamp, "h-11", className)} {...proprietes} />;

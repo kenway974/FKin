@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function PageConfidentialite() {
   return (
     <article className="pb-16">
-      <header className="border-bordure bg-sable motif-tissu border-b py-12 md:py-16">
+      <header className="border-bordure bg-nuage motif-tissu border-b py-12 md:py-16">
         <div className="contenu max-w-3xl">
           <h1 className="text-3xl leading-tight font-bold md:text-4xl">
             Politique de confidentialité
@@ -37,7 +37,7 @@ export default function PageConfidentialite() {
               question relative à vos données, écrivez à{" "}
               <a
                 href={`mailto:${site.email}`}
-                className="text-terre underline underline-offset-4"
+                className="text-rouge underline underline-offset-4"
               >
                 {site.email}
               </a>
@@ -91,14 +91,14 @@ export default function PageConfidentialite() {
               portabilité et d&apos;opposition sur vos données. Pour les exercer, écrivez-nous à{" "}
               <a
                 href={`mailto:${site.email}`}
-                className="text-terre underline underline-offset-4"
+                className="text-rouge underline underline-offset-4"
               >
                 {site.email}
               </a>
               . Vous pouvez également introduire une réclamation auprès de la CNIL (
               <a
                 href="https://www.cnil.fr"
-                className="text-terre underline underline-offset-4"
+                className="text-rouge underline underline-offset-4"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -123,7 +123,7 @@ export default function PageConfidentialite() {
               Voir aussi nos{" "}
               <Link
                 href="/mentions-legales"
-                className="text-terre underline underline-offset-4"
+                className="text-rouge underline underline-offset-4"
               >
                 mentions légales
               </Link>

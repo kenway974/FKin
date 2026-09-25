@@ -5,9 +5,9 @@ import { navigation } from "@/lib/site";
 /** Page 404 globale. */
 export default function PageIntrouvable() {
   return (
-    <div className="bg-sable motif-tissu flex min-h-dvh items-center justify-center px-5 py-20">
+    <div className="bg-nuage motif-tissu flex min-h-dvh items-center justify-center px-5 py-20">
       <div className="contenu max-w-lg text-center">
-        <p className="font-titre text-terre/40 text-6xl font-bold">404</p>
+        <p className="font-titre text-rouge/40 text-6xl font-bold">404</p>
         <h1 className="font-titre mt-3 text-3xl font-bold">Cette page n&apos;existe pas</h1>
         <p className="text-doux mt-3">
           Le lien est peut-être ancien, ou la page a été renommée. Voici par où reprendre.
@@ -19,7 +19,7 @@ export default function PageIntrouvable() {
               <li key={lien.href}>
                 <Link
                   href={lien.href}
-                  className="border-bordure hover:border-terre hover:text-terre inline-block rounded-full border bg-white px-3.5 py-1.5 text-sm font-medium"
+                  className="border-bordure hover:border-rouge hover:text-rouge inline-block rounded-full border bg-white px-3.5 py-1.5 text-sm font-medium"
                 >
                   {lien.libelle}
                 </Link>

@@ -21,8 +21,8 @@ export function Alert({
   className?: string;
 }) {
   const styles = {
-    info: "border-bordure bg-sable text-encre",
-    succes: "border-vert/30 bg-vert-voile text-vert-fonce",
+    info: "border-bordure bg-nuage text-encre",
+    succes: "border-bleu/30 bg-bleu-voile text-bleu-fonce",
     erreur: "border-red-300 bg-red-50 text-red-900",
   } as const;
 

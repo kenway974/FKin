@@ -89,7 +89,7 @@ export default async function PageArticle({ params }: Proprietes) {
       />
 
       <article className="pb-16">
-        <header className="border-bordure bg-sable motif-tissu border-b py-12 md:py-16">
+        <header className="border-bordure bg-nuage motif-tissu border-b py-12 md:py-16">
           <div className="contenu max-w-3xl">
             <Button asChild variante="lien" taille="sm" className="mb-4 px-0">
               <Link href="/actualites">
@@ -120,7 +120,7 @@ export default async function PageArticle({ params }: Proprietes) {
 
         {article.image_couverture ? (
           <div className="contenu -mt-8 max-w-4xl md:-mt-10">
-            <div className="rounded-douce border-bordure bg-sable relative aspect-[16/9] w-full overflow-hidden border shadow-sm">
+            <div className="rounded-douce border-bordure bg-nuage relative aspect-[16/9] w-full overflow-hidden border shadow-sm">
               <Image
                 src={article.image_couverture}
                 alt={article.image_alt ?? ""}
@@ -135,7 +135,7 @@ export default async function PageArticle({ params }: Proprietes) {
 
         <div className="contenu mt-10 max-w-3xl">
           {article.extrait ? (
-            <p className="border-terre text-encre mb-8 border-l-4 pl-4 text-lg leading-relaxed font-medium">
+            <p className="border-rouge text-encre mb-8 border-l-4 pl-4 text-lg leading-relaxed font-medium">
               {article.extrait}
             </p>
           ) : null}

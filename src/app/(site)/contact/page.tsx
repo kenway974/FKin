@@ -22,7 +22,7 @@ export default function PageContact() {
         surtitre="Contact"
         titre="Écrivez-nous"
         chapo="Matériel à donner ou besoin à exprimer : un seul formulaire. Précisez qui vous êtes, on oriente votre demande."
-        ton="vert"
+        ton="bleu"
         photo={trouverPhotoBanniere("contact")}
       />
 
@@ -50,7 +50,7 @@ export default function PageContact() {
               <CardBody className="space-y-3">
                 <CardTitre className="text-lg">Délai de réponse</CardTitre>
                 <p className="text-doux flex gap-2.5 text-sm">
-                  <Clock className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <Clock className="text-rouge mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   Réponse sous 72 heures ouvrées, même pour un refus. Vous ne resterez pas sans
                   nouvelles.
                 </p>
@@ -61,16 +61,16 @@ export default function PageContact() {
               <CardBody className="space-y-3">
                 <CardTitre className="text-lg">Nous joindre autrement</CardTitre>
                 <p className="text-doux flex gap-2.5 text-sm">
-                  <Mail className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <Mail className="text-rouge mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   <a
                     href={`mailto:${site.email}`}
-                    className="hover:text-terre underline underline-offset-4"
+                    className="hover:text-rouge underline underline-offset-4"
                   >
                     {site.email}
                   </a>
                 </p>
                 <p className="text-doux flex gap-2.5 text-sm">
-                  <MapPin className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <MapPin className="text-rouge mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   Collecte partout en France. Distribution à Kinshasa et dans les provinces
                   desservies par nos partenaires.
                 </p>
@@ -88,7 +88,7 @@ export default function PageContact() {
                     <li key={conseil} className="flex gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="bg-ocre mt-2 size-1.5 shrink-0 rounded-full"
+                        className="bg-bleu-vif mt-2 size-1.5 shrink-0 rounded-full"
                       />
                       <span>{conseil}</span>
                     </li>

@@ -24,7 +24,7 @@ export function BasculeLecture({ id }: { id: string }) {
   }
 
   return (
-    <Button type="button" variante="contour" onClick={basculer} disabled={enCours}>
+    <Button type="button" variante="courbe" onClick={basculer} disabled={enCours}>
       <MailOpen className="size-4" aria-hidden="true" />
       {enCours ? "Mise à jour…" : "Marquer comme non lu"}
     </Button>

@@ -20,7 +20,7 @@ export function CarteArticle({
     <Card className="group carte-relief relative h-full">
       <article className="flex h-full flex-col">
         {article.image_couverture ? (
-          <div className="bg-sable relative aspect-[16/9] w-full">
+          <div className="bg-nuage relative aspect-[16/9] w-full">
             <Image
               src={article.image_couverture}
               alt={article.image_alt ?? ""}
@@ -52,7 +52,7 @@ export function CarteArticle({
             */}
             <Link
               href={`/actualites/${article.slug}`}
-              className="hover:text-terre after:absolute after:inset-0"
+              className="hover:text-rouge after:absolute after:inset-0"
             >
               {article.titre}
             </Link>
@@ -60,7 +60,7 @@ export function CarteArticle({
 
           <p className="text-doux text-sm leading-relaxed">{resume}</p>
 
-          <p className="text-terre mt-auto flex items-center gap-1.5 pt-3 text-sm font-semibold">
+          <p className="text-rouge mt-auto flex items-center gap-1.5 pt-3 text-sm font-semibold">
             Lire l&apos;article
             <ArrowRight className="size-4" aria-hidden="true" />
           </p>

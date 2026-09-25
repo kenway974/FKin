@@ -30,7 +30,7 @@ export default async function PageModifierArticle({ params }: { params: Promise<
 
         <div className="flex flex-wrap items-center gap-2">
           {article.statut === "publie" ? (
-            <Button asChild variante="contour" taille="sm">
+            <Button asChild variante="courbe" taille="sm">
               <Link href={`/actualites/${article.slug}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="size-4" aria-hidden="true" />
                 Voir sur le site

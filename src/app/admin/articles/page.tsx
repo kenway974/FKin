@@ -38,7 +38,7 @@ export default async function PageAdminArticles() {
                 <CardBody className="flex flex-wrap items-start gap-4">
                   <div className="min-w-64 flex-1 space-y-1.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Badge ton={article.statut === "publie" ? "vert" : "ocre"}>
+                      <Badge ton={article.statut === "publie" ? "bleu" : "marine"}>
                         {article.statut === "publie" ? "Publié" : "Brouillon"}
                       </Badge>
                       {article.date_publication ? (
@@ -49,7 +49,7 @@ export default async function PageAdminArticles() {
                     </div>
 
                     <h2 className="text-lg font-semibold">
-                      <Link href={`/admin/articles/${article.id}`} className="hover:text-terre">
+                      <Link href={`/admin/articles/${article.id}`} className="hover:text-rouge">
                         {article.titre}
                       </Link>
                     </h2>
@@ -58,7 +58,7 @@ export default async function PageAdminArticles() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2">
-                    <Button asChild variante="contour" taille="sm">
+                    <Button asChild variante="courbe" taille="sm">
                       <Link href={`/admin/articles/${article.id}`}>
                         <Pencil className="size-4" aria-hidden="true" />
                         Modifier

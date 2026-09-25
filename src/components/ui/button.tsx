@@ -4,37 +4,86 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 /**
- * Bouton — primitive shadcn/ui adaptée à la palette du site.
+ * Bouton — primitive shadcn/ui redessinée aux formes de la marque.
+ *
+ * Deux familles, volontairement éloignées du duo « bouton plein / bouton à
+ * contour » :
+ *
+ * - les **pilules** (`principal`, `secondaire`, `clair`) : une gélule pleine
+ *   dont l'icône, quand il y en a une, est posée dans une pastille ronde
+ *   collée au bord droit — comme une bille dans une goutte. Au survol, la
+ *   flèche pivote vers le haut ;
+ * - les **traits** (`courbe`, `courbe-clair`) : du texte seul, souligné d'une
+ *   vague dessinée qui se tend au survol. C'est l'action secondaire.
  *
  * `asChild` permet de rendre un `<Link>` avec l'apparence d'un bouton sans
  * imbriquer un `<button>` dans un `<a>` (ce qui serait invalide et casserait
  * la navigation au clavier).
  */
+const pilule =
+  "rounded-full font-semibold shadow-[0_10px_24px_-12px_rgba(22,35,63,0.55)] transition-[background-color,box-shadow,transform] hover:-translate-y-0.5 active:translate-y-0 [&>svg]:shrink-0 [&>svg]:rounded-full [&>svg]:transition-transform [&>svg]:duration-300 hover:[&>svg]:-rotate-45";
+
+const trait =
+  "trait-courbe h-auto px-0 font-semibold [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:transition-transform hover:[&>svg]:translate-x-1";
+
 const variantesBouton = cva(
-  "inline-flex items-center justify-center gap-2 rounded-douce font-medium transition-colors disabled:pointer-events-none disabled:opacity-60 [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-3 transition-colors disabled:pointer-events-none disabled:opacity-60",
   {
     variants: {
       variante: {
-        principal: "bouton-brillant bg-terre text-white hover:bg-terre-fonce",
-        secondaire: "bouton-brillant bg-vert text-white hover:bg-vert-fonce",
-        contour: "border-2 border-terre text-terre hover:bg-terre-voile",
-        discret: "text-encre hover:bg-sable",
-        lien: "text-terre underline underline-offset-4 hover:text-terre-fonce",
-        // Variantes destinées aux fonds sombres (bannières, section verte).
-        // Elles existent en tant que variantes plutôt qu'en surcharge de
-        // `className` : tailwind-merge ne sait pas arbitrer un conflit entre
-        // deux couleurs personnalisées du thème, si bien qu'une surcharge du
-        // type `bg-white` sur `bg-terre` ne gagnait pas de façon fiable.
-        clair: "bouton-brillant bg-white text-encre hover:bg-white/90",
-        "contour-clair": "border-2 border-white text-white backdrop-blur-sm hover:bg-white/15",
-        danger: "border-2 border-red-700 text-red-800 hover:bg-red-50",
+        principal: cn(
+          pilule,
+          "bg-rouge text-white hover:bg-rouge-fonce [&>svg]:bg-white [&>svg]:text-rouge",
+        ),
+        secondaire: cn(
+          pilule,
+          "bg-bleu text-white hover:bg-bleu-fonce [&>svg]:bg-white [&>svg]:text-bleu",
+        ),
+        clair: cn(
+          pilule,
+          "bg-white text-marine hover:bg-nuage [&>svg]:bg-rouge [&>svg]:text-white",
+        ),
+        courbe: cn(
+          trait,
+          "text-encre hover:text-rouge-fonce [--couleur-trait:var(--color-rouge-vif)]",
+        ),
+        "courbe-clair": cn(trait, "text-white [--couleur-trait:var(--color-rouge-clair)]"),
+        discret: "rounded-full font-medium text-encre hover:bg-nuage [&_svg]:size-4",
+        lien: "font-semibold text-bleu underline decoration-2 underline-offset-4 hover:text-bleu-fonce [&_svg]:size-4",
+        danger:
+          "rounded-full border-2 border-rouge-fonce font-semibold text-rouge-fonce hover:bg-rouge-voile [&_svg]:size-4",
       },
       taille: {
-        sm: "h-9 px-3 text-sm",
-        md: "h-11 px-5 text-[0.95rem]",
-        lg: "h-13 px-7 text-base",
+        sm: "h-10 px-4 text-sm",
+        md: "h-12 px-6 text-[0.95rem]",
+        lg: "h-14 px-7 text-base",
       },
     },
+    compoundVariants: [
+      // Pilules : quand une icône est présente, le bord droit se resserre pour
+      // que la pastille vienne presque toucher le contour de la gélule.
+      {
+        variante: ["principal", "secondaire", "clair"],
+        taille: "sm",
+        className: "has-[>svg]:pr-1 [&>svg]:size-8 [&>svg]:p-2",
+      },
+      {
+        variante: ["principal", "secondaire", "clair"],
+        taille: "md",
+        className: "has-[>svg]:pr-1.5 [&>svg]:size-9 [&>svg]:p-2.5",
+      },
+      {
+        variante: ["principal", "secondaire", "clair"],
+        taille: "lg",
+        className: "has-[>svg]:pr-1.5 [&>svg]:size-11 [&>svg]:p-3",
+      },
+      // Les traits n'ont ni hauteur fixe ni marge interne : ils s'alignent sur
+      // le texte qui les entoure, quelle que soit la taille demandée.
+      {
+        variante: ["courbe", "courbe-clair"],
+        className: "h-auto px-0",
+      },
+    ],
     defaultVariants: {
       variante: "principal",
       taille: "md",

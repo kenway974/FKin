@@ -241,7 +241,7 @@ export function FormulaireArticle({ article }: { article?: Article }) {
         </div>
       </div>
 
-      <div className="border-bordure bg-sable/95 sticky bottom-0 flex flex-wrap items-center gap-3 border-t py-4 backdrop-blur-sm">
+      <div className="border-bordure bg-nuage/95 sticky bottom-0 flex flex-wrap items-center gap-3 border-t py-4 backdrop-blur-sm">
         <Button type="submit" taille="lg" disabled={isSubmitting}>
           <Save className="size-4" aria-hidden="true" />
           {isSubmitting

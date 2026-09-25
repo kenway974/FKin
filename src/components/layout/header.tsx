@@ -3,10 +3,11 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { navigation, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/logo";
+import { Button } from "@/components/ui/button";
 
 /**
  * En-tête du site.
@@ -28,7 +29,7 @@ export function Header() {
   const estActif = (href: string) => (href === "/" ? chemin === "/" : chemin.startsWith(href));
 
   return (
-    <header className="border-bordure bg-fond/95 sticky top-0 z-40 border-b backdrop-blur-sm">
+    <header className="bg-fond/90 sticky top-0 z-40 backdrop-blur-md">
       <div className="contenu flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           href="/"
@@ -36,12 +37,12 @@ export function Header() {
           aria-label={`${site.nom} — retour à l'accueil`}
         >
           <Logo className="h-9 shrink-0 md:h-10" priority />
-          <span className="font-titre text-encre text-lg leading-tight font-bold md:text-xl">
+          <span className="font-titre text-marine text-xl leading-tight font-semibold md:text-2xl">
             {site.nom}
           </span>
         </Link>
 
-        <nav aria-label="Navigation principale" className="hidden md:block">
+        <nav aria-label="Navigation principale" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {navigation.map((lien) => (
               <li key={lien.href}>
@@ -49,10 +50,10 @@ export function Header() {
                   href={lien.href}
                   aria-current={estActif(lien.href) ? "page" : undefined}
                   className={cn(
-                    "lien-souligne rounded-douce px-3 py-2 text-[0.95rem] font-medium transition-colors",
+                    "rounded-full px-3.5 py-2 text-[0.95rem] font-semibold transition-colors",
                     estActif(lien.href)
-                      ? "bg-terre-voile text-terre-fonce"
-                      : "text-encre hover:bg-sable",
+                      ? "bg-bleu-voile text-bleu-fonce"
+                      : "text-encre hover:text-rouge",
                   )}
                 >
                   {lien.libelle}
@@ -62,43 +63,60 @@ export function Header() {
           </ul>
         </nav>
 
-        <button
-          type="button"
-          onClick={() => setOuvert((v) => !v)}
-          aria-expanded={ouvert}
-          aria-controls="menu-mobile"
-          className="rounded-douce text-encre -mr-2 inline-flex size-11 items-center justify-center md:hidden"
-        >
-          {ouvert ? (
-            <X className="size-6" aria-hidden="true" />
-          ) : (
-            <Menu className="size-6" aria-hidden="true" />
-          )}
-          <span className="sr-only">{ouvert ? "Fermer le menu" : "Ouvrir le menu"}</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <Button asChild taille="sm" className="hidden sm:inline-flex">
+            <Link href="/contact?profil=entreprise">
+              Proposer un don
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => setOuvert((v) => !v)}
+            aria-expanded={ouvert}
+            aria-controls="menu-mobile"
+            className="bg-nuage text-marine -mr-1 inline-flex size-11 items-center justify-center rounded-full lg:hidden"
+          >
+            {ouvert ? (
+              <X className="size-6" aria-hidden="true" />
+            ) : (
+              <Menu className="size-6" aria-hidden="true" />
+            )}
+            <span className="sr-only">{ouvert ? "Fermer le menu" : "Ouvrir le menu"}</span>
+          </button>
+        </div>
       </div>
 
       {ouvert ? (
         <nav
           id="menu-mobile"
           aria-label="Navigation principale (mobile)"
-          className="border-bordure bg-fond border-t md:hidden"
+          className="contenu pb-4 lg:hidden"
         >
-          <ul className="contenu flex flex-col py-2">
+          <ul className="forme-coeur bg-marine flex flex-col p-3 shadow-xl">
             {navigation.map((lien) => (
               <li key={lien.href}>
                 <Link
                   href={lien.href}
                   aria-current={estActif(lien.href) ? "page" : undefined}
                   className={cn(
-                    "rounded-douce block px-3 py-3 text-base font-medium",
-                    estActif(lien.href) ? "bg-terre-voile text-terre-fonce" : "text-encre",
+                    "block rounded-full px-4 py-3 text-base font-semibold",
+                    estActif(lien.href) ? "bg-white/12 text-white" : "text-white/85",
                   )}
                 >
                   {lien.libelle}
                 </Link>
               </li>
             ))}
+            <li className="px-1 pt-2 pb-1 sm:hidden">
+              <Button asChild variante="clair" className="w-full justify-between">
+                <Link href="/contact?profil=entreprise">
+                  Proposer un don
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </Button>
+            </li>
           </ul>
         </nav>
       ) : null}

@@ -52,7 +52,7 @@ export default async function PageActualites() {
         surtitre="Actualités"
         titre="Nouvelles des convois et du terrain"
         chapo="Ce qui se passe entre deux livraisons : départ d'un conteneur, installation d'une salle, difficultés rencontrées."
-        ton="terre"
+        ton="rouge"
         photo={trouverPhotoBanniere("actualites")}
       />
 

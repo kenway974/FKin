@@ -6,8 +6,8 @@ import path from "node:path";
 /**
  * Détection des photographies de bannière déposées par le propriétaire.
  *
- * Le dépôt ne contient aucune photo : les bannières s'appuient donc sur des
- * illustrations SVG. Mais dès que le propriétaire dépose un fichier dans
+ * Le dépôt ne contient aucune photo de bannière : elles s'affichent donc en
+ * aplat de couleur. Mais dès que le propriétaire dépose un fichier dans
  * `public/bannieres/`, la bannière correspondante bascule automatiquement
  * dessus — sans toucher une ligne de code.
  *
@@ -28,28 +28,6 @@ const EXTENSIONS = ["jpg", "jpeg", "png", "webp", "avif"] as const;
 export function trouverPhotoBanniere(nom: string): string | null {
   for (const extension of EXTENSIONS) {
     const relatif = `${DOSSIER}/${nom}.${extension}`;
-    if (existsSync(path.join(process.cwd(), "public", relatif))) {
-      return `/${relatif}`;
-    }
-  }
-  return null;
-}
-
-/**
- * Sujet détouré du héros de l'accueil (un groupe d'enfants, par exemple),
- * cherché dans `public/heros/`.
- *
- * Même principe que les bannières : tant qu'aucun fichier n'est déposé, le
- * héros affiche une illustration. Dès qu'une image détourée arrive, elle prend
- * sa place sans toucher au code.
- *
- * Le fond doit être **transparent** : l'image est posée directement sur la
- * courbe colorée. Le PNG et le WebP conviennent, pas le JPEG qui ne gère pas
- * la transparence.
- */
-export function trouverSujetHeros(nom: string): string | null {
-  for (const extension of ["png", "webp", "avif"] as const) {
-    const relatif = `heros/${nom}.${extension}`;
     if (existsSync(path.join(process.cwd(), "public", relatif))) {
       return `/${relatif}`;
     }

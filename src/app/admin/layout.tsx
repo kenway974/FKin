@@ -33,14 +33,14 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
   const admin = await exigerAdmin();
 
   return (
-    <div className="bg-sable min-h-dvh">
+    <div className="bg-nuage min-h-dvh">
       <header className="border-bordure border-b bg-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-5 py-3">
           <Link href="/admin" className="flex items-center gap-2.5">
             <Logo className="size-8" />
             <span className="font-titre font-bold">
               {site.nom}
-              <span className="bg-terre-voile text-terre-fonce ml-2 rounded-full px-2 py-0.5 text-xs font-semibold">
+              <span className="bg-rouge-voile text-rouge-fonce ml-2 rounded-full px-2 py-0.5 text-xs font-semibold">
                 Administration
               </span>
             </span>
@@ -53,7 +53,7 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
 
             <Link
               href="/"
-              className="rounded-douce text-doux hover:bg-sable hover:text-terre inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium"
+              className="rounded-douce text-doux hover:bg-nuage hover:text-rouge inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium"
             >
               <ExternalLink className="size-4" aria-hidden="true" />
               Voir le site
@@ -63,7 +63,7 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
             <form action="/deconnexion" method="post">
               <button
                 type="submit"
-                className="rounded-douce border-bordure hover:border-terre hover:text-terre inline-flex items-center gap-1.5 border px-2.5 py-1.5 text-sm font-medium"
+                className="rounded-douce border-bordure hover:border-rouge hover:text-rouge inline-flex items-center gap-1.5 border px-2.5 py-1.5 text-sm font-medium"
               >
                 <LogOut className="size-4" aria-hidden="true" />
                 Se déconnecter

@@ -36,7 +36,7 @@ export default function Erreur({
         ) : null}
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Button onClick={reset}>Réessayer</Button>
-          <Button asChild variante="contour">
+          <Button asChild variante="courbe">
             <Link href="/">Retour à l&apos;accueil</Link>
           </Button>
         </div>

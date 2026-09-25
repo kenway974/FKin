@@ -18,7 +18,7 @@ import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
 import { Section, TitreSection } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
-import { MotifAngle } from "@/components/illustrations";
+import { Coeur } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = {
@@ -103,7 +103,7 @@ export default function PageServices() {
         surtitre="Nos services"
         titre="Une même chaîne, de la collecte à la formation"
         chapo="Collecter le matériel des entreprises partout en France, équiper des structures au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
-        ton="terre"
+        ton="rouge"
         photo={trouverPhotoBanniere("services")}
       />
 
@@ -122,8 +122,8 @@ export default function PageServices() {
               <li key={service.titre}>
                 <Card className="h-full">
                   <CardBody className="space-y-3">
-                    <span className="bg-terre-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <service.icone className="text-terre size-5" aria-hidden="true" />
+                    <span className="bg-rouge-voile inline-flex size-11 items-center justify-center rounded-full">
+                      <service.icone className="text-rouge size-5" aria-hidden="true" />
                     </span>
                     <CardTitre className="text-lg">{service.titre}</CardTitre>
                     <p className="text-doux text-sm leading-relaxed">{service.texte}</p>
@@ -153,7 +153,7 @@ export default function PageServices() {
       </Section>
 
       {/* -------------------------------------------------------- Bénéficiaires */}
-      <Section id="beneficiaires" fond="sable" aria-labelledby="titre-beneficiaires">
+      <Section id="beneficiaires" fond="nuage" aria-labelledby="titre-beneficiaires">
         <div className="contenu">
           <TitreSection
             id="titre-beneficiaires"
@@ -167,8 +167,8 @@ export default function PageServices() {
               <li key={service.titre}>
                 <Card className="h-full">
                   <CardBody className="space-y-3">
-                    <span className="bg-vert-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <service.icone className="text-vert size-5" aria-hidden="true" />
+                    <span className="bg-bleu-voile inline-flex size-11 items-center justify-center rounded-full">
+                      <service.icone className="text-bleu size-5" aria-hidden="true" />
                     </span>
                     <CardTitre className="text-lg">{service.titre}</CardTitre>
                     <p className="text-doux text-sm leading-relaxed">{service.texte}</p>
@@ -193,7 +193,7 @@ export default function PageServices() {
                     <li key={element} className="flex gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="bg-ocre mt-2 size-1.5 shrink-0 rounded-full"
+                        className="bg-bleu-vif mt-2 size-1.5 shrink-0 rounded-full"
                       />
                       <span>{element}</span>
                     </li>
@@ -242,8 +242,8 @@ export default function PageServices() {
               <li key={bloc.titre}>
                 <Card className="h-full">
                   <CardBody className="space-y-3">
-                    <span className="bg-soleil-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <bloc.icone className="text-ocre size-5" aria-hidden="true" />
+                    <span className="bg-rouge-voile inline-flex size-11 items-center justify-center rounded-full">
+                      <bloc.icone className="text-bleu-vif size-5" aria-hidden="true" />
                     </span>
                     <CardTitre className="text-lg">{bloc.titre}</CardTitre>
                     <p className="text-doux text-sm leading-relaxed">{bloc.texte}</p>
@@ -256,12 +256,12 @@ export default function PageServices() {
       </Section>
 
       {/* ------------------------------------------------------------- Formation */}
-      <Section id="formation" fond="sable" aria-labelledby="titre-formation">
+      <Section id="formation" fond="nuage" aria-labelledby="titre-formation">
         <div className="contenu">
-          <div className="rounded-douce border-bordure relative overflow-hidden border bg-white p-8 md:p-12">
-            <MotifAngle className="text-indigo -top-16 -right-16 size-72 opacity-10" />
+          <div className="forme-coeur border-bordure relative overflow-hidden border bg-white p-8 md:p-12">
+            <Coeur className="text-rouge-vif -top-10 -right-10 w-64 opacity-10 md:w-80" />
             <div className="relative max-w-2xl">
-              <span className="bg-indigo-voile text-indigo inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
+              <span className="bg-bleu-voile text-marine inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
                 <Sparkles className="size-3.5" aria-hidden="true" />
                 Bientôt
               </span>

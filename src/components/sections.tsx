@@ -12,11 +12,11 @@ export function Section({
   fond = "clair",
   className,
   ...proprietes
-}: React.ComponentProps<"section"> & { fond?: "clair" | "sable" | "vert" }) {
+}: React.ComponentProps<"section"> & { fond?: "clair" | "nuage" | "bleu" }) {
   const fonds = {
     clair: "bg-fond",
-    sable: "bg-sable motif-tissu",
-    vert: "bg-vert-voile",
+    nuage: "bg-nuage motif-tissu",
+    bleu: "bg-bleu-voile",
   } as const;
 
   return <section className={cn("py-14 md:py-20", fonds[fond], className)} {...proprietes} />;
@@ -43,11 +43,19 @@ export function TitreSection({
   return (
     <div className={cn("max-w-3xl", centre && "mx-auto text-center")}>
       {surtitre ? (
-        <p className="text-terre mb-2 text-sm font-bold tracking-[0.14em] uppercase">{surtitre}</p>
+        <p
+          className={cn(
+            "text-rouge mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase",
+            centre && "justify-center",
+          )}
+        >
+          <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+          {surtitre}
+        </p>
       ) : null}
       <Titre
         id={id}
-        className={cn("font-bold", niveau === 1 ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl")}
+        className={cn("font-bold", niveau === 1 ? "text-4xl md:text-6xl" : "text-3xl md:text-5xl")}
       >
         {titre}
       </Titre>
@@ -77,14 +85,14 @@ export function VisuelParDefaut({
   return (
     <div
       className={cn(
-        "bg-sable-fonce motif-tissu flex aspect-[4/3] w-full items-center justify-center",
+        "bg-nuage-fonce motif-tissu flex aspect-[4/3] w-full items-center justify-center",
         className,
       )}
       {...(decoratif
         ? { role: "presentation" as const, "aria-hidden": true }
         : { role: "img" as const, "aria-label": legende ?? "Photographie à venir" })}
     >
-      <svg viewBox="0 0 64 48" className="text-terre/45 h-16 w-16" aria-hidden="true">
+      <svg viewBox="0 0 64 48" className="text-bleu/40 h-16 w-16" aria-hidden="true">
         <rect
           x="4"
           y="8"
@@ -105,7 +113,7 @@ export function VisuelParDefaut({
 /** État vide : affiché quand une liste alimentée par la base ne renvoie rien. */
 export function EtatVide({ titre, children }: { titre: string; children?: React.ReactNode }) {
   return (
-    <div className="rounded-douce border-bordure bg-sable/60 border border-dashed p-8 text-center">
+    <div className="forme-coeur border-bordure bg-nuage/60 border-2 border-dashed p-8 text-center">
       <p className="font-titre text-encre text-lg font-semibold">{titre}</p>
       {children ? <div className="text-doux mt-2 text-sm">{children}</div> : null}
     </div>
@@ -123,8 +131,8 @@ export function ChiffreCle({
   precision?: string;
 }) {
   return (
-    <div className="rounded-douce border-bordure border bg-white p-6">
-      <p className="font-titre text-terre text-3xl font-bold md:text-4xl">{valeur}</p>
+    <div className="forme-coeur border-bordure border bg-white p-6">
+      <p className="font-titre text-bleu text-4xl font-bold md:text-5xl">{valeur}</p>
       <p className="text-encre mt-1 font-semibold">{libelle}</p>
       {precision ? <p className="text-doux mt-1 text-sm">{precision}</p> : null}
     </div>

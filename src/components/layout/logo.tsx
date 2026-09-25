@@ -11,13 +11,7 @@ import { cn } from "@/lib/utils";
  * utilisent ce pictogramme : on garde ainsi un intitulé sélectionnable et
  * accessible plutôt qu'une image de texte.
  */
-export function Logo({
-  className,
-  priority = false,
-}: {
-  className?: string;
-  priority?: boolean;
-}) {
+export function Logo({ className, priority = false }: { className?: string; priority?: boolean }) {
   return (
     <Image
       src="/marque/respusse-icone.png"
