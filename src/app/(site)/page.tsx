@@ -78,7 +78,7 @@ export default async function PageAccueil() {
             largeur={612}
             hauteur={900}
             alt="Trois écoliers en survêtement bleu, souriants, font coucou"
-            className="w-full"
+            className="h-[50svh] md:h-[min(82svh,54rem)]"
           />
         }
       >

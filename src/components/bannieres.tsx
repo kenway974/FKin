@@ -10,10 +10,10 @@ import { Coeur, TRACE_COEUR, Vague } from "@/components/formes";
 /**
  * Bannière principale de la page d'accueil.
  *
- * Une grande carte marine, traversée par une vague bleue bordée d'un ruban
- * rouge et d'un liseré blanc — les trois pages du cœur du logo. Le sujet
- * détouré (`sujet`, en général une vidéo sans fond) se tient debout sur la
- * vague et déborde légèrement du bord bas, comme posé devant la carte.
+ * Un plein écran marine, traversé par une vague bleue bordée d'un ruban rouge
+ * et d'un liseré blanc — les trois pages du cœur du logo. Le sujet détouré
+ * (`sujet`, en général une vidéo sans fond) se tient debout sur la vague, les
+ * pieds sur le bas de l'écran.
  *
  * Le texte est réduit à l'essentiel : un titre et deux actions. Tout le
  * reste du discours est porté par les sections suivantes.
@@ -26,20 +26,19 @@ export function BanniereAccueil({
   children: React.ReactNode;
 }) {
   return (
-    <section className="contenu pt-3 md:pt-6">
-      <div className="bg-marine relative isolate overflow-hidden rounded-[2rem] rounded-bl-lg md:rounded-[3rem] md:rounded-bl-xl">
-        <FondVague />
+    // Plein écran : toute la largeur, toute la hauteur visible sous l'en-tête
+    // (4 rem sur mobile, 5 rem au-delà). `svh` plutôt que `vh` : sur mobile,
+    // la hauteur ne saute pas quand la barre d'adresse se replie.
+    <section className="bg-marine relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden md:min-h-[calc(100svh-5rem)]">
+      <FondVague />
 
-        <div className="relative grid md:min-h-[36rem] md:grid-cols-[1.05fr_1fr] lg:min-h-[40rem]">
-          <div className="relative z-10 px-6 pt-12 pb-4 text-white md:self-center md:py-20 md:pr-0 md:pl-14 lg:pl-16">
-            {children}
-          </div>
-
-          {/* Sujet : posé sur le bord bas de la carte, sans marge. */}
-          <div className="relative mx-auto -mt-2 w-[82%] max-w-[26rem] self-end sm:w-[60%] md:mt-0 md:w-full md:max-w-[21rem] md:justify-self-center lg:max-w-[24rem]">
-            {sujet}
-          </div>
+      <div className="contenu relative flex flex-1 flex-col justify-between md:grid md:grid-cols-[1.1fr_1fr] md:items-stretch">
+        <div className="relative z-10 pt-10 pb-6 text-white md:self-center md:py-16">
+          {children}
         </div>
+
+        {/* Sujet : sa hauteur suit celle de l'écran, pieds posés sur le bas. */}
+        <div className="relative flex items-end justify-center md:justify-end">{sujet}</div>
       </div>
     </section>
   );
@@ -197,8 +196,8 @@ export function RubanDefilant({ mentions }: { mentions: readonly string[] }) {
   const piste = [...mentions, ...mentions];
 
   return (
-    <div className="contenu mt-5" aria-hidden="true">
-      <div className="ruban-piste bg-rouge relative flex overflow-hidden rounded-full py-3.5 text-white">
+    <div aria-hidden="true">
+      <div className="ruban-piste bg-rouge relative flex overflow-hidden py-3.5 text-white">
         <div className="ruban-defilant flex shrink-0 items-center gap-8 pr-8 whitespace-nowrap">
           {piste.map((mention, index) => (
             <span key={index} className="flex items-center gap-8 text-sm font-bold tracking-wide">
