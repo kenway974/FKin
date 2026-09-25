@@ -5,7 +5,7 @@ import { ArrowRight, Recycle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
 import { BanniereAccueil, RubanDefilant } from "@/components/bannieres";
-import { VoyageDefilant } from "@/components/voyage-defilant";
+import { Voyage } from "@/components/voyage";
 import { Coeur, Vague } from "@/components/formes";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
@@ -101,7 +101,7 @@ export default async function PageAccueil() {
       />
 
       {/* ----------------------------------------------------- Le voyage d'un don */}
-      <VoyageDefilant />
+      <Voyage />
 
       {/* ------------------------------------------------------------- Chiffres */}
       {/* Masquée tant qu'aucun projet n'est publié : mieux vaut pas de section
