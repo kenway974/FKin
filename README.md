@@ -84,14 +84,16 @@ quoi que ce soit chez Supabase.
 
 ### Scripts disponibles
 
-| Commande            | Effet                                 |
-| ------------------- | ------------------------------------- |
-| `npm run dev`       | Serveur de développement              |
-| `npm run build`     | Build de production                   |
-| `npm run start`     | Sert le build de production           |
-| `npm run lint`      | ESLint                                |
-| `npm run typecheck` | Vérification TypeScript sans émission |
-| `npm run format`    | Formatage Prettier                    |
+| Commande             | Effet                                 |
+| -------------------- | ------------------------------------- |
+| `npm run dev`        | Serveur de développement              |
+| `npm run build`      | Build de production                   |
+| `npm run start`      | Sert le build de production           |
+| `npm run lint`       | ESLint                                |
+| `npm run typecheck`  | Vérification TypeScript sans émission |
+| `npm run format`     | Formatage Prettier                    |
+| `npm test`           | Tests Vitest (une passe)              |
+| `npm run test:watch` | Tests Vitest en continu               |
 
 ## 4. Brancher Supabase
 
@@ -371,14 +373,14 @@ affiche une illustration SVG (une scène « bureaux franciliens → conteneur �
 `public/bannieres/` et la bannière bascule automatiquement sur votre
 photographie**, sans toucher au code :
 
-| Fichier | Page |
-| --- | --- |
-| `public/bannieres/accueil.jpg` | Accueil |
-| `public/bannieres/services.jpg` | Nos services |
-| `public/bannieres/realisations.jpg` | Réalisations |
+| Fichier                                  | Page              |
+| ---------------------------------------- | ----------------- |
+| `public/bannieres/accueil.jpg`           | Accueil           |
+| `public/bannieres/services.jpg`          | Nos services      |
+| `public/bannieres/realisations.jpg`      | Réalisations      |
 | `public/bannieres/comment-ca-marche.jpg` | Comment ça marche |
-| `public/bannieres/actualites.jpg` | Actualités |
-| `public/bannieres/contact.jpg` | Contact |
+| `public/bannieres/actualites.jpg`        | Actualités        |
+| `public/bannieres/contact.jpg`           | Contact           |
 
 Les extensions `.jpg`, `.jpeg`, `.png`, `.webp` et `.avif` sont reconnues.
 Format conseillé : 2000 × 1000 px environ, moins de 400 ko. Un voile dégradé
