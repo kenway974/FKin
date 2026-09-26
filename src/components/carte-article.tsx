@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Card, CardBody, CardTitre } from "@/components/ui/card";
+import { CardTitre } from "@/components/ui/card";
 import { VisuelParDefaut } from "@/components/sections";
 import { extraireResume, formaterDate } from "@/lib/utils";
 import type { Article } from "@/types/database";
@@ -17,10 +17,11 @@ export function CarteArticle({
   const resume = article.extrait?.trim() || extraireResume(article.contenu, 150);
 
   return (
-    <Card className="group carte-relief relative h-full">
+    // Pas de carte encadrée : image en forme souple, texte posé dessous.
+    <div className="group relative h-full">
       <article className="flex h-full flex-col">
         {article.image_couverture ? (
-          <div className="bg-nuage relative aspect-[16/9] w-full">
+          <div className="bg-nuage forme-blob-3 relative aspect-[16/9] w-full overflow-hidden">
             <Image
               src={article.image_couverture}
               alt={article.image_alt ?? ""}
@@ -32,10 +33,10 @@ export function CarteArticle({
             />
           </div>
         ) : (
-          <VisuelParDefaut className="aspect-[16/9]" decoratif />
+          <VisuelParDefaut className="forme-blob-3 aspect-[16/9]" decoratif />
         )}
 
-        <CardBody className="flex flex-1 flex-col gap-2">
+        <div className="flex flex-1 flex-col gap-2 px-1 pt-5">
           {article.date_publication ? (
             <p className="text-doux text-sm">
               <time dateTime={article.date_publication}>
@@ -64,8 +65,8 @@ export function CarteArticle({
             Lire l&apos;article
             <ArrowRight className="size-4" aria-hidden="true" />
           </p>
-        </CardBody>
+        </div>
       </article>
-    </Card>
+    </div>
   );
 }

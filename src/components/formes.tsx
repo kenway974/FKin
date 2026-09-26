@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -53,5 +54,82 @@ export function Vague({ className, retourne = false }: { className?: string; ret
     >
       <path d="M0 0h1440v34c-120 30-260 52-420 44S740 30 560 26 240 60 0 50Z" fill="currentColor" />
     </svg>
+  );
+}
+
+/**
+ * Bord de vague animé, pour le haut ou le bas d'une bande pleine largeur.
+ *
+ * La vague dessine la couleur de la section **voisine** (`className` :
+ * `text-*`), si bien que la bande semble découpée en vague. Le tracé est
+ * deux fois plus large que l'écran et se répète à l'identique sur chaque
+ * moitié : en le faisant glisser d'une moitié (transform seul, calculé par la
+ * carte graphique), la houle défile sans fin et sans raccord visible. Deux
+ * épaisseurs à des vitesses différentes donnent de la profondeur.
+ */
+export function OndeBord({
+  className,
+  position = "haut",
+}: {
+  className?: string;
+  position?: "haut" | "bas";
+}) {
+  // Deux périodes identiques de 1440 unités : la seconde prolonge la première.
+  const trace = "M0 34C240 4 480 4 720 34S1200 64 1440 34S1920 4 2160 34S2640 64 2880 34V0H0Z";
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute inset-x-0 z-10 h-12 overflow-hidden md:h-20",
+        position === "haut" ? "-top-px" : "-bottom-px rotate-180",
+        className,
+      )}
+    >
+      <svg
+        viewBox="0 0 2880 70"
+        preserveAspectRatio="none"
+        className="onde onde-lente absolute inset-y-0 left-0 h-full opacity-35"
+        focusable="false"
+      >
+        <path d={trace} fill="currentColor" transform="translate(0 10)" />
+      </svg>
+      <svg
+        viewBox="0 0 2880 70"
+        preserveAspectRatio="none"
+        className="onde absolute inset-y-0 left-0 h-full"
+        focusable="false"
+      >
+        <path d={trace} fill="currentColor" />
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * Forme souple, tirée des courbes du cœur : une tache irrégulière qui tourne
+ * et respire lentement. Sert de fond à un pictogramme, à un chiffre, ou de
+ * décor flottant dans une bande de couleur.
+ */
+export function Blob({
+  className,
+  teinte = "bg-white/10",
+  variante = 1,
+  children,
+}: {
+  className?: string;
+  /** Couleur de la forme (classe `bg-*`), indépendante de celle du contenu. */
+  teinte?: string;
+  /** Trois silhouettes différentes, pour ne jamais répéter la même. */
+  variante?: 1 | 2 | 3;
+  children?: ReactNode;
+}) {
+  return (
+    <span className={cn("relative isolate inline-grid place-items-center", className)}>
+      <span
+        aria-hidden="true"
+        className={cn("blob-anime absolute inset-0 -z-10", teinte, `forme-blob-${variante}`)}
+      />
+      {children}
+    </span>
   );
 }

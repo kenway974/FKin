@@ -65,6 +65,10 @@ html {
 }
 
 body {
+  /* Garde-fou : aucune animation (formes qui tournent, parallaxe) ne doit
+     pouvoir créer de défilement horizontal. `clip` et non `hidden` : ce
+     dernier casserait les éléments en position sticky. */
+  overflow-x: clip;
   background-color: var(--color-fond);
   color: var(--color-encre);
   font-family: var(--font-sans);
@@ -709,4 +713,78 @@ p {
 
 .vehicule-arrivee {
   animation: vehicule-arrivee 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* --------------------------------------------------------------------------
+   Bandes et formes souples
+   --------------------------------------------------------------------------
+   Les bandes pleine largeur sont bordées de vagues qui défilent, et les
+   anciennes « cartes » sont remplacées par des formes souples qui tournent
+   en respirant. Tout est animé en `transform` seul.
+   -------------------------------------------------------------------------- */
+
+@keyframes onde-defile {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes onde-verticale {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes blob-tourne {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.07);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes blob-derive {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  33% {
+    transform: translate(4%, -6%) rotate(40deg);
+  }
+  66% {
+    transform: translate(-5%, 4%) rotate(-25deg);
+  }
+}
+
+.onde {
+  width: 200%;
+  animation: onde-defile 16s linear infinite;
+}
+.onde-lente {
+  animation-duration: 27s;
+  animation-direction: reverse;
+}
+.onde-verticale {
+  height: 200%;
+  animation: onde-verticale 14s linear infinite;
+}
+
+.forme-blob-1 {
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+}
+.forme-blob-2 {
+  border-radius: 61% 39% 52% 48% / 44% 59% 41% 56%;
+}
+.forme-blob-3 {
+  border-radius: 38% 62% 45% 55% / 58% 38% 62% 42%;
+}
+.blob-anime {
+  animation: blob-tourne 22s linear infinite;
+}
+.blob-derive {
+  animation: blob-derive 26s ease-in-out infinite;
 }
