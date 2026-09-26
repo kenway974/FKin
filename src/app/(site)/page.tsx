@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Building2,
   GraduationCap,
+  PackageCheck,
   Recycle,
   Ship,
   Truck,
@@ -13,7 +14,7 @@ import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
 import { BandeauAccent, BanniereAccueil, RubanDefilant } from "@/components/bannieres";
 import { IlluCollecte, IlluEcole, IlluTransport, MotifAngle } from "@/components/illustrations";
-import { trouverSujetHeros } from "@/lib/visuels";
+import { trouverPhotoBanniere } from "@/lib/visuels";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
 import { compterPourAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
@@ -64,39 +65,64 @@ export default async function PageAccueil() {
     compterPourAccueil(),
   ]);
 
-  // Bascule automatiquement sur une photographie détourée dès qu'un fichier
-  // `public/heros/enfants.png` (ou .webp/.avif) est déposé. Sans lui, le héros
-  // affiche son illustration.
-  const sujetHeros = trouverSujetHeros("enfants");
+  // Bascule automatiquement sur une vraie photographie dès qu'un fichier
+  // `public/bannieres/accueil.jpg` (ou .png/.webp/.avif) est déposé.
+  const photoBanniere = trouverPhotoBanniere("accueil");
 
   return (
     <>
       {/* ------------------------------------------------------------- Bannière */}
-      <BanniereAccueil
-        sujet={sujetHeros}
-        sujetAlt="Des élèves devant leur école, au Congo"
-      >
-        <h1 className="anim-entree text-4xl leading-[1.05] font-bold text-balance md:text-5xl lg:text-6xl">
-          Votre matériel, <span className="text-soleil">leur avenir</span>.
-        </h1>
-
-        {/* Bande d'accent : la seule ligne d'explication de la bannière. Tout le
-            reste du discours est porté par les sections suivantes. */}
-        <p className="anim-entree anim-retard-1 bg-soleil text-encre mt-6 inline-block rounded-full px-5 py-2.5 text-sm font-bold tracking-wide uppercase">
-          Collecte en France · Distribution au Congo
+      <BanniereAccueil photo={photoBanniere} photoAlt="">
+        <p className="anim-entree bg-soleil/25 ring-soleil/40 mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold ring-1 backdrop-blur-sm">
+          <span className="bg-soleil size-2 rounded-full" aria-hidden="true" />
+          Collecte partout en France · Distribution au Congo
         </p>
 
-        <div className="anim-entree anim-retard-2 mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button asChild taille="lg" className="rounded-full shadow-lg shadow-black/25">
+        <h1 className="anim-entree anim-retard-1 text-4xl leading-[1.08] font-bold text-balance md:text-6xl lg:text-7xl">
+          Le matériel dont vous n&apos;avez plus l&apos;usage devient une{" "}
+          <span className="text-soleil">salle de classe équipée</span>.
+        </h1>
+
+        <p className="anim-entree anim-retard-2 mt-6 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl">
+          Nous collectons le matériel dont les entreprises françaises se séparent et
+          l&apos;acheminons vers des écoles et associations au Congo. Chaque étape est tracée.
+        </p>
+
+        <div className="anim-entree anim-retard-3 mt-9 flex flex-col gap-3 sm:flex-row">
+          <Button asChild taille="lg" className="shadow-lg shadow-black/20">
             <Link href="/contact?profil=entreprise">
               Proposer un don
               <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </Button>
-          <Button asChild taille="lg" variante="contour-clair" className="rounded-full">
+          <Button asChild taille="lg" variante="contour-clair">
             <Link href="/realisations">Voir nos réalisations</Link>
           </Button>
         </div>
+
+        {/* Trois repères du parcours, directement dans la bannière. */}
+        <ul className="anim-entree anim-retard-4 mt-12 grid gap-4 sm:grid-cols-3">
+          {[
+            {
+              icone: Building2,
+              texte: "Enlèvement sur votre site",
+              detail: "Partout en France",
+            },
+            { icone: PackageCheck, texte: "Données effacées", detail: "Certificat remis" },
+            { icone: GraduationCap, texte: "Compte rendu d'usage", detail: "Photos à l'appui" },
+          ].map((repere) => (
+            <li
+              key={repere.texte}
+              className="rounded-douce flex items-center gap-3 border border-white/20 bg-white/10 p-3.5 backdrop-blur-sm"
+            >
+              <repere.icone className="text-soleil size-6 shrink-0" aria-hidden="true" />
+              <span>
+                <span className="block text-sm font-semibold">{repere.texte}</span>
+                <span className="block text-xs text-white/75">{repere.detail}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </BanniereAccueil>
 
       {/* ---------------------------------------------------------------- Ruban */}

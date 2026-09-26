@@ -1,7 +1,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { CourbeHeros, IlluEnfants, MotifAngle } from "@/components/illustrations";
+import { MotifAngle, SceneBanniere } from "@/components/illustrations";
 
 /**
  * Bannières et rubans.
@@ -12,75 +12,52 @@ import { CourbeHeros, IlluEnfants, MotifAngle } from "@/components/illustrations
  * compris une photo claire ou très contrastée.
  */
 
-/**
- * Bannière principale de la page d'accueil.
- *
- * Trois plans qui se décalent au défilement pour donner de la profondeur :
- *   1. la courbe colorée, qui descend lentement ;
- *   2. le texte, immobile, qui reste le point d'ancrage ;
- *   3. le sujet détouré, qui remonte légèrement.
- *
- * Le mouvement est entièrement en CSS (`animation-timeline: scroll()`), donc
- * sans JavaScript ni écouteur de défilement. Là où il n'est pas géré, ou si le
- * visiteur a demandé à réduire les animations, la scène reste simplement fixe.
- *
- * `sujet` attend une image **détourée** (fond transparent) : elle se pose
- * directement sur la courbe. Sans elle, on retombe sur une illustration.
- */
+/** Bannière principale de la page d'accueil. */
 export function BanniereAccueil({
-  sujet,
-  sujetAlt,
+  photo,
+  photoAlt,
   children,
 }: {
-  sujet?: string | null;
-  sujetAlt?: string;
+  photo?: string | null;
+  photoAlt?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="contenu pt-4 md:pt-6">
-      {/* La bannière est une carte arrondie posée sur le fond de page : le
-          sujet peut ainsi venir mourir sur son bord inférieur. */}
-      <div className="rounded-3xl relative isolate overflow-hidden">
-        {/* Plan 1 — la courbe. Le conteneur déborde en haut et en bas pour que
-            le déplacement ne découvre jamais de bande vide. */}
-        <div
-          className="parallaxe absolute inset-x-0 -top-20 -bottom-20 -z-20 [--parallaxe:3.5rem]"
-          aria-hidden="true"
-        >
-          <CourbeHeros />
-        </div>
-
-        {/* Voile latéral : garantit le contraste du texte blanc même lorsque la
-            courbe bleue remonte sous lui, sur les écrans étroits. */}
-        <div
-          className="from-marine/95 via-marine/70 to-marine/30 md:via-marine/30 md:to-transparent absolute inset-0 -z-10 bg-linear-to-r"
-          aria-hidden="true"
-        />
-
-        <div className="relative grid items-end gap-4 px-6 pt-12 md:grid-cols-[1fr_1.05fr] md:gap-6 md:px-12 md:pt-16">
-          {/* Plan 2 — le texte, peu nombreux et aligné bas. */}
-          <div className="pb-12 text-white md:pb-20">{children}</div>
-
-          {/* Plan 3 — le sujet, grand, posé sur le bord bas de la carte. */}
-          <div
-            className="parallaxe relative h-72 self-end [--parallaxe:-1.5rem] sm:h-80 md:h-[28rem] lg:h-[33rem]"
-            aria-hidden={sujet ? undefined : "true"}
-          >
-            {sujet ? (
-              <Image
-                src={sujet}
-                alt={sujetAlt ?? ""}
-                fill
-                priority
-                sizes="(min-width: 768px) 50vw, 90vw"
-                className="object-contain object-bottom drop-shadow-2xl"
-              />
-            ) : (
-              <IlluEnfants className="object-bottom" />
-            )}
+    <section className="relative isolate overflow-hidden">
+      {/* Fond : photographie si disponible, illustration sinon. */}
+      <div className="absolute inset-0 -z-20">
+        {photo ? (
+          <Image
+            src={photo}
+            alt={photoAlt ?? ""}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        ) : (
+          <div className="degrade-terre relative h-full w-full">
+            {/* La scène occupe la moitié basse : le texte reste sur un fond
+                uni et lisible, l'illustration se lit comme un paysage. */}
+            <SceneBanniere className="absolute inset-x-0 bottom-0 max-h-[72%]" />
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Voile de lisibilité, orienté selon le fond : par le bas sur une
+          photographie, latéralement sur l'illustration pour ne pas noyer la
+          scène — le texte occupe la moitié gauche dans les deux cas. */}
+      <div
+        className={cn("absolute inset-0 -z-10", photo ? "voile-banniere" : "voile-lateral")}
+        aria-hidden="true"
+      />
+
+      <div className="contenu relative py-20 md:py-24 lg:py-28">
+        <div className="max-w-3xl text-white">{children}</div>
+      </div>
+
+      {/* Filet tricolore de bas de bannière, repris du logo. */}
+      <div className="filet-tricolore absolute inset-x-0 bottom-0" aria-hidden="true" />
     </section>
   );
 }
