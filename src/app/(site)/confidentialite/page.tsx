@@ -35,10 +35,7 @@ export default function PageConfidentialite() {
               Les données transmises via ce site sont traitées par <strong>{site.nom}</strong>, dont
               le siège est situé à {site.adresse.ville} ({site.adresse.codePostal}). Pour toute
               question relative à vos données, écrivez à{" "}
-              <a
-                href={`mailto:${site.email}`}
-                className="text-rouge underline underline-offset-4"
-              >
+              <a href={`mailto:${site.email}`} className="text-rouge underline underline-offset-4">
                 {site.email}
               </a>
               .
@@ -89,10 +86,7 @@ export default function PageConfidentialite() {
               Conformément au Règlement général sur la protection des données (RGPD), vous disposez
               d&apos;un droit d&apos;accès, de rectification, d&apos;effacement, de limitation, de
               portabilité et d&apos;opposition sur vos données. Pour les exercer, écrivez-nous à{" "}
-              <a
-                href={`mailto:${site.email}`}
-                className="text-rouge underline underline-offset-4"
-              >
+              <a href={`mailto:${site.email}`} className="text-rouge underline underline-offset-4">
                 {site.email}
               </a>
               . Vous pouvez également introduire une réclamation auprès de la CNIL (
@@ -121,10 +115,7 @@ export default function PageConfidentialite() {
           <section className="space-y-2">
             <p className="text-doux text-sm">
               Voir aussi nos{" "}
-              <Link
-                href="/mentions-legales"
-                className="text-rouge underline underline-offset-4"
-              >
+              <Link href="/mentions-legales" className="text-rouge underline underline-offset-4">
                 mentions légales
               </Link>
               .

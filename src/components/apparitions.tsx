@@ -83,9 +83,40 @@ export function Apparitions() {
       .querySelectorAll<HTMLElement>("[data-compteur]")
       .forEach((el) => compteurs.observe(el));
 
+    // Filet de sécurité : un défilement rapide (un grand coup de doigt) peut
+    // faire sauter un élément sans qu'il ait jamais croisé l'écran aux yeux
+    // de l'observateur. Tout ce qui est passé au-dessus du bas de l'écran est
+    // donc révélé d'office. Vérification au plus toutes les 150 ms, et le
+    // suivi s'arrête dès qu'il ne reste plus rien à révéler.
+    let enAttente = false;
+    const rattraper = () => {
+      enAttente = false;
+      const restants = document.querySelectorAll<HTMLElement>(
+        "[data-apparition]:not([data-visible])",
+      );
+      if (!restants.length) {
+        window.removeEventListener("scroll", programmer);
+        return;
+      }
+      restants.forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          el.setAttribute("data-visible", "");
+          el.querySelectorAll<HTMLElement>("[data-compteur]").forEach(compter);
+          observateur.unobserve(el);
+        }
+      });
+    };
+    const programmer = () => {
+      if (enAttente) return;
+      enAttente = true;
+      window.setTimeout(rattraper, 150);
+    };
+    window.addEventListener("scroll", programmer, { passive: true });
+
     return () => {
       observateur.disconnect();
       compteurs.disconnect();
+      window.removeEventListener("scroll", programmer);
     };
   }, [chemin]);
 

@@ -50,9 +50,9 @@ export default function PageConnexion() {
             ) : (
               <Alert ton="erreur" titre="Authentification non configurée">
                 <p>
-                  Les variables <code>NEXT_PUBLIC_SUPABASE_URL</code> et{" "}
-                  <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> ne sont pas renseignées. Consultez la
-                  section « Brancher Supabase » du README.
+                  Les variables <code className="break-all">NEXT_PUBLIC_SUPABASE_URL</code> et{" "}
+                  <code className="break-all">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> ne sont pas
+                  renseignées. Consultez la section « Brancher Supabase » du README.
                 </p>
               </Alert>
             )}

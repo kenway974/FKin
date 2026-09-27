@@ -37,10 +37,7 @@ export default function PageMentionsLegales() {
             </p>
             <p>
               Adresse e-mail :{" "}
-              <a
-                href={`mailto:${site.email}`}
-                className="text-rouge underline underline-offset-4"
-              >
+              <a href={`mailto:${site.email}`} className="text-rouge underline underline-offset-4">
                 {site.email}
               </a>
               .
@@ -49,7 +46,10 @@ export default function PageMentionsLegales() {
 
           <section className="space-y-2">
             <h2 className="font-titre text-encre text-xl font-bold">Directeur de la publication</h2>
-            <p>Le directeur de la publication est Fabrice Malph, représentant légal de l&apos;association.</p>
+            <p>
+              Le directeur de la publication est Fabrice Malph, représentant légal de
+              l&apos;association.
+            </p>
           </section>
 
           <section className="space-y-2">
@@ -88,10 +88,7 @@ export default function PageMentionsLegales() {
             <p>
               Le traitement des données transmises via le formulaire de contact est détaillé dans
               notre{" "}
-              <Link
-                href="/confidentialite"
-                className="text-rouge underline underline-offset-4"
-              >
+              <Link href="/confidentialite" className="text-rouge underline underline-offset-4">
                 politique de confidentialité
               </Link>
               .

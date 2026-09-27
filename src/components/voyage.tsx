@@ -285,12 +285,38 @@ export function Voyage() {
       courante.observe(item);
       apparition.observe(item);
     });
+
+    // Filet de sécurité pour les défilements rapides : une étape passée
+    // au-dessus du bas de l'écran est révélée d'office (au plus une
+    // vérification toutes les 150 ms, arrêtée quand tout est révélé).
+    let enAttente = false;
+    const rattraper = () => {
+      enAttente = false;
+      const restants = items.filter((item) => !item.hasAttribute("data-visible"));
+      if (!restants.length) {
+        window.removeEventListener("scroll", programmer);
+        return;
+      }
+      restants.forEach((item) => {
+        if (item.getBoundingClientRect().top < window.innerHeight) {
+          item.setAttribute("data-visible", "");
+          apparition.unobserve(item);
+        }
+      });
+    };
+    const programmer = () => {
+      if (enAttente) return;
+      enAttente = true;
+      window.setTimeout(rattraper, 150);
+    };
+    window.addEventListener("scroll", programmer, { passive: true });
     // Le contenu n'est masqué (en attente de son entrée en scène) qu'une fois
     // ce script actif : sans JavaScript, tout reste visible.
     setPret(true);
     return () => {
       courante.disconnect();
       apparition.disconnect();
+      window.removeEventListener("scroll", programmer);
     };
   }, []);
 

@@ -54,13 +54,13 @@ export default async function PageAccueil() {
             height={1696}
             priority
             sizes="(min-width: 1024px) 40vw, 70vw"
-            className="sujet-heros h-full w-auto max-w-none drop-shadow-[0_24px_40px_rgba(17,29,54,0.45)]"
+            className="sujet-heros h-full w-auto max-w-none"
           />
         }
       >
         {/* Ce que fait l'association, en deux pastilles : où l'on récupère,
             où l'on distribue. Le détail vient plus bas dans la page. */}
-        <ul className="anim-entree mb-5 flex flex-wrap gap-2 text-[0.8rem] font-bold sm:mb-6 sm:text-sm">
+        <ul className="anim-entree mb-4 flex flex-wrap gap-2 text-[0.72rem] font-bold min-[380px]:mb-5 min-[380px]:text-[0.8rem] sm:mb-6 sm:text-sm">
           <li className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-3.5 pl-2 ring-1 ring-white/15 backdrop-blur-sm">
             <span className="bg-bleu-vif inline-block size-3 rounded-full" aria-hidden="true" />
             Récupération partout en France
@@ -71,11 +71,11 @@ export default async function PageAccueil() {
           </li>
         </ul>
 
-        <h1 className="anim-entree anim-retard-1 text-[clamp(2.5rem,9vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance lg:text-[clamp(3.5rem,4.8vw,5.75rem)]">
+        <h1 className="anim-entree anim-retard-1 text-[clamp(2.1rem,9vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance lg:text-[clamp(3.5rem,4.8vw,5.75rem)]">
           Ce qui dort chez vous <span className="text-rouge-clair">fait école</span> ailleurs.
         </h1>
 
-        <div className="anim-entree anim-retard-2 mt-8 flex flex-wrap items-center gap-x-8 gap-y-5 md:mt-10">
+        <div className="anim-entree anim-retard-2 mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 min-[380px]:mt-8 min-[380px]:gap-y-5 md:mt-10">
           <Button asChild taille="lg" className="appel-attention">
             <Link href="/contact?profil=entreprise">
               Proposer un don

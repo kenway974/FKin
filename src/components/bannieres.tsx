@@ -47,14 +47,17 @@ export function BanniereAccueil({
         aria-hidden="true"
       />
 
-      <div className="contenu relative z-10 pt-8 pb-12 text-white sm:pt-14 sm:pb-16 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:py-16">
+      {/* À partir de 1280 px, le texte est ancré à gauche (6 % du bord) plutôt
+          que centré : sur les écrans larges, une colonne centrée glisserait
+          vers la droite, jusque sous le ruban. */}
+      <div className="contenu relative z-10 pt-6 pb-10 text-white min-[380px]:pt-8 min-[380px]:pb-12 sm:pt-14 sm:pb-16 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:py-16 xl:mx-0 xl:max-w-none xl:pl-[6vw]">
         {/* Le texte descend un peu moins vite que la page : premier plan de
             lecture, il reste en vue un instant de plus. */}
         <div className="parallaxe [--parallaxe:3rem] lg:max-w-[min(38rem,44vw)]">{children}</div>
       </div>
 
       {/* Scène : vague + sujet, dimensionnés ensemble. */}
-      <div className="relative min-h-72 w-full flex-1 lg:absolute lg:right-0 lg:bottom-0 lg:mt-0 lg:aspect-[12/7] lg:h-[86%] lg:w-auto xl:h-full">
+      <div className="relative min-h-72 w-full flex-1 lg:absolute lg:right-0 lg:bottom-0 lg:mt-0 lg:aspect-[12/7] lg:h-[82%] lg:w-auto xl:h-full">
         {/* Trois plans, trois vitesses : la vague traîne derrière, le sujet
             remonte vers le lecteur. */}
         <div className="parallaxe absolute inset-0 [--parallaxe:4.5rem]">
@@ -77,97 +80,107 @@ export function BanniereAccueil({
  * repère de la scène, si bien qu'elle grandit exactement comme le sujet.
  */
 function VagueScene() {
+  // Chaque format est découpé en deux calques superposés, dans le même
+  // repère : la vague (fond + halo), puis le ruban (rouge + liseré blanc).
+  // Leur entrée au chargement n'est qu'un glissement (`transform`, classes
+  // .vague-heros et .ruban-heros) : aucun recalcul de dessin, donc aucune
+  // saccade, même pendant que la page finit de charger.
   return (
     <div className="absolute inset-0 -z-10" aria-hidden="true">
       {/* Portrait (téléphone, tablette) : la vague déborde juste au-dessus de la
           scène pour que le ruban passe derrière les têtes. */}
-      <svg
-        viewBox="0 0 400 520"
-        preserveAspectRatio="none"
-        className="absolute inset-x-0 bottom-0 h-[calc(100%+2rem)] w-full lg:hidden"
-        focusable="false"
-      >
-        <defs>
-          <linearGradient id="vague-bleue-p" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#42b0e3" />
-            <stop offset="1" stopColor="#0474a8" />
-          </linearGradient>
-          <radialGradient id="halo-p" cx="0.5" cy="0.62" r="0.45">
-            <stop offset="0" stopColor="#8fd3f4" stopOpacity="0.55" />
-            <stop offset="1" stopColor="#8fd3f4" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <path
-          d="M0 520V118C120 52 260 92 400 22V520Z"
-          fill="url(#vague-bleue-p)"
-          className="vague-heros"
-        />
-        <rect width="400" height="520" fill="url(#halo-p)" />
-        <path
-          d="M-20 110C110 38 255 80 420 8"
-          fill="none"
-          stroke="#ef433f"
-          strokeWidth="22"
-          strokeLinecap="round"
-          pathLength={1}
-          className="trace-heros"
-        />
-        <path
-          d="M-20 90C110 18 255 60 420 -12"
-          fill="none"
-          stroke="#fff"
-          strokeOpacity="0.85"
-          strokeWidth="5"
-          strokeLinecap="round"
-          pathLength={1}
-          className="trace-heros trace-heros-2"
-        />
-      </svg>
+      <div className="absolute inset-x-0 bottom-0 h-[calc(100%+2rem)] lg:hidden">
+        <svg
+          viewBox="0 0 400 520"
+          preserveAspectRatio="none"
+          className="vague-heros absolute inset-0 size-full"
+          focusable="false"
+        >
+          <defs>
+            <linearGradient id="vague-bleue-p" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#42b0e3" />
+              <stop offset="1" stopColor="#0474a8" />
+            </linearGradient>
+            <radialGradient id="halo-p" cx="0.5" cy="0.62" r="0.45">
+              <stop offset="0" stopColor="#8fd3f4" stopOpacity="0.55" />
+              <stop offset="1" stopColor="#8fd3f4" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <path d="M0 520V118C120 52 260 92 400 22V520Z" fill="url(#vague-bleue-p)" />
+          <rect width="400" height="520" fill="url(#halo-p)" />
+        </svg>
+        <svg
+          viewBox="0 0 400 520"
+          preserveAspectRatio="none"
+          className="ruban-heros absolute inset-0 size-full"
+          focusable="false"
+        >
+          <path
+            d="M-20 110C110 38 255 80 420 8"
+            fill="none"
+            stroke="#ef433f"
+            strokeWidth="22"
+            strokeLinecap="round"
+          />
+          <path
+            d="M-20 90C110 18 255 60 420 -12"
+            fill="none"
+            stroke="#fff"
+            strokeOpacity="0.85"
+            strokeWidth="5"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
 
       {/* Paysage (ordinateur) : format fixe 12:7, identique à la scène. */}
-      <svg
-        viewBox="0 0 1200 700"
-        preserveAspectRatio="none"
-        className="absolute inset-0 hidden size-full lg:block"
-        focusable="false"
-      >
-        <defs>
-          <linearGradient id="vague-bleue-l" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#42b0e3" />
-            <stop offset="0.55" stopColor="#0495d4" />
-            <stop offset="1" stopColor="#055a82" />
-          </linearGradient>
-          <radialGradient id="halo-l" cx="0.76" cy="0.6" r="0.3">
-            <stop offset="0" stopColor="#8fd3f4" stopOpacity="0.5" />
-            <stop offset="1" stopColor="#8fd3f4" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <path
-          d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z"
-          fill="url(#vague-bleue-l)"
-          className="vague-heros"
-        />
-        <path d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z" fill="url(#halo-l)" />
-        <path
-          d="M500 740C540 505 665 345 865 268S1135 140 1215 0"
-          fill="none"
-          stroke="#ef433f"
-          strokeWidth="34"
-          strokeLinecap="round"
-          pathLength={1}
-          className="trace-heros"
-        />
-        <path
-          d="M462 740C505 490 630 322 838 242S1105 108 1190 -30"
-          fill="none"
-          stroke="#fff"
-          strokeOpacity="0.85"
-          strokeWidth="8"
-          strokeLinecap="round"
-          pathLength={1}
-          className="trace-heros trace-heros-2"
-        />
-      </svg>
+      <div className="absolute inset-0 hidden lg:block">
+        <svg
+          viewBox="0 0 1200 700"
+          preserveAspectRatio="none"
+          className="vague-heros absolute inset-0 size-full"
+          focusable="false"
+        >
+          <defs>
+            <linearGradient id="vague-bleue-l" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#42b0e3" />
+              <stop offset="0.55" stopColor="#0495d4" />
+              <stop offset="1" stopColor="#055a82" />
+            </linearGradient>
+            <radialGradient id="halo-l" cx="0.76" cy="0.6" r="0.3">
+              <stop offset="0" stopColor="#8fd3f4" stopOpacity="0.5" />
+              <stop offset="1" stopColor="#8fd3f4" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <path
+            d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z"
+            fill="url(#vague-bleue-l)"
+          />
+          <path d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z" fill="url(#halo-l)" />
+        </svg>
+        <svg
+          viewBox="0 0 1200 700"
+          preserveAspectRatio="none"
+          className="ruban-heros absolute inset-0 size-full"
+          focusable="false"
+        >
+          <path
+            d="M500 740C540 505 665 345 865 268S1135 140 1215 0"
+            fill="none"
+            stroke="#ef433f"
+            strokeWidth="34"
+            strokeLinecap="round"
+          />
+          <path
+            d="M462 740C505 490 630 322 838 242S1105 108 1190 -30"
+            fill="none"
+            stroke="#fff"
+            strokeOpacity="0.85"
+            strokeWidth="8"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
     </div>
   );
 }
