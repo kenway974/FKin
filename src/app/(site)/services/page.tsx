@@ -15,7 +15,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import { Point, Section, TitreSection } from "@/components/sections";
+import { Bande, Point, Section, TitreSection } from "@/components/sections";
+import { DeuxPortes } from "@/components/deux-portes";
 import { BannierePage } from "@/components/bannieres";
 import { Blob } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
@@ -157,7 +158,7 @@ export default function PageServices() {
       </Section>
 
       {/* -------------------------------------------------------- Bénéficiaires */}
-      <Section id="beneficiaires" fond="nuage" aria-labelledby="titre-beneficiaires">
+      <Bande id="beneficiaires" fond="nuage" aria-labelledby="titre-beneficiaires">
         <div className="contenu">
           <TitreSection
             id="titre-beneficiaires"
@@ -216,13 +217,14 @@ export default function PageServices() {
             </ol>
           </div>
         </div>
-      </Section>
+      </Bande>
 
       {/* ------------------------------------------------------------ Réparation */}
-      <Section id="reparation" aria-labelledby="titre-reparation">
+      <Bande id="reparation" fond="marine" aria-labelledby="titre-reparation">
         <div className="contenu">
           <TitreSection
             id="titre-reparation"
+            sombre
             surtitre="Réemploi et insertion"
             titre="Réparer plutôt que jeter, et former en réparant"
             chapo="Une partie du matériel arrive endommagée. Plutôt que de la mettre au rebut, nous la confions à des recycleries à Kinshasa, où des jeunes apprennent à le remettre en état."
@@ -252,8 +254,9 @@ export default function PageServices() {
                 <Point
                   icone={bloc.icone}
                   titre={bloc.titre}
-                  ton="marine"
+                  ton={index === 1 ? "rouge" : "bleu"}
                   variante={variante(index)}
+                  sombre
                 >
                   <p>{bloc.texte}</p>
                 </Point>
@@ -261,10 +264,10 @@ export default function PageServices() {
             ))}
           </ul>
         </div>
-      </Section>
+      </Bande>
 
       {/* ------------------------------------------------------------- Formation */}
-      <Section id="formation" fond="nuage" aria-labelledby="titre-formation">
+      <Section id="formation" aria-labelledby="titre-formation">
         <div className="contenu">
           {/* Pas d'encadré : une grande forme souple porte le pictogramme, le
               texte est posé à côté. */}
@@ -300,6 +303,8 @@ export default function PageServices() {
           </div>
         </div>
       </Section>
+
+      <DeuxPortes />
     </>
   );
 }

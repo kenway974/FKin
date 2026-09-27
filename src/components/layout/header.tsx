@@ -16,10 +16,11 @@ import { Vague } from "@/components/formes";
  * Le menu mobile est un simple état React qui affiche/masque un panneau : pas
  * de librairie de drawer, pas d'animation coûteuse.
  *
- * Sur l'accueil, tant que le héros est à l'écran, l'en-tête est translucide
- * et se fond dans le marine du héros (textes en blanc) ; il reprend son fond
- * clair dès qu'on l'a dépassé. Un seul écouteur de défilement, passif, qui ne
- * met l'état à jour que lorsque la bascule change réellement.
+ * Tant qu'une bannière sombre (héros de l'accueil, bannière des pages) est à
+ * l'écran, l'en-tête est translucide et se fond dans son marine (textes en
+ * blanc) ; il reprend son fond clair dès qu'on l'a dépassée. Un seul
+ * écouteur de défilement, passif, qui ne met l'état à jour que lorsque la
+ * bascule change réellement.
  */
 export function Header() {
   const [ouvert, setOuvert] = React.useState(false);
@@ -30,24 +31,35 @@ export function Header() {
     setOuvert(false);
   }, [chemin]);
 
-  const accueil = chemin === "/";
-  const [surHeros, setSurHeros] = React.useState(accueil);
+  // Translucide tant qu'une bannière sombre (héros de l'accueil ou bannière
+  // de page, marquées `data-banniere-sombre`) est sous l'en-tête. L'état
+  // initial suit les pages qui en ont une, pour éviter un saut à l'affichage.
+  const [surHeros, setSurHeros] = React.useState(true);
 
   React.useEffect(() => {
-    if (!accueil) {
+    const banniere = document.querySelector<HTMLElement>("[data-banniere-sombre]");
+    if (!banniere) {
       setSurHeros(false);
       return;
     }
-    // Le héros occupe tout l'écran : on bascule un peu avant sa fin.
-    const verifier = () => setSurHeros(window.scrollY < window.innerHeight - 160);
-    verifier();
+    // On bascule un peu avant la fin de la bannière. Sa hauteur est mesurée
+    // une fois (puis à chaque redimensionnement), jamais pendant le
+    // défilement : la lire à chaque image forcerait un recalcul de la mise en
+    // page et saccaderait le défilement.
+    let limite = 0;
+    const mesurer = () => {
+      limite = banniere.offsetHeight - 120;
+      verifier();
+    };
+    const verifier = () => setSurHeros(window.scrollY < limite);
+    mesurer();
     window.addEventListener("scroll", verifier, { passive: true });
-    window.addEventListener("resize", verifier);
+    window.addEventListener("resize", mesurer);
     return () => {
       window.removeEventListener("scroll", verifier);
-      window.removeEventListener("resize", verifier);
+      window.removeEventListener("resize", mesurer);
     };
-  }, [accueil]);
+  }, [chemin]);
 
   // Menu mobile ouvert : fond clair, pour que le panneau se détache.
   const transparent = surHeros && !ouvert;
@@ -57,8 +69,10 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 backdrop-blur-md transition-colors duration-300",
-        transparent ? "bg-marine/25 text-white" : "bg-fond/90 text-encre",
+        "sticky top-0 z-40 transition-colors duration-300",
+        // Pas de flou sur la bannière : recalculé à chaque image au-dessus de
+        // la vague animée, il saccadait le défilement ; le marine suffit.
+        transparent ? "bg-marine/25 text-white" : "bg-fond/90 text-encre backdrop-blur-md",
       )}
     >
       <div className="contenu flex h-16 items-center justify-between gap-4 md:h-20">

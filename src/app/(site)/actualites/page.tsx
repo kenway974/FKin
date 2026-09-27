@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { EtatVide, Section } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
+import { DeuxPortes } from "@/components/deux-portes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { CarteArticle } from "@/components/carte-article";
 import { listerArticlesPublies } from "@/lib/data";
@@ -76,6 +77,8 @@ export default async function PageActualites() {
           )}
         </div>
       </Section>
+
+      <DeuxPortes />
     </>
   );
 }

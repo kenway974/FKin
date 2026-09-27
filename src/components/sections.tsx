@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Blob } from "@/components/formes";
+import { Blob, OndeBord } from "@/components/formes";
 
 /**
  * Briques de mise en page réutilisées par les pages publiques.
@@ -31,6 +31,7 @@ export function TitreSection({
   chapo,
   niveau = 2,
   centre = false,
+  sombre = false,
   id,
 }: {
   surtitre?: string;
@@ -38,6 +39,8 @@ export function TitreSection({
   chapo?: string;
   niveau?: 1 | 2;
   centre?: boolean;
+  /** Sur une bande sombre : surtitre et chapô éclaircis. */
+  sombre?: boolean;
   id?: string;
 }) {
   const Titre = niveau === 1 ? "h1" : "h2";
@@ -51,7 +54,8 @@ export function TitreSection({
         {surtitre ? (
           <p
             className={cn(
-              "text-rouge mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase",
+              "mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase",
+              sombre ? "text-rouge-clair" : "text-rouge",
               centre && "justify-center",
             )}
           >
@@ -71,7 +75,11 @@ export function TitreSection({
         >
           {titre}
         </Titre>
-        {chapo ? <p className="text-doux mt-4 text-lg leading-relaxed">{chapo}</p> : null}
+        {chapo ? (
+          <p className={cn("mt-4 text-lg leading-relaxed", sombre ? "text-white/80" : "text-doux")}>
+            {chapo}
+          </p>
+        ) : null}
       </div>
     </div>
   );
@@ -179,6 +187,7 @@ export function Point({
   titre,
   ton = "rouge",
   variante = 1,
+  sombre = false,
   children,
   className,
 }: {
@@ -186,21 +195,65 @@ export function Point({
   titre: React.ReactNode;
   ton?: "rouge" | "bleu" | "marine";
   variante?: 1 | 2 | 3;
+  /** Sur une bande sombre (marine) : forme pleine, textes clairs. */
+  sombre?: boolean;
   children?: React.ReactNode;
   className?: string;
 }) {
-  const teintes = {
-    rouge: "bg-rouge-voile text-rouge",
-    bleu: "bg-bleu-voile text-bleu",
-    marine: "bg-nuage-fonce text-marine",
-  } as const;
+  const teintes = sombre
+    ? {
+        rouge: ["bg-rouge-vif", "text-white"],
+        bleu: ["bg-bleu-vif", "text-white"],
+        marine: ["bg-white/15", "text-white"],
+      }
+    : {
+        rouge: ["bg-rouge-voile", "text-rouge"],
+        bleu: ["bg-bleu-voile", "text-bleu"],
+        marine: ["bg-nuage-fonce", "text-marine"],
+      };
   return (
     <div className={cn("flex flex-col items-start gap-4", className)}>
-      <Blob teinte={teintes[ton].split(" ")[0]} variante={variante} className="size-16">
-        <Icone className={cn("size-7", teintes[ton].split(" ")[1])} aria-hidden="true" />
+      <Blob teinte={teintes[ton][0]} variante={variante} className="size-16">
+        <Icone className={cn("size-7", teintes[ton][1])} aria-hidden="true" />
       </Blob>
-      <h3 className="text-xl font-semibold md:text-2xl">{titre}</h3>
-      {children ? <div className="text-doux space-y-2 leading-relaxed">{children}</div> : null}
+      <h3 className={cn("text-xl font-semibold md:text-2xl", sombre && "text-white")}>{titre}</h3>
+      {children ? (
+        <div className={cn("space-y-2 leading-relaxed", sombre ? "text-white/80" : "text-doux")}>
+          {children}
+        </div>
+      ) : null}
     </div>
+  );
+}
+
+/**
+ * Bande pleine largeur bordée de vagues animées, comme sur l'accueil.
+ * `fond` : nuage (clair bleuté) ou marine (sombre, textes clairs).
+ */
+export function Bande({
+  fond = "nuage",
+  className,
+  children,
+  ...proprietes
+}: React.ComponentProps<"section"> & { fond?: "nuage" | "marine" }) {
+  return (
+    <section
+      className={cn(
+        "relative isolate overflow-hidden py-24 md:py-36",
+        fond === "marine" ? "bg-marine text-white" : "bg-nuage",
+        className,
+      )}
+      {...proprietes}
+    >
+      <OndeBord className="text-fond" position="haut" />
+      <OndeBord className="text-fond" position="bas" />
+      {fond === "marine" ? (
+        <span
+          aria-hidden="true"
+          className="blob-derive forme-blob-2 bg-bleu-vif/15 absolute top-10 -right-24 -z-10 size-80 md:size-[28rem]"
+        />
+      ) : null}
+      {children}
+    </section>
   );
 }

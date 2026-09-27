@@ -1,10 +1,7 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, HeartHandshake } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { EtatVide, Section } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
-import { Blob } from "@/components/formes";
+import { DeuxPortes } from "@/components/deux-portes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { CarteProjet } from "@/components/carte-projet";
 import { listerProjetsPublies } from "@/lib/data";
@@ -90,33 +87,10 @@ export default async function PageRealisations() {
               </p>
             </EtatVide>
           )}
-
-          {/* Appel final sans encadré : forme souple et texte posés sur la page. */}
-          <div
-            data-apparition=""
-            className="mt-20 grid items-center gap-8 md:grid-cols-[auto_1fr] md:gap-12"
-          >
-            <Blob teinte="bg-rouge-vif" variante={1} className="size-28 text-white md:size-36">
-              <HeartHandshake className="size-12 md:size-16" aria-hidden="true" />
-            </Blob>
-            <div>
-              <h2 className="font-titre text-3xl font-bold md:text-4xl">
-                Votre entreprise peut être le point de départ du prochain projet
-              </h2>
-              <p className="text-doux mt-3 max-w-2xl">
-                La plupart de ces installations partent d&apos;un simple message. Décrivez-nous
-                votre lot, nous vous disons rapidement ce que nous pouvons en faire.
-              </p>
-              <Button asChild className="mt-6">
-                <Link href="/contact?profil=entreprise">
-                  Proposer un don
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-            </div>
-          </div>
         </div>
       </Section>
+
+      <DeuxPortes />
     </>
   );
 }

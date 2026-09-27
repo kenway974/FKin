@@ -1,7 +1,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Coeur, TRACE_COEUR, Vague } from "@/components/formes";
+import { OndeBord, TRACE_COEUR } from "@/components/formes";
 
 /**
  * Bannières et rubans, aux formes et aux couleurs du logo.
@@ -41,7 +41,10 @@ export function BanniereAccueil({
     //
     // Le héros remonte sous l'en-tête (marge négative de sa hauteur) : sur
     // l'accueil, l'en-tête est translucide et se fond dans le marine.
-    <section className="bg-marine relative isolate -mt-16 flex min-h-svh flex-col overflow-hidden pt-16 md:-mt-20 md:pt-20 lg:block">
+    <section
+      data-banniere-sombre=""
+      className="bg-marine relative isolate -mt-16 flex min-h-svh flex-col overflow-hidden pt-16 md:-mt-20 md:pt-20 lg:block"
+    >
       <div
         className="from-marine-fonce via-marine to-marine-clair absolute inset-0 -z-20 bg-linear-to-br"
         aria-hidden="true"
@@ -186,8 +189,15 @@ function VagueScene() {
 }
 
 /**
- * Bannière d'en-tête des pages intérieures : plus compacte, en aplat de
- * couleur, terminée par une vague qui ouvre sur le contenu de la page.
+ * Bannière d'en-tête des pages intérieures, dans la langue du héros de
+ * l'accueil : fond marine, vague colorée et ruban (rouge + liseré blanc) qui
+ * entrent en glissant sur la droite, formes souples qui dérivent en fond, bas
+ * découpé en vague animée. Comme sur l'accueil, la bannière passe sous
+ * l'en-tête, qui reste translucide tant qu'elle est à l'écran
+ * (`data-banniere-sombre`).
+ *
+ * `ton` choisit la couleur de la vague (bleu ou rouge) ; `photo`, si une
+ * image est déposée, remplace le décor.
  */
 export function BannierePage({
   surtitre,
@@ -195,22 +205,31 @@ export function BannierePage({
   chapo,
   ton = "marine",
   photo,
+  avant,
+  children,
 }: {
   surtitre?: string;
   titre: string;
   chapo?: string;
   ton?: "rouge" | "bleu" | "marine";
   photo?: string | null;
+  /** Contenu placé au-dessus du titre (lien de retour, par exemple). */
+  avant?: React.ReactNode;
+  /** Contenu placé sous le titre (date, auteur…). */
+  children?: React.ReactNode;
 }) {
-  const tons = {
-    rouge: "from-rouge-fonce via-rouge to-rouge-vif",
-    bleu: "from-bleu-fonce via-bleu to-bleu-vif",
-    marine: "from-marine-fonce via-marine to-marine-clair",
-  } as const;
+  const vague = ton === "rouge" ? ["#fc6844", "#b0221f"] : ["#42b0e3", "#055a82"];
+  const idDegrade = `vague-page-${ton}`;
 
   return (
-    <section className="relative isolate overflow-hidden">
-      <div className={cn("absolute inset-0 -z-20 bg-linear-to-br", tons[ton])} aria-hidden="true" />
+    <section
+      data-banniere-sombre=""
+      className="bg-marine relative isolate -mt-16 overflow-hidden pt-16 md:-mt-20 md:pt-20"
+    >
+      <div
+        className="from-marine-fonce via-marine to-marine-clair absolute inset-0 -z-20 bg-linear-to-br"
+        aria-hidden="true"
+      />
 
       {photo ? (
         <>
@@ -218,30 +237,84 @@ export function BannierePage({
           <div className="voile-banniere absolute inset-0 -z-10" aria-hidden="true" />
         </>
       ) : (
-        <Coeur className="right-16 bottom-20 -z-10 hidden w-56 -rotate-12 text-white/10 md:block lg:right-28 lg:w-72" />
+        <div className="absolute inset-0 -z-10" aria-hidden="true">
+          <span className="blob-derive forme-blob-2 bg-bleu-vif/15 absolute -top-16 -left-24 size-72 md:size-96" />
+          {/* Vague et ruban, comme dans le héros : sur la droite sur grand
+              écran ; sur mobile et tablette, en bas, sous le texte, pour ne
+              jamais le traverser. */}
+          <div className="parallaxe absolute right-0 bottom-0 h-40 w-full [--parallaxe:3rem] md:h-48 xl:top-0 xl:h-auto xl:w-[55%]">
+            <svg
+              viewBox="0 0 800 500"
+              preserveAspectRatio="none"
+              className="vague-heros absolute inset-0 size-full"
+              focusable="false"
+            >
+              <defs>
+                <linearGradient id={idDegrade} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor={vague[0]} />
+                  <stop offset="1" stopColor={vague[1]} />
+                </linearGradient>
+              </defs>
+              <path
+                d="M240 500C290 360 420 280 600 230S780 130 800 60V500Z"
+                fill={`url(#${idDegrade})`}
+              />
+            </svg>
+            <svg
+              viewBox="0 0 800 500"
+              preserveAspectRatio="none"
+              className="ruban-heros absolute inset-0 size-full"
+              focusable="false"
+            >
+              <path
+                d="M200 540C260 360 400 262 590 212S775 108 815 30"
+                fill="none"
+                stroke="#ef433f"
+                strokeWidth="26"
+                strokeLinecap="round"
+              />
+              <path
+                d="M168 540C232 346 376 238 570 188S752 82 792 6"
+                fill="none"
+                stroke="#fff"
+                strokeOpacity="0.85"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+        </div>
       )}
 
-      <div className="contenu relative pt-14 pb-20 text-white md:pt-20 md:pb-28">
-        <div className="parallaxe max-w-3xl [--parallaxe:2rem]">
+      <div
+        className={cn(
+          "contenu relative pt-14 text-white md:pt-24",
+          photo ? "pb-28 md:pb-36" : "pb-44 md:pb-52 xl:pb-36",
+        )}
+      >
+        <div className="parallaxe max-w-3xl [--parallaxe:2rem] xl:max-w-[min(48rem,50vw)]">
+          {avant ? <div className="anim-entree mb-6">{avant}</div> : null}
           {surtitre ? (
-            <p className="anim-entree mb-4 inline-flex items-center gap-2 text-sm font-bold tracking-[0.14em] uppercase">
-              <span
-                className="bg-rouge-clair inline-block size-2.5 rounded-full"
-                aria-hidden="true"
-              />
+            <p className="anim-entree mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 py-1.5 pr-4 pl-2 text-sm font-bold ring-1 ring-white/20">
+              <span className="bg-rouge-vif inline-block size-3 rounded-full" aria-hidden="true" />
               {surtitre}
             </p>
           ) : null}
-          <h1 className="anim-entree anim-retard-1 text-4xl font-bold md:text-6xl">{titre}</h1>
+          <h1 className="anim-entree anim-retard-1 text-[clamp(2.3rem,8vw,4.5rem)] leading-[1.03] font-bold tracking-[-0.02em] text-balance">
+            {titre}
+          </h1>
           {chapo ? (
-            <p className="anim-entree anim-retard-2 mt-5 max-w-2xl text-lg leading-relaxed text-white/90">
+            <p className="anim-entree anim-retard-2 mt-5 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl">
               {chapo}
             </p>
+          ) : null}
+          {children ? (
+            <div className="anim-entree anim-retard-2 mt-5 text-white/85">{children}</div>
           ) : null}
         </div>
       </div>
 
-      <Vague className="text-fond absolute inset-x-0 -bottom-px" retourne />
+      <OndeBord className="text-fond" position="bas" />
     </section>
   );
 }

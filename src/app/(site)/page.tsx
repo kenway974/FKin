@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
 import { BanniereAccueil, RubanDefilant } from "@/components/bannieres";
 import { Voyage } from "@/components/voyage";
+import { DeuxPortes } from "@/components/deux-portes";
 import { Blob, OndeBord } from "@/components/formes";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
 import { compterPourAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
-import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -61,11 +61,11 @@ export default async function PageAccueil() {
         {/* Ce que fait l'association, en deux pastilles : où l'on récupère,
             où l'on distribue. Le détail vient plus bas dans la page. */}
         <ul className="anim-entree mb-4 flex flex-wrap gap-2 text-[0.72rem] font-bold min-[380px]:mb-5 min-[380px]:text-[0.8rem] sm:mb-6 sm:text-sm">
-          <li className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-3.5 pl-2 ring-1 ring-white/15 backdrop-blur-sm">
+          <li className="inline-flex items-center gap-2 rounded-full bg-white/15 py-1.5 pr-3.5 pl-2 ring-1 ring-white/20">
             <span className="bg-bleu-vif inline-block size-3 rounded-full" aria-hidden="true" />
             Récupération partout en France
           </li>
-          <li className="inline-flex items-center gap-2 rounded-full bg-white/10 py-1.5 pr-3.5 pl-2 ring-1 ring-white/15 backdrop-blur-sm">
+          <li className="inline-flex items-center gap-2 rounded-full bg-white/15 py-1.5 pr-3.5 pl-2 ring-1 ring-white/20">
             <span className="bg-rouge-vif inline-block size-3 rounded-full" aria-hidden="true" />
             Distribution en France et au Congo
           </li>
@@ -302,97 +302,7 @@ export default async function PageAccueil() {
       ) : null}
 
       {/* ------------------------------------------- Deux portes d'entrée (CTA) */}
-      {/* Les deux publics se partagent l'écran, d'un bord à l'autre : rouge
-          pour les donateurs, bleu pour les bénéficiaires, séparés par une
-          couture en vague qui ondule. C'est la dernière chose vue avant le
-          pied de page. */}
-      <section
-        aria-label="Nous contacter"
-        className="relative isolate mt-10 overflow-hidden text-white"
-      >
-        <OndeBord className="text-fond" position="haut" />
-        <OndeBord className="text-fond" position="bas" />
-        <div className="grid md:grid-cols-2">
-          <div className="bg-rouge-vif relative isolate overflow-hidden px-6 pt-24 pb-20 md:px-12 md:pt-36 md:pb-36 lg:pl-[max(3rem,calc((100vw-72rem)/2+2rem))]">
-            <span
-              aria-hidden="true"
-              className="blob-derive forme-blob-1 absolute -right-20 -bottom-24 -z-10 size-72 bg-white/10 md:size-96"
-            />
-            <div
-              data-apparition-cascade="gauche"
-              className="parallaxe-vue max-w-md [--parallaxe:1rem]"
-            >
-              <p className="text-sm font-extrabold tracking-[0.14em] text-white/85 uppercase">
-                Donateurs
-              </p>
-              <h2 className="mt-2 text-3xl font-bold md:text-5xl">
-                Du matériel qui dort chez vous ?
-              </h2>
-              <p className="mt-4 text-lg leading-relaxed text-white/90">
-                Entreprises, collectivités : décrivez-nous le lot, nous répondons sous 72 heures et
-                venons le chercher gratuitement.
-              </p>
-              <Button asChild taille="lg" variante="clair" className="mt-8">
-                <Link href="/contact?profil=entreprise">
-                  Proposer un don
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-
-          <div className="bg-bleu-vif relative isolate px-6 pt-24 pb-20 md:px-12 md:pt-36 md:pb-36 md:pl-20 lg:pr-[max(3rem,calc((100vw-72rem)/2+2rem))]">
-            {/* Couture : sur téléphone, une vague rouge en haut du bloc bleu ;
-                sur grand écran, une vague verticale qui ondule le long du bord. */}
-            <OndeBord className="text-rouge-vif md:hidden" position="haut" />
-            <div
-              aria-hidden="true"
-              className="absolute inset-y-0 left-0 hidden w-16 -translate-x-1/2 overflow-hidden md:block"
-            >
-              <svg
-                viewBox="0 0 60 1200"
-                preserveAspectRatio="none"
-                className="onde-verticale absolute inset-x-0 top-0 w-full"
-                focusable="false"
-              >
-                <path
-                  d="M30 0C52 100 52 200 30 300S8 500 30 600S52 800 30 900S8 1100 30 1200H60V0Z"
-                  fill="var(--color-bleu-vif)"
-                />
-              </svg>
-            </div>
-            <span
-              aria-hidden="true"
-              className="blob-derive forme-blob-2 absolute -right-24 -bottom-20 -z-10 size-72 bg-white/10 [animation-delay:-12s] md:size-96"
-            />
-            <div
-              data-apparition-cascade="droite"
-              className="parallaxe-vue max-w-md [--parallaxe:1rem] md:[--parallaxe:2.25rem]"
-            >
-              <p className="text-sm font-extrabold tracking-[0.14em] text-white/85 uppercase">
-                Bénéficiaires
-              </p>
-              <h2 className="mt-2 text-3xl font-bold md:text-5xl">Besoin d&apos;équipement ?</h2>
-              <p className="mt-4 text-lg leading-relaxed text-white/90">
-                Écoles, mairies, associations, en France ou au Congo : présentez votre structure et
-                vos besoins.
-              </p>
-              <Button asChild taille="lg" variante="clair" className="mt-8">
-                <Link href="/contact?profil=beneficiaire">
-                  Demander un équipement
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-      <p className="contenu text-doux mt-4 text-center text-sm">
-        Ou écrivez-nous directement à{" "}
-        <a href={`mailto:${site.email}`} className="text-encre font-bold underline">
-          {site.email}
-        </a>
-      </p>
+      <DeuxPortes />
     </>
   );
 }

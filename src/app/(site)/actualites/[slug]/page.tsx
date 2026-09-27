@@ -8,6 +8,7 @@ import { listerArticlesPublies, trouverArticleParSlug } from "@/lib/data";
 import { decouperParagraphes, extraireResume, formaterDate } from "@/lib/utils";
 import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
+import { BannierePage } from "@/components/bannieres";
 
 type Proprietes = {
   // Depuis Next.js 15, `params` est une promesse dans les Server Components.
@@ -89,37 +90,34 @@ export default async function PageArticle({ params }: Proprietes) {
       />
 
       <article className="pb-16">
-        <header className="border-bordure bg-nuage motif-tissu border-b py-12 md:py-16">
-          <div className="contenu max-w-3xl">
-            <Button asChild variante="lien" taille="sm" className="mb-4 px-0">
+        <BannierePage
+          titre={article.titre}
+          avant={
+            <Button asChild variante="courbe-clair">
               <Link href="/actualites">
-                <ArrowLeft className="size-4" aria-hidden="true" />
+                <ArrowLeft aria-hidden="true" />
                 Toutes les actualités
               </Link>
             </Button>
-
-            <h1 className="text-3xl leading-tight font-bold md:text-4xl lg:text-5xl">
-              {article.titre}
-            </h1>
-
-            <p className="text-doux mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-              {article.date_publication ? (
-                <time dateTime={article.date_publication}>
-                  Publié le {formaterDate(article.date_publication)}
-                </time>
-              ) : null}
-              {article.auteur ? (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>{article.auteur}</span>
-                </>
-              ) : null}
-            </p>
-          </div>
-        </header>
+          }
+        >
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            {article.date_publication ? (
+              <time dateTime={article.date_publication}>
+                Publié le {formaterDate(article.date_publication)}
+              </time>
+            ) : null}
+            {article.auteur ? (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>{article.auteur}</span>
+              </>
+            ) : null}
+          </p>
+        </BannierePage>
 
         {article.image_couverture ? (
-          <div className="contenu -mt-8 max-w-4xl md:-mt-10">
+          <div className="contenu relative z-10 -mt-6 max-w-4xl md:-mt-10">
             <div className="bg-nuage forme-blob-3 relative aspect-[16/9] w-full overflow-hidden">
               <Image
                 src={article.image_couverture}

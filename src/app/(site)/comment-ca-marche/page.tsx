@@ -1,10 +1,8 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Building2, School } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import { Point, Section } from "@/components/sections";
+import { Section } from "@/components/sections";
+import { DeuxPortes } from "@/components/deux-portes";
 import { BannierePage } from "@/components/bannieres";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { urlSite } from "@/lib/env";
@@ -155,33 +153,10 @@ export default function PageCommentCaMarche() {
               </p>
             </Alert>
           </div>
-
-          {/* Les deux publics, sans encadré : chacun porté par sa forme souple. */}
-          <div data-apparition-cascade="" className="mt-16 grid gap-12 sm:grid-cols-2">
-            <Point icone={Building2} titre="Vous êtes une entreprise" ton="rouge" variante={1}>
-              <p>Votre seule action est le premier message. Tout le reste est pris en charge.</p>
-              <Button asChild variante="principal" className="mt-3">
-                <Link href="/contact?profil=entreprise">
-                  Signaler du matériel
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-            </Point>
-            <Point icone={School} titre="Vous êtes une structure à équiper" ton="bleu" variante={2}>
-              <p>
-                En France ou au Congo, déposez votre demande : elle sera examinée au fil des
-                collectes.
-              </p>
-              <Button asChild variante="secondaire" className="mt-3">
-                <Link href="/contact?profil=beneficiaire">
-                  Demander un équipement
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-            </Point>
-          </div>
         </div>
       </Section>
+
+      <DeuxPortes />
     </>
   );
 }

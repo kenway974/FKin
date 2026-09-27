@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
+import { BannierePage } from "@/components/bannieres";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
@@ -18,16 +19,13 @@ export const metadata: Metadata = {
 export default function PageConfidentialite() {
   return (
     <article className="pb-16">
-      <header className="border-bordure bg-nuage motif-tissu border-b py-12 md:py-16">
-        <div className="contenu max-w-3xl">
-          <h1 className="text-3xl leading-tight font-bold md:text-4xl">
-            Politique de confidentialité
-          </h1>
-          <p className="text-doux mt-3 text-sm">Dernière mise à jour : août 2026.</p>
-        </div>
-      </header>
+      <BannierePage
+        surtitre="Informations légales"
+        titre="Politique de confidentialité"
+        chapo="Dernière mise à jour : août 2026."
+      />
 
-      <div className="contenu mt-10 max-w-3xl">
+      <div className="contenu mt-12 max-w-3xl">
         <div className="text-encre/90 space-y-8 leading-relaxed">
           <section className="space-y-2">
             <h2 className="font-titre text-encre text-xl font-bold">Responsable du traitement</h2>
