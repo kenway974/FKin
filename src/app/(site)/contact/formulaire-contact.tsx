@@ -111,26 +111,50 @@ export function FormulaireContact() {
           <span className="sr-only">(champ obligatoire)</span>
         </legend>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          {profils.map((profil) => (
-            <label
-              key={profil.valeur}
-              className={cn(
-                "rounded-douce border-bordure flex cursor-pointer gap-3 border-2 bg-white p-4",
-                "has-[:checked]:border-rouge has-[:checked]:bg-rouge-voile",
-                "has-[:focus-visible]:outline-bleu has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2",
-              )}
-            >
+        {/* Pas de cartes : chaque profil est un grand pictogramme posé sur
+            une forme souple. Celle du profil choisi se remplit de couleur et
+            son libellé se souligne d'une vague. Le bouton radio reste présent
+            (lecteurs d'écran, clavier) mais visuellement masqué. */}
+        <div className="grid gap-6 sm:grid-cols-2">
+          {profils.map((profil, index) => (
+            <label key={profil.valeur} className="group flex cursor-pointer items-center gap-4">
               <input
                 type="radio"
                 value={profil.valeur}
                 {...register("typeEmetteur")}
                 aria-describedby={errors.typeEmetteur ? "erreur-profil" : undefined}
-                className="accent-bleu mt-1 size-4 shrink-0"
+                className="peer sr-only"
               />
+              <span
+                className={cn(
+                  "relative isolate inline-grid size-16 shrink-0 place-items-center transition-colors duration-300",
+                  "rounded-full ring-offset-4 peer-focus-visible:ring-3",
+                  index === 0
+                    ? "text-rouge peer-focus-visible:ring-rouge group-has-[:checked]:text-white"
+                    : "text-bleu peer-focus-visible:ring-bleu group-has-[:checked]:text-white",
+                )}
+              >
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "blob-anime absolute inset-0 -z-10 transition-colors duration-300",
+                    index === 0
+                      ? "forme-blob-1 bg-rouge-voile group-has-[:checked]:bg-rouge-vif"
+                      : "forme-blob-2 bg-bleu-voile group-has-[:checked]:bg-bleu-vif",
+                  )}
+                />
+                <profil.icone className="size-7" aria-hidden="true" />
+              </span>
               <span>
-                <span className="text-encre flex items-center gap-2 font-semibold">
-                  <profil.icone className="text-rouge size-4" aria-hidden="true" />
+                <span
+                  className={cn(
+                    "text-encre inline-block text-lg font-semibold",
+                    "group-has-[:checked]:trait-courbe",
+                    index === 0
+                      ? "[--couleur-trait:var(--color-rouge-vif)]"
+                      : "[--couleur-trait:var(--color-bleu-vif)]",
+                  )}
+                >
                   {profil.libelle}
                 </span>
                 <span className="text-doux mt-0.5 block text-sm">{profil.precision}</span>

@@ -22,19 +22,26 @@ export function Label({
   );
 }
 
+// Pas de boîte : un simple trait souligné, qui s'épaissit et passe au bleu
+// quand le champ est actif, au rouge quand il est en erreur.
 const styleChamp =
-  "w-full rounded-douce border border-bordure bg-white px-3.5 py-2.5 text-encre placeholder:text-doux/70 disabled:cursor-not-allowed disabled:bg-nuage aria-invalid:border-red-700";
+  "w-full rounded-none border-0 border-b-2 border-bordure bg-transparent px-0.5 py-2.5 text-lg text-encre transition-colors placeholder:text-doux/60 hover:border-doux/50 focus:border-bleu focus:shadow-[0_2px_0_0_var(--color-bleu)] focus:outline-none focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:border-red-700";
 
 export function Input({ className, ...proprietes }: React.ComponentProps<"input">) {
-  return <input className={cn(styleChamp, "h-11", className)} {...proprietes} />;
+  return <input className={cn(styleChamp, "h-12", className)} {...proprietes} />;
 }
 
 export function Textarea({ className, ...proprietes }: React.ComponentProps<"textarea">) {
-  return <textarea className={cn(styleChamp, "min-h-32 resize-y", className)} {...proprietes} />;
+  return (
+    <textarea
+      className={cn(styleChamp, "min-h-32 resize-y leading-relaxed", className)}
+      {...proprietes}
+    />
+  );
 }
 
 export function Select({ className, ...proprietes }: React.ComponentProps<"select">) {
-  return <select className={cn(styleChamp, "h-11 pr-8", className)} {...proprietes} />;
+  return <select className={cn(styleChamp, "h-12 pr-8", className)} {...proprietes} />;
 }
 
 /** Message d'erreur d'un champ. `role="alert"` le rend annoncé dès son apparition. */

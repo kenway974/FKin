@@ -274,39 +274,3 @@ export function RubanDefilant({ mentions }: { mentions: readonly string[] }) {
     </div>
   );
 }
-
-/** Petit bandeau coloré, pour attirer l'œil au milieu d'une page. */
-export function BandeauAccent({
-  ton = "bleu",
-  className,
-  children,
-}: {
-  ton?: "rouge" | "bleu" | "marine";
-  className?: string;
-  children: React.ReactNode;
-}) {
-  const tons = {
-    rouge: "bg-rouge-voile text-encre [--puce:var(--color-rouge-vif)]",
-    bleu: "bg-bleu-voile text-encre [--puce:var(--color-bleu-vif)]",
-    marine: "bg-marine text-white [--puce:var(--color-rouge-clair)]",
-  } as const;
-
-  return (
-    <div
-      className={cn(
-        "forme-coeur relative overflow-hidden p-6 pl-16 md:p-7 md:pl-20",
-        tons[ton],
-        className,
-      )}
-    >
-      <svg
-        viewBox="0 0 100 92"
-        className="absolute top-6 left-6 size-7 md:top-7 md:left-7 md:size-8"
-        aria-hidden="true"
-      >
-        <path d={TRACE_COEUR} fill="var(--puce)" />
-      </svg>
-      <div className="relative">{children}</div>
-    </div>
-  );
-}

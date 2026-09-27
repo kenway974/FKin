@@ -1,5 +1,7 @@
 import * as React from "react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Blob } from "@/components/formes";
 
 /**
  * Briques de mise en page réutilisées par les pages publiques.
@@ -163,6 +165,42 @@ export function ChiffreCle({
       </span>
       <p className="text-encre mt-1 font-semibold">{libelle}</p>
       {precision ? <p className="text-doux mt-1 text-sm">{precision}</p> : null}
+    </div>
+  );
+}
+
+/**
+ * Point clé : pictogramme posé sur une forme souple animée, titre et texte
+ * directement sur la page. Remplace les « cartes » encadrées : aucun fond,
+ * aucune bordure, la hiérarchie vient de la forme et de la typographie.
+ */
+export function Point({
+  icone: Icone,
+  titre,
+  ton = "rouge",
+  variante = 1,
+  children,
+  className,
+}: {
+  icone: LucideIcon;
+  titre: React.ReactNode;
+  ton?: "rouge" | "bleu" | "marine";
+  variante?: 1 | 2 | 3;
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  const teintes = {
+    rouge: "bg-rouge-voile text-rouge",
+    bleu: "bg-bleu-voile text-bleu",
+    marine: "bg-nuage-fonce text-marine",
+  } as const;
+  return (
+    <div className={cn("flex flex-col items-start gap-4", className)}>
+      <Blob teinte={teintes[ton].split(" ")[0]} variante={variante} className="size-16">
+        <Icone className={cn("size-7", teintes[ton].split(" ")[1])} aria-hidden="true" />
+      </Blob>
+      <h3 className="text-xl font-semibold md:text-2xl">{titre}</h3>
+      {children ? <div className="text-doux space-y-2 leading-relaxed">{children}</div> : null}
     </div>
   );
 }

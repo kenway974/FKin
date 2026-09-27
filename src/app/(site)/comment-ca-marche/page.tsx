@@ -1,11 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Building2, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
-import { Section } from "@/components/sections";
+import { Point, Section } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { urlSite } from "@/lib/env";
@@ -120,7 +119,7 @@ export default function PageCommentCaMarche() {
               lecture. */}
           <ol
             data-apparition-cascade=""
-            className="before:border-bordure relative space-y-5 before:absolute before:top-8 before:bottom-8 before:left-7 before:border-l-[3px] before:border-dotted md:before:left-8"
+            className="before:border-bordure relative space-y-6 before:absolute before:top-8 before:bottom-8 before:left-7 before:border-l-[3px] before:border-dotted md:before:left-8"
           >
             {etapes.map((etape, index) => (
               <li key={etape.numero} className="relative flex gap-4 md:gap-6">
@@ -133,20 +132,20 @@ export default function PageCommentCaMarche() {
                 >
                   {etape.numero}
                 </span>
-                <Card className={cn("flex-1", index % 2 === 1 && "forme-coeur-inverse")}>
-                  <CardBody className="space-y-2">
-                    <span className="bg-bleu-voile text-bleu-fonce inline-flex rounded-full px-3 py-1 text-xs font-bold">
-                      {etape.delai}
-                    </span>
-                    <CardTitre className="text-xl">{etape.titre}</CardTitre>
-                    <p className="text-doux leading-relaxed">{etape.texte}</p>
-                  </CardBody>
-                </Card>
+                {/* Pas de carte : le texte est posé directement le long de la
+                    frise. */}
+                <div className="flex-1 space-y-2 pt-2 pb-6 md:pt-3">
+                  <span className="bg-bleu-voile text-bleu-fonce inline-flex rounded-full px-3 py-1 text-xs font-bold">
+                    {etape.delai}
+                  </span>
+                  <h2 className="text-2xl font-semibold md:text-3xl">{etape.titre}</h2>
+                  <p className="text-doux max-w-2xl text-lg leading-relaxed">{etape.texte}</p>
+                </div>
               </li>
             ))}
           </ol>
 
-          <div className="mt-10">
+          <div data-apparition="" className="mt-12 max-w-3xl">
             <Alert titre="Pourquoi ces délais ?">
               <p>
                 En France, un lot enlevé est généralement installé en quelques semaines. Pour le
@@ -157,36 +156,29 @@ export default function PageCommentCaMarche() {
             </Alert>
           </div>
 
-          <div data-apparition-cascade="" className="mt-10 grid gap-4 sm:grid-cols-2">
-            <Card>
-              <CardBody className="space-y-3">
-                <CardTitre className="text-lg">Vous êtes une entreprise</CardTitre>
-                <p className="text-doux text-sm">
-                  Votre seule action est le premier message. Tout le reste est pris en charge.
-                </p>
-                <Button asChild variante="principal">
-                  <Link href="/contact?profil=entreprise">
-                    Signaler du matériel
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </Button>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardBody className="space-y-3">
-                <CardTitre className="text-lg">Vous êtes une structure à équiper</CardTitre>
-                <p className="text-doux text-sm">
-                  En France ou au Congo, déposez votre demande : elle sera examinée au fil des
-                  collectes.
-                </p>
-                <Button asChild variante="secondaire">
-                  <Link href="/contact?profil=beneficiaire">
-                    Demander un équipement
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </Button>
-              </CardBody>
-            </Card>
+          {/* Les deux publics, sans encadré : chacun porté par sa forme souple. */}
+          <div data-apparition-cascade="" className="mt-16 grid gap-12 sm:grid-cols-2">
+            <Point icone={Building2} titre="Vous êtes une entreprise" ton="rouge" variante={1}>
+              <p>Votre seule action est le premier message. Tout le reste est pris en charge.</p>
+              <Button asChild variante="principal" className="mt-3">
+                <Link href="/contact?profil=entreprise">
+                  Signaler du matériel
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              </Button>
+            </Point>
+            <Point icone={School} titre="Vous êtes une structure à équiper" ton="bleu" variante={2}>
+              <p>
+                En France ou au Congo, déposez votre demande : elle sera examinée au fil des
+                collectes.
+              </p>
+              <Button asChild variante="secondaire" className="mt-3">
+                <Link href="/contact?profil=beneficiaire">
+                  Demander un équipement
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              </Button>
+            </Point>
           </div>
         </div>
       </Section>

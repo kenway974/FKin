@@ -14,11 +14,10 @@ import {
   Wrench,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
-import { Section, TitreSection } from "@/components/sections";
+import { Point, Section, TitreSection } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
-import { Coeur } from "@/components/formes";
+import { Blob } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = {
@@ -96,6 +95,9 @@ const servicesBeneficiaires = [
   },
 ] as const;
 
+/** Alterne les trois silhouettes de forme souple, pour ne jamais répéter la même. */
+const variante = (index: number) => ((index % 3) + 1) as 1 | 2 | 3;
+
 export default function PageServices() {
   return (
     <>
@@ -117,23 +119,25 @@ export default function PageServices() {
             chapo="Sans coût ni logistique de votre côté. Notre engagement : sécurité des données, traçabilité du lot, retour documenté sur son usage."
           />
 
-          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {servicesEntreprises.map((service) => (
+          <ul
+            data-apparition-cascade=""
+            className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {servicesEntreprises.map((service, index) => (
               <li key={service.titre}>
-                <Card className="h-full">
-                  <CardBody className="space-y-3">
-                    <span className="bg-rouge-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <service.icone className="text-rouge size-5" aria-hidden="true" />
-                    </span>
-                    <CardTitre className="text-lg">{service.titre}</CardTitre>
-                    <p className="text-doux text-sm leading-relaxed">{service.texte}</p>
-                  </CardBody>
-                </Card>
+                <Point
+                  icone={service.icone}
+                  titre={service.titre}
+                  ton="rouge"
+                  variante={variante(index)}
+                >
+                  <p>{service.texte}</p>
+                </Point>
               </li>
             ))}
           </ul>
 
-          <div className="mt-8 space-y-5">
+          <div className="mt-14 space-y-8">
             <Alert titre="Ce que nous ne prenons pas">
               <p>
                 Ni matériel hors d&apos;usage, ni écrans cathodiques, ni batteries gonflées, ni
@@ -162,51 +166,54 @@ export default function PageServices() {
             chapo="Demandes examinées au fil des collectes et des arrivages. Priorité aux structures à public scolaire disposant d'un local sécurisable et alimenté en électricité."
           />
 
-          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-2">
-            {servicesBeneficiaires.map((service) => (
+          <ul data-apparition-cascade="" className="mt-12 grid gap-x-12 gap-y-12 sm:grid-cols-2">
+            {servicesBeneficiaires.map((service, index) => (
               <li key={service.titre}>
-                <Card className="h-full">
-                  <CardBody className="space-y-3">
-                    <span className="bg-bleu-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <service.icone className="text-bleu size-5" aria-hidden="true" />
-                    </span>
-                    <CardTitre className="text-lg">{service.titre}</CardTitre>
-                    <p className="text-doux text-sm leading-relaxed">{service.texte}</p>
-                  </CardBody>
-                </Card>
+                <Point
+                  icone={service.icone}
+                  titre={service.titre}
+                  ton="bleu"
+                  variante={variante(index)}
+                >
+                  <p>{service.texte}</p>
+                </Point>
               </li>
             ))}
           </ul>
 
-          <div className="mt-10">
-            <Card>
-              <CardBody className="space-y-4">
-                <CardTitre>Ce qu&apos;il faut nous transmettre</CardTitre>
-                <ul className="text-doux space-y-2.5 text-sm">
-                  {[
-                    "Nom, adresse et statut de la structure (école, mairie, association).",
-                    "Nombre de personnes concernées : élèves, enseignants, agents.",
-                    "Matériel souhaité, par ordre de priorité, et usage prévu.",
-                    "État du local : surface, fermeture, stabilité de l'électricité.",
-                    "Contact direct d'une personne référente sur place.",
-                  ].map((element) => (
-                    <li key={element} className="flex gap-2.5">
-                      <span
-                        aria-hidden="true"
-                        className="bg-bleu-vif mt-2 size-1.5 shrink-0 rounded-full"
-                      />
-                      <span>{element}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button asChild variante="secondaire">
-                  <Link href="/contact?profil=beneficiaire">
-                    Déposer une demande d&apos;équipement
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </Button>
-              </CardBody>
-            </Card>
+          {/* Pièces à fournir : une liste numérotée posée sur la page, sans
+              encadré. */}
+          <div data-apparition="" className="mt-16 grid gap-10 md:grid-cols-[1fr_1.5fr] md:gap-16">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold md:text-3xl">
+                Ce qu&apos;il faut nous transmettre
+              </h3>
+              <Button asChild variante="secondaire">
+                <Link href="/contact?profil=beneficiaire">
+                  Déposer une demande d&apos;équipement
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              </Button>
+            </div>
+            <ol className="space-y-5">
+              {[
+                "Nom, adresse et statut de la structure (école, mairie, association).",
+                "Nombre de personnes concernées : élèves, enseignants, agents.",
+                "Matériel souhaité, par ordre de priorité, et usage prévu.",
+                "État du local : surface, fermeture, stabilité de l'électricité.",
+                "Contact direct d'une personne référente sur place.",
+              ].map((element, index) => (
+                <li key={element} className="flex items-start gap-4">
+                  <span
+                    aria-hidden="true"
+                    className="font-titre bg-bleu-vif inline-flex size-9 shrink-0 items-center justify-center rounded-full font-bold text-white"
+                  >
+                    {index + 1}
+                  </span>
+                  <span className="text-doux pt-1 text-lg leading-relaxed">{element}</span>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </Section>
@@ -221,7 +228,7 @@ export default function PageServices() {
             chapo="Une partie du matériel arrive endommagée. Plutôt que de la mettre au rebut, nous la confions à des recycleries à Kinshasa, où des jeunes apprennent à le remettre en état."
           />
 
-          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-3">
+          <ul data-apparition-cascade="" className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-3">
             {[
               {
                 icone: Recycle,
@@ -240,17 +247,16 @@ export default function PageServices() {
                 texte:
                   "Chaque réparation est un atelier : les jeunes acquièrent un vrai savoir-faire.",
               },
-            ].map((bloc) => (
+            ].map((bloc, index) => (
               <li key={bloc.titre}>
-                <Card className="h-full">
-                  <CardBody className="space-y-3">
-                    <span className="bg-rouge-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <bloc.icone className="text-bleu-vif size-5" aria-hidden="true" />
-                    </span>
-                    <CardTitre className="text-lg">{bloc.titre}</CardTitre>
-                    <p className="text-doux text-sm leading-relaxed">{bloc.texte}</p>
-                  </CardBody>
-                </Card>
+                <Point
+                  icone={bloc.icone}
+                  titre={bloc.titre}
+                  ton="marine"
+                  variante={variante(index)}
+                >
+                  <p>{bloc.texte}</p>
+                </Point>
               </li>
             ))}
           </ul>
@@ -260,25 +266,31 @@ export default function PageServices() {
       {/* ------------------------------------------------------------- Formation */}
       <Section id="formation" fond="nuage" aria-labelledby="titre-formation">
         <div className="contenu">
-          <div className="forme-coeur border-bordure relative overflow-hidden border bg-white p-8 md:p-12">
-            <Coeur className="text-rouge-vif -top-10 -right-10 w-64 opacity-10 md:w-80" />
-            <div className="relative max-w-2xl">
-              <span className="bg-bleu-voile text-marine inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
-                <Sparkles className="size-3.5" aria-hidden="true" />
+          {/* Pas d'encadré : une grande forme souple porte le pictogramme, le
+              texte est posé à côté. */}
+          <div
+            data-apparition=""
+            className="grid items-center gap-10 md:grid-cols-[auto_1fr] md:gap-16"
+          >
+            <Blob teinte="bg-rouge-vif" variante={2} className="size-40 text-white md:size-56">
+              <Sparkles className="size-16 md:size-20" aria-hidden="true" />
+            </Blob>
+            <div className="max-w-2xl">
+              <span className="bg-marine inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wide text-white uppercase">
                 Bientôt
               </span>
-              <h2 id="titre-formation" className="font-titre mt-4 text-2xl font-bold md:text-3xl">
+              <h2 id="titre-formation" className="font-titre mt-4 text-3xl font-bold md:text-5xl">
                 Un centre de formation aux métiers de l&apos;informatique
               </h2>
-              <p className="text-doux mt-3 leading-relaxed">
+              <p className="text-doux mt-4 text-lg leading-relaxed">
                 À Kinshasa, un centre de formation voit le jour : maintenance, réparation et bases
                 du numérique, pour donner aux jeunes un métier autour du matériel qui arrive.
               </p>
-              <p className="text-doux mt-3 text-sm">
+              <p className="text-doux mt-3">
                 Le projet est en cours de montage. Écrivez-nous pour suivre son ouverture ou y
                 contribuer.
               </p>
-              <Button asChild variante="secondaire" className="mt-6">
+              <Button asChild variante="secondaire" className="mt-7">
                 <Link href="/contact">
                   En savoir plus sur le centre
                   <ArrowRight className="size-4" aria-hidden="true" />

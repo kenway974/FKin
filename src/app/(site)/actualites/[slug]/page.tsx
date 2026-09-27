@@ -120,7 +120,7 @@ export default async function PageArticle({ params }: Proprietes) {
 
         {article.image_couverture ? (
           <div className="contenu -mt-8 max-w-4xl md:-mt-10">
-            <div className="rounded-douce border-bordure bg-nuage relative aspect-[16/9] w-full overflow-hidden border shadow-sm">
+            <div className="bg-nuage forme-blob-3 relative aspect-[16/9] w-full overflow-hidden">
               <Image
                 src={article.image_couverture}
                 alt={article.image_alt ?? ""}

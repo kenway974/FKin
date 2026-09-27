@@ -8,6 +8,7 @@ import { navigation, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
+import { Vague } from "@/components/formes";
 
 /**
  * En-tête du site.
@@ -140,27 +141,30 @@ export function Header() {
       </div>
 
       {ouvert ? (
+        // Panneau pleine largeur, sans cadre, terminé par une vague.
         <nav
           id="menu-mobile"
           aria-label="Navigation principale (mobile)"
-          className="contenu pb-4 xl:hidden"
+          className="bg-marine relative xl:hidden"
         >
-          <ul className="forme-coeur bg-marine flex flex-col p-3 shadow-xl">
+          <ul className="contenu flex flex-col py-4">
             {navigation.map((lien) => (
               <li key={lien.href}>
                 <Link
                   href={lien.href}
                   aria-current={estActif(lien.href) ? "page" : undefined}
                   className={cn(
-                    "block rounded-full px-4 py-3 text-base font-semibold",
-                    estActif(lien.href) ? "bg-white/12 text-white" : "text-white/85",
+                    "block py-3 text-xl font-semibold",
+                    estActif(lien.href)
+                      ? "trait-courbe inline-block text-white [--couleur-trait:var(--color-rouge-clair)]"
+                      : "text-white/80 hover:text-white",
                   )}
                 >
                   {lien.libelle}
                 </Link>
               </li>
             ))}
-            <li className="px-1 pt-2 pb-1 sm:hidden">
+            <li className="pt-4 pb-1 sm:hidden">
               <Button asChild variante="clair" className="w-full justify-between">
                 <Link href="/contact?profil=entreprise">
                   Proposer un don
@@ -169,6 +173,7 @@ export function Header() {
               </Button>
             </li>
           </ul>
+          <Vague className="text-marine absolute inset-x-0 top-full" />
         </nav>
       ) : null}
     </header>

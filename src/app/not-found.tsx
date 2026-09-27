@@ -14,12 +14,12 @@ export default function PageIntrouvable() {
         </p>
 
         <nav aria-label="Navigation de secours" className="mt-6">
-          <ul className="flex flex-wrap justify-center gap-2">
+          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-3">
             {navigation.map((lien) => (
               <li key={lien.href}>
                 <Link
                   href={lien.href}
-                  className="border-bordure hover:border-rouge hover:text-rouge inline-block rounded-full border bg-white px-3.5 py-1.5 text-sm font-medium"
+                  className="trait-courbe hover:text-rouge inline-block font-semibold [--couleur-trait:var(--color-rouge-vif)]"
                 >
                   {lien.libelle}
                 </Link>

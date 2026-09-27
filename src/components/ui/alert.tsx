@@ -20,10 +20,12 @@ export function Alert({
   children?: React.ReactNode;
   className?: string;
 }) {
+  // Pas de cadre : l'icône, posée sur une pastille de couleur, porte seule
+  // le ton du message ; le texte reste directement sur la page.
   const styles = {
-    info: "border-bordure bg-nuage text-encre",
-    succes: "border-bleu/30 bg-bleu-voile text-bleu-fonce",
-    erreur: "border-red-300 bg-red-50 text-red-900",
+    info: { texte: "text-encre", pastille: "bg-bleu-voile text-bleu" },
+    succes: { texte: "text-bleu-fonce", pastille: "bg-bleu-vif text-white" },
+    erreur: { texte: "text-red-900", pastille: "bg-rouge-vif text-white" },
   } as const;
 
   const Icone = ton === "succes" ? CircleCheck : ton === "erreur" ? CircleAlert : Info;
@@ -31,11 +33,18 @@ export function Alert({
   return (
     <div
       role={ton === "erreur" ? "alert" : "status"}
-      className={cn("rounded-douce flex gap-3 border p-4", styles[ton], className)}
+      className={cn("flex gap-4", styles[ton].texte, className)}
     >
-      <Icone className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
-      <div className="space-y-1 text-sm">
-        {titre ? <p className="font-semibold">{titre}</p> : null}
+      <span
+        className={cn(
+          "inline-flex size-10 shrink-0 items-center justify-center rounded-full",
+          styles[ton].pastille,
+        )}
+      >
+        <Icone className="size-5" aria-hidden="true" />
+      </span>
+      <div className="space-y-1 pt-1.5 leading-relaxed">
+        {titre ? <p className="font-titre text-lg font-semibold">{titre}</p> : null}
         {children}
       </div>
     </div>
