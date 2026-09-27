@@ -37,10 +37,7 @@ const originesSupabase = hoteSupabase ? [`https://${hoteSupabase}`, `wss://${hot
  */
 const csp = [
   "default-src 'self'",
-  // `'unsafe-eval'` uniquement en développement : le rechargement à chaud de
-  // React en a besoin, et sans lui aucun composant interactif ne s'initialise
-  // en local. La production n'en dépend pas et reste stricte.
-  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
+  "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",

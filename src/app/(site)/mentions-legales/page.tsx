@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function PageMentionsLegales() {
   return (
     <article className="pb-16">
-      <header className="border-bordure bg-nuage motif-tissu border-b py-12 md:py-16">
+      <header className="border-bordure bg-sable motif-tissu border-b py-12 md:py-16">
         <div className="contenu max-w-3xl">
           <h1 className="text-3xl leading-tight font-bold md:text-4xl">Mentions légales</h1>
           <p className="text-doux mt-3 text-sm">Dernière mise à jour : août 2026.</p>
@@ -37,7 +37,10 @@ export default function PageMentionsLegales() {
             </p>
             <p>
               Adresse e-mail :{" "}
-              <a href={`mailto:${site.email}`} className="text-rouge underline underline-offset-4">
+              <a
+                href={`mailto:${site.email}`}
+                className="text-terre underline underline-offset-4"
+              >
                 {site.email}
               </a>
               .
@@ -46,10 +49,7 @@ export default function PageMentionsLegales() {
 
           <section className="space-y-2">
             <h2 className="font-titre text-encre text-xl font-bold">Directeur de la publication</h2>
-            <p>
-              Le directeur de la publication est Fabrice Malph, représentant légal de
-              l&apos;association.
-            </p>
+            <p>Le directeur de la publication est Fabrice Malph, représentant légal de l&apos;association.</p>
           </section>
 
           <section className="space-y-2">
@@ -59,7 +59,7 @@ export default function PageMentionsLegales() {
               CA 91789, États-Unis —{" "}
               <a
                 href="https://vercel.com"
-                className="text-rouge underline underline-offset-4"
+                className="text-terre underline underline-offset-4"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -88,7 +88,10 @@ export default function PageMentionsLegales() {
             <p>
               Le traitement des données transmises via le formulaire de contact est détaillé dans
               notre{" "}
-              <Link href="/confidentialite" className="text-rouge underline underline-offset-4">
+              <Link
+                href="/confidentialite"
+                className="text-terre underline underline-offset-4"
+              >
                 politique de confidentialité
               </Link>
               .

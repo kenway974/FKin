@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardTitre } from "@/components/ui/card";
@@ -13,7 +12,7 @@ import { urlSite } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Comment ça marche",
   description:
-    "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école, en France ou au Congo, étape par étape et avec les délais.",
+    "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école au Congo, étape par étape et avec les délais.",
   alternates: { canonical: "/comment-ca-marche" },
 };
 
@@ -54,17 +53,17 @@ const etapes = [
   },
   {
     numero: "05",
-    titre: "Livraison en France ou départ en conteneur",
-    delai: "Quelques jours à cinq semaines",
+    titre: "Palettisation et départ en conteneur",
+    delai: "Selon le calendrier des convois",
     texte:
-      "En France, le lot est livré directement à la structure. Pour le Congo, il est palettisé puis chargé en conteneur au Havre ou à Anvers : la traversée jusqu'à Matadi dure environ cinq semaines.",
+      "Les lots sont palettisés puis chargés en conteneur au Havre ou à Anvers. La traversée jusqu'à Matadi dure environ cinq semaines.",
   },
   {
     numero: "06",
-    titre: "Dédouanement et acheminement (Congo)",
+    titre: "Dédouanement et acheminement local",
     delai: "1 à 3 semaines",
     texte:
-      "Pour le Congo uniquement : notre partenaire prend en charge le dédouanement puis la route jusqu'à la structure. C'est l'étape la plus incertaine.",
+      "Notre partenaire prend en charge le dédouanement puis la route jusqu'à la structure. C'est l'étape la plus incertaine.",
   },
   {
     numero: "07",
@@ -86,9 +85,9 @@ export default function PageCommentCaMarche() {
   const donneesStructurees = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "Le parcours d'un don de matériel, de l'entreprise à la salle de classe",
+    name: "Le parcours d'un don de matériel, de la France au Congo",
     description:
-      "Les huit étapes suivies par un lot de matériel, de son signalement par une entreprise en France à sa mise en service dans une structure, en France ou au Congo.",
+      "Les huit étapes suivies par un lot de matériel, de son signalement par une entreprise en France à sa mise en service dans une structure au Congo.",
     url: `${urlSite}/comment-ca-marche`,
     step: etapes.map((etape, index) => ({
       "@type": "HowToStep",
@@ -109,37 +108,32 @@ export default function PageCommentCaMarche() {
         surtitre="Comment ça marche"
         titre="Le parcours complet d'un don"
         chapo="Du signalement d'un lot à l'installation des élèves devant les postes : trois à quatre mois. Voici ce qui se passe, délais réels compris."
-        ton="marine"
+        ton="indigo"
         photo={trouverPhotoBanniere("comment-ca-marche")}
       />
 
       <Section>
         <div className="contenu">
-          {/* Frise verticale : une pastille numérotée par étape, reliées par un
-              fil en pointillés. Les couleurs du logo alternent pour rythmer la
-              lecture. */}
-          <ol
-            data-apparition-cascade=""
-            className="before:border-bordure relative space-y-5 before:absolute before:top-8 before:bottom-8 before:left-7 before:border-l-[3px] before:border-dotted md:before:left-8"
-          >
-            {etapes.map((etape, index) => (
-              <li key={etape.numero} className="relative flex gap-4 md:gap-6">
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "font-titre ring-fond relative z-10 flex size-14 shrink-0 items-center justify-center rounded-full text-xl font-bold text-white ring-6 md:size-16 md:text-2xl",
-                    ["bg-bleu-vif", "bg-rouge-vif", "bg-marine"][index % 3],
-                  )}
-                >
-                  {etape.numero}
-                </span>
-                <Card className={cn("flex-1", index % 2 === 1 && "forme-coeur-inverse")}>
-                  <CardBody className="space-y-2">
-                    <span className="bg-bleu-voile text-bleu-fonce inline-flex rounded-full px-3 py-1 text-xs font-bold">
-                      {etape.delai}
-                    </span>
-                    <CardTitre className="text-xl">{etape.titre}</CardTitre>
-                    <p className="text-doux leading-relaxed">{etape.texte}</p>
+          <ol className="space-y-4">
+            {etapes.map((etape) => (
+              <li key={etape.numero}>
+                <Card>
+                  <CardBody className="flex flex-col gap-4 sm:flex-row sm:gap-6">
+                    <div className="flex shrink-0 items-center gap-3 sm:flex-col sm:items-start">
+                      <span
+                        aria-hidden="true"
+                        className="font-titre text-terre/40 text-3xl font-bold"
+                      >
+                        {etape.numero}
+                      </span>
+                      <span className="bg-ocre-voile rounded-full px-2.5 py-1 text-xs font-semibold text-[#7a4a08]">
+                        {etape.delai}
+                      </span>
+                    </div>
+                    <div className="space-y-1.5">
+                      <CardTitre className="text-lg">{etape.titre}</CardTitre>
+                      <p className="text-doux text-sm leading-relaxed">{etape.texte}</p>
+                    </div>
                   </CardBody>
                 </Card>
               </li>
@@ -149,15 +143,14 @@ export default function PageCommentCaMarche() {
           <div className="mt-10">
             <Alert titre="Pourquoi ces délais ?">
               <p>
-                En France, un lot enlevé est généralement installé en quelques semaines. Pour le
-                Congo, la traversée maritime et le dédouanement pèsent à eux seuls la moitié du
-                délai : un lot enlevé en janvier arrive généralement en salle de classe entre avril
-                et mai. Nous préférons annoncer un calendrier réaliste.
+                La traversée maritime et le dédouanement pèsent à eux seuls la moitié du délai. Nous
+                préférons annoncer un calendrier réaliste : un lot enlevé en janvier arrive
+                généralement en salle de classe entre avril et mai.
               </p>
             </Alert>
           </div>
 
-          <div data-apparition-cascade="" className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
             <Card>
               <CardBody className="space-y-3">
                 <CardTitre className="text-lg">Vous êtes une entreprise</CardTitre>
@@ -174,10 +167,9 @@ export default function PageCommentCaMarche() {
             </Card>
             <Card>
               <CardBody className="space-y-3">
-                <CardTitre className="text-lg">Vous êtes une structure à équiper</CardTitre>
+                <CardTitre className="text-lg">Vous êtes une structure au Congo</CardTitre>
                 <p className="text-doux text-sm">
-                  En France ou au Congo, déposez votre demande : elle sera examinée au fil des
-                  collectes.
+                  Déposez votre demande : elle sera examinée lors du prochain arrivage.
                 </p>
                 <Button asChild variante="secondaire">
                   <Link href="/contact?profil=beneficiaire">

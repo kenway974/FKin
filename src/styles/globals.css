@@ -3,55 +3,57 @@
 /* ==========================================================================
    Thème — Tailwind CSS v4
    --------------------------------------------------------------------------
-   Palette de la marque, relevée sur le logo (livre-cœur) : un bleu, un rouge
-   et le marine de la base du livre. Rien d'autre : pas de beige, pas de brun.
-   Les fonds clairs sont très légèrement teintés de bleu pour que le blanc ne
-   paraisse jamais « cassé » à côté du marine.
+   Palette « terre & solidarité » : un fond sable chaud, un brun profond pour
+   le texte, une terracotta comme couleur principale et un vert profond comme
+   accent (croissance, éducation).
 
-   Chaque couleur existe en deux intensités :
-     - la teinte « vif », identique au logo, réservée aux aplats décoratifs,
-       aux courbes et aux pictogrammes ;
-     - la teinte de base, légèrement assombrie, qui passe le seuil WCAG AA
-       (4,5:1) en texte sur fond clair comme en texte blanc sur elle :
-         bleu   #0474A8 sur #FFFFFF → ~5,0:1
-         rouge  #D72E2B sur #FFFFFF → ~4,6:1
-         encre  #16233F sur #F8FBFE → ~15:1
-         doux   #4F5B74 sur #F8FBFE → ~6,6:1
+   Les contrastes ont été choisis pour dépasser le seuil WCAG AA (4,5:1) sur
+   le fond clair :
+     foreground #2B211A sur #FDFAF6 → ~14:1
+     muted      #6B5A4C sur #FDFAF6 → ~5,7:1
+     terre      #9C4A1F sur #FDFAF6 → ~6,3:1
+     vert       #2F6B4F sur #FDFAF6 → ~6,0:1
+   L'ocre, moins contrasté, ne sert jamais à du texte courant : uniquement à
+   des filets, des puces et des aplats décoratifs.
    ========================================================================== */
 
 @theme {
-  --color-fond: #f8fbfe;
-  --color-nuage: #edf4fa;
-  --color-nuage-fonce: #dbe8f3;
-  --color-encre: #16233f;
-  --color-doux: #4f5b74;
-  --color-bordure: #d8e3ee;
+  --color-fond: #fdfaf6;
+  --color-sable: #f6efe6;
+  --color-sable-fonce: #ede0ce;
+  --color-encre: #2b211a;
+  --color-doux: #6b5a4c;
+  --color-bordure: #e4d6c4;
 
-  --color-marine: #1a2c50;
-  --color-marine-clair: #26406f;
-  --color-marine-fonce: #111d36;
+  --color-terre: #9c4a1f;
+  --color-terre-clair: #c2703d;
+  --color-terre-fonce: #7a3915;
+  --color-terre-voile: #f7e9df;
 
-  --color-bleu: #0474a8;
-  --color-bleu-vif: #0495d4;
-  --color-bleu-clair: #42b0e3;
-  --color-bleu-fonce: #055a82;
-  --color-bleu-voile: #e3f2fa;
+  --color-vert: #2f6b4f;
+  --color-vert-fonce: #24523c;
+  --color-vert-voile: #e4efe8;
 
-  --color-rouge: #d72e2b;
-  --color-rouge-vif: #ef433f;
-  --color-rouge-clair: #fc6844;
-  --color-rouge-fonce: #b0221f;
-  --color-rouge-voile: #fdeceb;
+  --color-ocre: #c97b1e;
+  --color-ocre-fonce: #9a5c11;
+  --color-ocre-voile: #fbf0dc;
+
+  /* Couleurs d'appoint, introduites pour donner du relief aux bannières et aux
+     illustrations sans sortir de la famille terre / végétal.
+     `indigo` et `brique` ne servent qu'à des aplats et à du texte sur fond
+     clair : leur contraste sur #FDFAF6 dépasse 6:1. */
+  --color-indigo: #2f4858;
+  --color-indigo-voile: #e6edf1;
+  --color-brique: #b4472f;
+  --color-soleil: #e8a33d;
+  --color-soleil-voile: #fdf3e2;
 
   --font-sans:
     var(--police-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  --font-titre:
-    var(--police-titre), ui-rounded, var(--police-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-titre: var(--police-titre), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 
-  /* Formes : aucune arête vive. Les cartes reprennent la silhouette du logo —
-     de grands arrondis, et un coin plus serré, comme la pointe du cœur. */
-  --radius-douce: 1.25rem;
+  --radius-douce: 0.75rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -65,10 +67,6 @@ html {
 }
 
 body {
-  /* Garde-fou : aucune animation (formes qui tournent, parallaxe) ne doit
-     pouvoir créer de défilement horizontal. `clip` et non `hidden` : ce
-     dernier casserait les éléments en position sticky. */
-  overflow-x: clip;
   background-color: var(--color-fond);
   color: var(--color-encre);
   font-family: var(--font-sans);
@@ -80,8 +78,7 @@ h1,
 h2,
 h3 {
   font-family: var(--font-titre);
-  letter-spacing: -0.01em;
-  font-weight: 600;
+  letter-spacing: -0.015em;
   text-wrap: balance;
 }
 
@@ -91,7 +88,7 @@ p {
 
 /* Focus clavier toujours visible — jamais de `outline: none` sec. */
 :focus-visible {
-  outline: 3px solid var(--color-bleu);
+  outline: 3px solid var(--color-vert);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -128,15 +125,20 @@ p {
   }
 }
 
-/* Semis de points très pâles, posé sur les sections « nuage » pour éviter
-   l'aplat plat sans ajouter de bruit. Le nom est conservé pour ne pas toucher
-   aux pages qui l'utilisent déjà. */
+/* Motif discret de « tissu » utilisé sur les sections sable. */
 @utility motif-tissu {
-  background-image: radial-gradient(
-    color-mix(in srgb, var(--color-bleu-vif) 14%, transparent) 1.2px,
-    transparent 1.6px
-  );
-  background-size: 22px 22px;
+  background-image:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-ocre) 6%, transparent) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      225deg,
+      color-mix(in srgb, var(--color-ocre) 6%, transparent) 25%,
+      transparent 25%
+    );
+  background-size: 28px 28px;
 }
 
 /* --------------------------------------------------------------------------
@@ -225,66 +227,10 @@ p {
 /* Apparition déclenchée par le défilement — progressive enhancement. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    :root:not(.js-apparitions) .anim-defilement {
+    .anim-defilement {
       animation: apparition 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-timeline: view();
       animation-range: entry 0% entry 55%;
-    }
-  }
-}
-
-/* Parallaxe au défilement.
-
-   Piloté par `animation-timeline: scroll()` : aucun JavaScript, donc aucun
-   écouteur de défilement ni recalcul à chaque image — ce qui compte sur les
-   téléphones modestes et les connexions lentes visés par le projet.
-
-   Chaque couche règle son amplitude avec `--parallaxe` : plus la valeur est
-   grande, plus la couche « traîne » derrière le défilement, ce qui crée la
-   sensation de profondeur. Une valeur négative fait remonter la couche.
-
-   Les navigateurs qui ne gèrent pas encore les animations liées au défilement
-   affichent simplement la scène fixe : rien n'est cassé, seul le mouvement
-   manque. */
-@keyframes parallaxe {
-  to {
-    transform: translate3d(0, var(--parallaxe, 3rem), 0);
-  }
-}
-
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .parallaxe {
-      animation: parallaxe linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 80vh;
-      will-change: transform;
-    }
-  }
-}
-
-/* Parallaxe au passage d'un élément dans l'écran.
-
-   Même principe que `.parallaxe`, mais la progression suit le passage de
-   l'élément lui-même dans la fenêtre (`view()`) plutôt que le haut de page :
-   il glisse de `--parallaxe` à son opposé pendant qu'il traverse l'écran.
-   Réservé aux éléments décoratifs (cœurs, pastilles) : ils ne portent aucune
-   information, donc un navigateur qui ne gère pas l'effet ne perd rien. */
-@keyframes parallaxe-vue {
-  from {
-    transform: translate3d(0, var(--parallaxe, 2rem), 0);
-  }
-  to {
-    transform: translate3d(0, calc(var(--parallaxe, 2rem) * -1), 0);
-  }
-}
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .parallaxe-vue {
-      animation: parallaxe-vue linear both;
-      animation-timeline: view();
-      animation-range: cover;
     }
   }
 }
@@ -300,7 +246,7 @@ p {
   &:focus-within {
     transform: translateY(-4px);
     box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--color-encre) 32%, transparent);
-    border-color: color-mix(in srgb, var(--color-rouge) 45%, transparent);
+    border-color: color-mix(in srgb, var(--color-terre) 45%, transparent);
   }
 }
 
@@ -326,17 +272,66 @@ p {
   );
 }
 
-/* Filet aux couleurs du cœur du logo : bleu, puis rouge, avec des extrémités
-   arrondies. Sert de séparateur fin entre deux zones. */
+/* Voile latéral, utilisé quand le fond est l'illustration : le texte occupe la
+   gauche, la scène reste donc pleinement visible à droite et en bas. */
+@utility voile-lateral {
+  background:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-encre) 82%, transparent) 0%,
+      color-mix(in srgb, var(--color-encre) 62%, transparent) 42%,
+      color-mix(in srgb, var(--color-encre) 18%, transparent) 78%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-encre) 45%, transparent) 0%,
+      transparent 35%
+    );
+}
+
+/* Sur mobile, le texte occupe toute la largeur : un voile latéral masquerait
+   entièrement l'illustration. On bascule donc sur un voile vertical, sombre
+   derrière le texte et transparent en bas, où vit la scène. */
+@media (width < 48rem) {
+  .voile-lateral {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-encre) 78%, transparent) 0%,
+      color-mix(in srgb, var(--color-encre) 72%, transparent) 55%,
+      color-mix(in srgb, var(--color-encre) 25%, transparent) 88%,
+      transparent 100%
+    );
+  }
+}
+
+/* Dégradé chaud, utilisé en repli quand aucune photo n'est disponible. */
+@utility degrade-terre {
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 15% 0%,
+      color-mix(in srgb, var(--color-soleil) 55%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 70% 70% at 90% 30%,
+      color-mix(in srgb, var(--color-brique) 60%, transparent),
+      transparent 65%
+    ),
+    linear-gradient(150deg, var(--color-terre-fonce), var(--color-indigo));
+}
+
+/* Filet tricolore, repris du logo. Sert de séparateur entre deux sections. */
 @utility filet-tricolore {
-  height: 6px;
-  border-radius: 999px;
+  height: 5px;
   background: linear-gradient(
     to right,
-    var(--color-bleu-vif) 0%,
-    var(--color-bleu-vif) 50%,
-    var(--color-rouge-vif) 50%,
-    var(--color-rouge-vif) 100%
+    var(--color-terre) 0%,
+    var(--color-terre) 45%,
+    var(--color-ocre) 45%,
+    var(--color-ocre) 72%,
+    var(--color-vert) 72%,
+    var(--color-vert) 100%
   );
 }
 
@@ -350,10 +345,10 @@ p {
 @keyframes pulsation-douce {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-rouge-clair) 55%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-soleil) 55%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-rouge-clair) 0%, transparent);
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-soleil) 0%, transparent);
   }
 }
 
@@ -363,6 +358,18 @@ p {
   }
   to {
     transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+@keyframes respiration-soleil {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
   }
 }
 
@@ -423,6 +430,13 @@ p {
   }
 }
 
+/* Le soleil de la bannière « respire » lentement. */
+@utility respire-soleil {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: respiration-soleil 7s ease-in-out infinite;
+}
+
 /* Dégradé animé, pour les grands aplats de bannière. Le fond doit être un
    `background` de type gradient avec `background-size: 200% 200%`. */
 @utility fond-anime {
@@ -451,446 +465,4 @@ p {
   &:focus-visible::after {
     transform: scaleX(1);
   }
-}
-
-/* --------------------------------------------------------------------------
-   Formes de la marque
-   --------------------------------------------------------------------------
-   Le logo n'a aucune arête : un cœur, des pages de livre qui s'incurvent. Le
-   site reprend ces deux idées — des arrondis généreux avec un coin plus serré
-   (la pointe du cœur), et des courbes en guise de séparations.
-   -------------------------------------------------------------------------- */
-
-/* Silhouette « cœur » : trois grands arrondis, un coin serré en bas à gauche. */
-@utility forme-coeur {
-  border-radius: 2rem 2rem 2rem 0.5rem;
-}
-
-/* Variante miroir, pour alterner d'une carte à l'autre. */
-@utility forme-coeur-inverse {
-  border-radius: 2rem 2rem 0.5rem 2rem;
-}
-
-/* Trait courbe sous un lien : une vague dessinée, qui se tend au survol.
-   Le tracé est un SVG en masque, coloré par `currentColor` : il prend donc
-   automatiquement la couleur du texte, sur fond clair comme sur fond sombre. */
-@utility trait-courbe {
-  position: relative;
-  padding-bottom: 0.55rem;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 0.5rem;
-    background: var(--couleur-trait, currentColor);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 7 C 22 1, 38 1, 60 5 S 100 9, 118 3' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")
-      center / 100% 100% no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 7 C 22 1, 38 1, 60 5 S 100 9, 118 3' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")
-      center / 100% 100% no-repeat;
-    transform-origin: left;
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  &:hover::after,
-  &:focus-visible::after {
-    transform: scaleX(1.08) scaleY(0.6);
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Le voyage d'un don
-   --------------------------------------------------------------------------
-   Règle de performance : on n'anime que `transform` et `opacity` (pris en
-   charge par la carte graphique, sans recalcul de la page), et seulement
-   dans l'étape courante (`data-actif="true"`). Tout est coupé par la règle
-   `prefers-reduced-motion` générale, en haut de ce fichier.
-   -------------------------------------------------------------------------- */
-
-@keyframes picto-flotte {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8%);
-  }
-}
-
-@keyframes picto-roule {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0);
-  }
-  25% {
-    transform: translate(3%, -4%) rotate(-2deg);
-  }
-  75% {
-    transform: translate(-3%, 2%) rotate(1deg);
-  }
-}
-
-@keyframes picto-outil {
-  0%,
-  60%,
-  100% {
-    transform: rotate(0);
-  }
-  70% {
-    transform: rotate(-28deg);
-  }
-  85% {
-    transform: rotate(16deg);
-  }
-}
-
-@keyframes picto-tangue {
-  0%,
-  100% {
-    transform: rotate(-6deg) translateY(0);
-  }
-  50% {
-    transform: rotate(6deg) translateY(-6%);
-  }
-}
-
-@keyframes picto-lumiere {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-@keyframes picto-battement {
-  0%,
-  40%,
-  100% {
-    transform: scale(1);
-  }
-  15% {
-    transform: scale(1.14);
-  }
-  28% {
-    transform: scale(0.96);
-  }
-}
-
-@keyframes halo-onde {
-  from {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  to {
-    transform: scale(1.45);
-    opacity: 0;
-  }
-}
-
-@keyframes vagues {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes vehicule-arrivee {
-  from {
-    transform: scale(0.4) rotate(-20deg);
-  }
-  to {
-    transform: scale(1) rotate(0);
-  }
-}
-
-[data-actif="true"] .picto-flotte {
-  animation: picto-flotte 3.2s ease-in-out infinite;
-}
-[data-actif="true"] .picto-roule {
-  animation: picto-roule 0.9s ease-in-out infinite;
-}
-[data-actif="true"] .picto-outil {
-  animation: picto-outil 2.4s ease-in-out infinite;
-  transform-origin: 70% 30%;
-}
-[data-actif="true"] .picto-tangue {
-  animation: picto-tangue 2.6s ease-in-out infinite;
-  transform-origin: 50% 80%;
-}
-[data-actif="true"] .picto-lumiere {
-  animation: picto-lumiere 1.8s ease-in-out infinite;
-}
-[data-actif="true"] .picto-battement {
-  animation: picto-battement 1.6s ease-in-out infinite;
-}
-
-/* Onde qui s'échappe de la pastille, comme un signal. */
-.halo-bleu {
-  background: var(--color-bleu-vif);
-}
-.halo-rouge {
-  background: var(--color-rouge-vif);
-}
-.halo-marine {
-  background: var(--color-marine);
-}
-.halo-bleu,
-.halo-rouge,
-.halo-marine {
-  opacity: 0;
-}
-[data-actif="true"] :is(.halo-bleu, .halo-rouge, .halo-marine) {
-  animation: halo-onde 2.4s ease-out infinite;
-}
-
-/* Vagues sous le bateau : une bande deux fois plus large qui glisse. */
-.vagues {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Cpath d='M0 10 Q15 2 30 10 T60 10' fill='none' stroke='white' stroke-opacity='.75' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")
-    repeat-x left center / 30px 100%;
-}
-[data-actif="true"] .vagues {
-  animation: vagues 3s linear infinite;
-}
-
-/* Grand écran : visuels empilés, seul celui de l'étape courante est visible. */
-.voyage .scene {
-  opacity: 0;
-  transform: translateY(2.5rem) scale(0.9);
-  transition:
-    opacity 0.45s ease,
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.voyage .scene[data-actif="true"] {
-  opacity: 1;
-  transform: none;
-}
-.voyage .scene .medaillon {
-  transform: translateX(3rem) rotate(10deg);
-  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s;
-}
-.voyage .scene[data-actif="true"] .medaillon {
-  transform: none;
-}
-
-/* Entrée en scène du texte, une seule fois, élément par élément. */
-.voyage[data-pret] .entree {
-  transition:
-    opacity 0.6s ease,
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.voyage[data-pret] .etape:not([data-visible]) .entree {
-  opacity: 0;
-  transform: translateY(2rem);
-}
-.voyage[data-pret] .entree:nth-child(2) {
-  transition-delay: 0.06s;
-}
-.voyage[data-pret] .entree:nth-child(3) {
-  transition-delay: 0.12s;
-}
-.voyage[data-pret] .entree:nth-child(4) {
-  transition-delay: 0.18s;
-}
-.voyage[data-pret] .entree:nth-child(5) {
-  transition-delay: 0.24s;
-}
-.voyage[data-pret] .entree:nth-child(6) {
-  transition-delay: 0.3s;
-}
-
-/* Étapes passées ou à venir : légèrement estompées, pour guider l'œil. */
-.voyage .etape {
-  transition: opacity 0.4s ease;
-}
-@media (min-width: 48rem) {
-  .voyage .etape[data-actif="false"] {
-    opacity: 0.35;
-  }
-}
-
-.vehicule-arrivee {
-  animation: vehicule-arrivee 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* --------------------------------------------------------------------------
-   Bandes et formes souples
-   --------------------------------------------------------------------------
-   Les bandes pleine largeur sont bordées de vagues qui défilent, et les
-   anciennes « cartes » sont remplacées par des formes souples qui tournent
-   en respirant. Tout est animé en `transform` seul.
-   -------------------------------------------------------------------------- */
-
-@keyframes onde-defile {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes onde-verticale {
-  to {
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes blob-tourne {
-  0% {
-    transform: rotate(0) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(1.07);
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
-}
-
-@keyframes blob-derive {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0);
-  }
-  33% {
-    transform: translate(4%, -6%) rotate(40deg);
-  }
-  66% {
-    transform: translate(-5%, 4%) rotate(-25deg);
-  }
-}
-
-.onde {
-  width: 200%;
-  animation: onde-defile 16s linear infinite;
-}
-.onde-lente {
-  animation-duration: 27s;
-  animation-direction: reverse;
-}
-.onde-verticale {
-  height: 200%;
-  animation: onde-verticale 14s linear infinite;
-}
-
-.forme-blob-1 {
-  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
-}
-.forme-blob-2 {
-  border-radius: 61% 39% 52% 48% / 44% 59% 41% 56%;
-}
-.forme-blob-3 {
-  border-radius: 38% 62% 45% 55% / 58% 38% 62% 42%;
-}
-.blob-anime {
-  animation: blob-tourne 22s linear infinite;
-}
-.blob-derive {
-  animation: blob-derive 26s ease-in-out infinite;
-}
-
-/* --------------------------------------------------------------------------
-   Apparitions au défilement (composant Apparitions)
-   --------------------------------------------------------------------------
-   Rien n'est masqué tant que le script n'a pas posé `.js-apparitions` :
-   sans JavaScript, tout le contenu est visible.
-   -------------------------------------------------------------------------- */
-
-.js-apparitions :is([data-apparition], .anim-defilement) {
-  transition:
-    opacity 0.7s ease var(--delai, 0s),
-    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) var(--delai, 0s);
-}
-.js-apparitions :is([data-apparition], .anim-defilement):not([data-visible]) {
-  opacity: 0;
-  transform: translateY(2.25rem);
-}
-.js-apparitions [data-apparition="gauche"]:not([data-visible]) {
-  transform: translateX(-3rem);
-}
-.js-apparitions [data-apparition="droite"]:not([data-visible]) {
-  transform: translateX(3rem);
-}
-.js-apparitions [data-apparition="zoom"]:not([data-visible]) {
-  transform: scale(0.82);
-}
-
-/* La barre rouge des surtitres se déploie à l'arrivée du titre. */
-.barre-surtitre {
-  transform-origin: left;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
-}
-.js-apparitions [data-apparition]:not([data-visible]) .barre-surtitre {
-  transform: scaleX(0);
-}
-
-/* Le trait courbe des liens se dessine à l'arrivée du bloc. */
-.js-apparitions [data-apparition]:not([data-visible]) .trait-courbe::after {
-  transform: scaleX(0);
-}
-
-/* ---------- Héros : séquence d'ouverture ---------- */
-
-@keyframes coup-de-coude {
-  0%,
-  86%,
-  100% {
-    transform: translateX(0);
-  }
-  90% {
-    transform: translateX(5px);
-  }
-  94% {
-    transform: translateX(-2px);
-  }
-  97% {
-    transform: translateX(3px);
-  }
-}
-
-/* Ouverture du héros, en trois temps : la vague monte depuis le bas de
-   l'écran, le ruban glisse en place depuis le coin inférieur gauche, puis
-   les enfants montent à leur tour (leurs jambes sont de toute façon coupées
-   par le bas du héros). Rien que des glissements (`transform`), sans fondu
-   ni filtre : mesuré aussi léger qu'un héros immobile, donc sans saccade
-   même pendant que la page finit de charger. */
-@keyframes heros-montee {
-  from {
-    transform: translateY(22%);
-  }
-  to {
-    transform: none;
-  }
-}
-@keyframes heros-ruban {
-  from {
-    transform: translate(-35%, 45%);
-  }
-  to {
-    transform: none;
-  }
-}
-.vague-heros {
-  animation: heros-montee 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.ruban-heros {
-  animation: heros-ruban 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
-}
-.sujet-heros {
-  animation: heros-montee 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
-}
-/* La flèche du bouton principal donne un petit coup de coude, de temps en
-   temps, pour attirer l'œil ; elle se tait au survol. */
-.appel-attention > svg {
-  animation: coup-de-coude 5s ease-in-out 2.5s infinite;
-}
-.appel-attention:hover > svg,
-.appel-attention:focus-visible > svg {
-  animation: none;
-}
-
-/* Le cœur du logo bat au survol. */
-.logo-battant:hover img,
-.logo-battant:focus-visible img {
-  animation: picto-battement 1.2s ease-in-out;
 }

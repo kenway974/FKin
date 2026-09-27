@@ -11,7 +11,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Entreprise en France souhaitant donner du matériel, ou structure en France ou au Congo cherchant à être équipée : écrivez-nous, nous répondons sous 72 heures ouvrées.",
+    "Entreprise en France souhaitant donner du matériel, ou structure au Congo cherchant à être équipée : écrivez-nous, nous répondons sous 72 heures ouvrées.",
   alternates: { canonical: "/contact" },
 };
 
@@ -22,15 +22,12 @@ export default function PageContact() {
         surtitre="Contact"
         titre="Écrivez-nous"
         chapo="Matériel à donner ou besoin à exprimer : un seul formulaire. Précisez qui vous êtes, on oriente votre demande."
-        ton="bleu"
+        ton="vert"
         photo={trouverPhotoBanniere("contact")}
       />
 
       <Section>
-        <div
-          data-apparition-cascade=""
-          className="contenu grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start"
-        >
+        <div className="contenu grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start">
           <div>
             {/*
               `useSearchParams` impose une frontière Suspense : sans elle, toute
@@ -53,7 +50,7 @@ export default function PageContact() {
               <CardBody className="space-y-3">
                 <CardTitre className="text-lg">Délai de réponse</CardTitre>
                 <p className="text-doux flex gap-2.5 text-sm">
-                  <Clock className="text-rouge mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <Clock className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   Réponse sous 72 heures ouvrées, même pour un refus. Vous ne resterez pas sans
                   nouvelles.
                 </p>
@@ -64,18 +61,18 @@ export default function PageContact() {
               <CardBody className="space-y-3">
                 <CardTitre className="text-lg">Nous joindre autrement</CardTitre>
                 <p className="text-doux flex gap-2.5 text-sm">
-                  <Mail className="text-rouge mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <Mail className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   <a
                     href={`mailto:${site.email}`}
-                    className="hover:text-rouge underline underline-offset-4"
+                    className="hover:text-terre underline underline-offset-4"
                   >
                     {site.email}
                   </a>
                 </p>
                 <p className="text-doux flex gap-2.5 text-sm">
-                  <MapPin className="text-rouge mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                  Collecte partout en France. Distribution en France, et au Congo à Kinshasa et dans
-                  les provinces desservies par nos partenaires.
+                  <MapPin className="text-terre mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  Collecte partout en France. Distribution à Kinshasa et dans les provinces
+                  desservies par nos partenaires.
                 </p>
               </CardBody>
             </Card>
@@ -91,7 +88,7 @@ export default function PageContact() {
                     <li key={conseil} className="flex gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="bg-bleu-vif mt-2 size-1.5 shrink-0 rounded-full"
+                        className="bg-ocre mt-2 size-1.5 shrink-0 rounded-full"
                       />
                       <span>{conseil}</span>
                     </li>

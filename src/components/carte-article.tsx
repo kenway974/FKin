@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { CardTitre } from "@/components/ui/card";
+import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { VisuelParDefaut } from "@/components/sections";
 import { extraireResume, formaterDate } from "@/lib/utils";
 import type { Article } from "@/types/database";
@@ -17,11 +17,10 @@ export function CarteArticle({
   const resume = article.extrait?.trim() || extraireResume(article.contenu, 150);
 
   return (
-    // Pas de carte encadrée : image en forme souple, texte posé dessous.
-    <div className="group relative h-full">
+    <Card className="group carte-relief relative h-full">
       <article className="flex h-full flex-col">
         {article.image_couverture ? (
-          <div className="bg-nuage forme-blob-3 relative aspect-[16/9] w-full overflow-hidden">
+          <div className="bg-sable relative aspect-[16/9] w-full">
             <Image
               src={article.image_couverture}
               alt={article.image_alt ?? ""}
@@ -33,10 +32,10 @@ export function CarteArticle({
             />
           </div>
         ) : (
-          <VisuelParDefaut className="forme-blob-3 aspect-[16/9]" decoratif />
+          <VisuelParDefaut className="aspect-[16/9]" decoratif />
         )}
 
-        <div className="flex flex-1 flex-col gap-2 px-1 pt-5">
+        <CardBody className="flex flex-1 flex-col gap-2">
           {article.date_publication ? (
             <p className="text-doux text-sm">
               <time dateTime={article.date_publication}>
@@ -53,7 +52,7 @@ export function CarteArticle({
             */}
             <Link
               href={`/actualites/${article.slug}`}
-              className="hover:text-rouge after:absolute after:inset-0"
+              className="hover:text-terre after:absolute after:inset-0"
             >
               {article.titre}
             </Link>
@@ -61,12 +60,12 @@ export function CarteArticle({
 
           <p className="text-doux text-sm leading-relaxed">{resume}</p>
 
-          <p className="text-rouge mt-auto flex items-center gap-1.5 pt-3 text-sm font-semibold">
+          <p className="text-terre mt-auto flex items-center gap-1.5 pt-3 text-sm font-semibold">
             Lire l&apos;article
             <ArrowRight className="size-4" aria-hidden="true" />
           </p>
-        </div>
+        </CardBody>
       </article>
-    </div>
+    </Card>
   );
 }

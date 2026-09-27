@@ -86,7 +86,7 @@ export function FormulaireContact() {
     {
       valeur: "beneficiaire" as const,
       libelle: "Une structure bénéficiaire",
-      precision: "En France ou au Congo, je cherche à être équipée.",
+      precision: "Au Congo, je cherche à être équipée.",
       icone: GraduationCap,
     },
   ];
@@ -117,8 +117,8 @@ export function FormulaireContact() {
               key={profil.valeur}
               className={cn(
                 "rounded-douce border-bordure flex cursor-pointer gap-3 border-2 bg-white p-4",
-                "has-[:checked]:border-rouge has-[:checked]:bg-rouge-voile",
-                "has-[:focus-visible]:outline-bleu has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2",
+                "has-[:checked]:border-terre has-[:checked]:bg-terre-voile",
+                "has-[:focus-visible]:outline-vert has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2",
               )}
             >
               <input
@@ -126,11 +126,11 @@ export function FormulaireContact() {
                 value={profil.valeur}
                 {...register("typeEmetteur")}
                 aria-describedby={errors.typeEmetteur ? "erreur-profil" : undefined}
-                className="accent-bleu mt-1 size-4 shrink-0"
+                className="mt-1 size-4 shrink-0 accent-[#9c4a1f]"
               />
               <span>
                 <span className="text-encre flex items-center gap-2 font-semibold">
-                  <profil.icone className="text-rouge size-4" aria-hidden="true" />
+                  <profil.icone className="text-terre size-4" aria-hidden="true" />
                   {profil.libelle}
                 </span>
                 <span className="text-doux mt-0.5 block text-sm">{profil.precision}</span>

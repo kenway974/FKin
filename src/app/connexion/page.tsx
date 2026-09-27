@@ -17,11 +17,11 @@ export const metadata: Metadata = {
 /** Page de connexion au back-office. Volontairement hors du layout public. */
 export default function PageConnexion() {
   return (
-    <div className="bg-nuage motif-tissu flex min-h-dvh flex-col">
+    <div className="bg-sable motif-tissu flex min-h-dvh flex-col">
       <div className="contenu py-6">
         <Link
           href="/"
-          className="text-doux hover:text-rouge inline-flex items-center gap-1.5 text-sm font-medium"
+          className="text-doux hover:text-terre inline-flex items-center gap-1.5 text-sm font-medium"
         >
           <ArrowLeft className="size-4" aria-hidden="true" />
           Retour au site
@@ -50,9 +50,9 @@ export default function PageConnexion() {
             ) : (
               <Alert ton="erreur" titre="Authentification non configurée">
                 <p>
-                  Les variables <code className="break-all">NEXT_PUBLIC_SUPABASE_URL</code> et{" "}
-                  <code className="break-all">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> ne sont pas
-                  renseignées. Consultez la section « Brancher Supabase » du README.
+                  Les variables <code>NEXT_PUBLIC_SUPABASE_URL</code> et{" "}
+                  <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> ne sont pas renseignées. Consultez la
+                  section « Brancher Supabase » du README.
                 </p>
               </Alert>
             )}

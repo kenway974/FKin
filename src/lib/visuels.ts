@@ -6,8 +6,8 @@ import path from "node:path";
 /**
  * Détection des photographies de bannière déposées par le propriétaire.
  *
- * Le dépôt ne contient aucune photo de bannière : elles s'affichent donc en
- * aplat de couleur. Mais dès que le propriétaire dépose un fichier dans
+ * Le dépôt ne contient aucune photo : les bannières s'appuient donc sur des
+ * illustrations SVG. Mais dès que le propriétaire dépose un fichier dans
  * `public/bannieres/`, la bannière correspondante bascule automatiquement
  * dessus — sans toucher une ligne de code.
  *

@@ -18,13 +18,13 @@ import { Card, CardBody, CardTitre } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
 import { Section, TitreSection } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
-import { Coeur } from "@/components/formes";
+import { MotifAngle } from "@/components/illustrations";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = {
   title: "Nos services",
   description:
-    "Collecte et effacement des données pour les entreprises partout en France ; équipement d'écoles et d'associations en France et au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
+    "Collecte et effacement des données pour les entreprises partout en France ; équipement des écoles au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
   alternates: { canonical: "/services" },
 };
 
@@ -74,7 +74,7 @@ const servicesBeneficiaires = [
     icone: FileText,
     titre: "Étude de votre demande",
     texte:
-      "Vous décrivez votre structure et vos besoins. Nous vérifions avec vous, ou avec notre relais local au Congo, les conditions d'accueil.",
+      "Vous décrivez votre structure et vos besoins. Notre relais local vérifie sur place les conditions d'accueil.",
   },
   {
     icone: Warehouse,
@@ -86,13 +86,13 @@ const servicesBeneficiaires = [
     icone: Wrench,
     titre: "Installation et prise en main",
     texte:
-      "Notre équipe en France, nos partenaires locaux au Congo accompagnent l'installation et la première prise en main, pour un usage dès la première semaine.",
+      "Nos partenaires locaux accompagnent l'installation et la première prise en main, pour un usage dès la première semaine.",
   },
   {
     icone: Handshake,
     titre: "Suivi après livraison",
     texte:
-      "Nous repassons quelques mois plus tard : usage réel, pannes éventuelles, dotation complétée à la livraison suivante.",
+      "Nous repassons quelques mois plus tard : usage réel, pannes éventuelles, dotation complétée au convoi suivant.",
   },
 ] as const;
 
@@ -102,8 +102,8 @@ export default function PageServices() {
       <BannierePage
         surtitre="Nos services"
         titre="Une même chaîne, de la collecte à la formation"
-        chapo="Collecter le matériel des entreprises partout en France, équiper des structures en France et au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
-        ton="rouge"
+        chapo="Collecter le matériel des entreprises partout en France, équiper des structures au Congo, faire réparer par des jeunes ce qui peut l'être, et former aux métiers de l'informatique."
+        ton="terre"
         photo={trouverPhotoBanniere("services")}
       />
 
@@ -117,13 +117,13 @@ export default function PageServices() {
             chapo="Sans coût ni logistique de votre côté. Notre engagement : sécurité des données, traçabilité du lot, retour documenté sur son usage."
           />
 
-          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {servicesEntreprises.map((service) => (
               <li key={service.titre}>
                 <Card className="h-full">
                   <CardBody className="space-y-3">
-                    <span className="bg-rouge-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <service.icone className="text-rouge size-5" aria-hidden="true" />
+                    <span className="bg-terre-voile inline-flex size-11 items-center justify-center rounded-full">
+                      <service.icone className="text-terre size-5" aria-hidden="true" />
                     </span>
                     <CardTitre className="text-lg">{service.titre}</CardTitre>
                     <p className="text-doux text-sm leading-relaxed">{service.texte}</p>
@@ -153,22 +153,22 @@ export default function PageServices() {
       </Section>
 
       {/* -------------------------------------------------------- Bénéficiaires */}
-      <Section id="beneficiaires" fond="nuage" aria-labelledby="titre-beneficiaires">
+      <Section id="beneficiaires" fond="sable" aria-labelledby="titre-beneficiaires">
         <div className="contenu">
           <TitreSection
             id="titre-beneficiaires"
-            surtitre="Pour les structures en France et au Congo"
+            surtitre="Pour les structures au Congo"
             titre="Écoles, mairies et associations : comment être équipé"
-            chapo="Demandes examinées au fil des collectes et des arrivages. Priorité aux structures à public scolaire disposant d'un local sécurisable et alimenté en électricité."
+            chapo="Demandes examinées au fil des arrivages. Priorité aux structures à public scolaire disposant d'un local sécurisable et alimenté en électricité."
           />
 
-          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-2">
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2">
             {servicesBeneficiaires.map((service) => (
               <li key={service.titre}>
                 <Card className="h-full">
                   <CardBody className="space-y-3">
-                    <span className="bg-bleu-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <service.icone className="text-bleu size-5" aria-hidden="true" />
+                    <span className="bg-vert-voile inline-flex size-11 items-center justify-center rounded-full">
+                      <service.icone className="text-vert size-5" aria-hidden="true" />
                     </span>
                     <CardTitre className="text-lg">{service.titre}</CardTitre>
                     <p className="text-doux text-sm leading-relaxed">{service.texte}</p>
@@ -193,7 +193,7 @@ export default function PageServices() {
                     <li key={element} className="flex gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="bg-bleu-vif mt-2 size-1.5 shrink-0 rounded-full"
+                        className="bg-ocre mt-2 size-1.5 shrink-0 rounded-full"
                       />
                       <span>{element}</span>
                     </li>
@@ -221,7 +221,7 @@ export default function PageServices() {
             chapo="Une partie du matériel arrive endommagée. Plutôt que de la mettre au rebut, nous la confions à des recycleries à Kinshasa, où des jeunes apprennent à le remettre en état."
           />
 
-          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-3">
+          <ul className="mt-10 grid gap-5 sm:grid-cols-3">
             {[
               {
                 icone: Recycle,
@@ -231,21 +231,19 @@ export default function PageServices() {
               {
                 icone: Wrench,
                 titre: "Remis en état sur place",
-                texte:
-                  "Diagnostic, réparation et test dans des recycleries partenaires à Kinshasa.",
+                texte: "Diagnostic, réparation et test dans des recycleries partenaires à Kinshasa.",
               },
               {
                 icone: Users,
                 titre: "Des jeunes formés",
-                texte:
-                  "Chaque réparation est un atelier : les jeunes acquièrent un vrai savoir-faire.",
+                texte: "Chaque réparation est un atelier : les jeunes acquièrent un vrai savoir-faire.",
               },
             ].map((bloc) => (
               <li key={bloc.titre}>
                 <Card className="h-full">
                   <CardBody className="space-y-3">
-                    <span className="bg-rouge-voile inline-flex size-11 items-center justify-center rounded-full">
-                      <bloc.icone className="text-bleu-vif size-5" aria-hidden="true" />
+                    <span className="bg-soleil-voile inline-flex size-11 items-center justify-center rounded-full">
+                      <bloc.icone className="text-ocre size-5" aria-hidden="true" />
                     </span>
                     <CardTitre className="text-lg">{bloc.titre}</CardTitre>
                     <p className="text-doux text-sm leading-relaxed">{bloc.texte}</p>
@@ -258,12 +256,12 @@ export default function PageServices() {
       </Section>
 
       {/* ------------------------------------------------------------- Formation */}
-      <Section id="formation" fond="nuage" aria-labelledby="titre-formation">
+      <Section id="formation" fond="sable" aria-labelledby="titre-formation">
         <div className="contenu">
-          <div className="forme-coeur border-bordure relative overflow-hidden border bg-white p-8 md:p-12">
-            <Coeur className="text-rouge-vif -top-10 -right-10 w-64 opacity-10 md:w-80" />
+          <div className="rounded-douce border-bordure relative overflow-hidden border bg-white p-8 md:p-12">
+            <MotifAngle className="text-indigo -top-16 -right-16 size-72 opacity-10" />
             <div className="relative max-w-2xl">
-              <span className="bg-bleu-voile text-marine inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
+              <span className="bg-indigo-voile text-indigo inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase">
                 <Sparkles className="size-3.5" aria-hidden="true" />
                 Bientôt
               </span>
@@ -271,8 +269,8 @@ export default function PageServices() {
                 Un centre de formation aux métiers de l&apos;informatique
               </h2>
               <p className="text-doux mt-3 leading-relaxed">
-                À Kinshasa, un centre de formation voit le jour : maintenance, réparation et bases
-                du numérique, pour donner aux jeunes un métier autour du matériel qui arrive.
+                À Kinshasa, un centre de formation voit le jour : maintenance, réparation et bases du
+                numérique, pour donner aux jeunes un métier autour du matériel qui arrive.
               </p>
               <p className="text-doux mt-3 text-sm">
                 Le projet est en cours de montage. Écrivez-nous pour suivre son ouverture ou y

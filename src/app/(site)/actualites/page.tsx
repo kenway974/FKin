@@ -10,7 +10,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Actualités",
   description:
-    "Comptes rendus de convois, retours de terrain et nouvelles des structures équipées en France et au Congo.",
+    "Comptes rendus de convois, retours de terrain et nouvelles des structures équipées au Congo.",
   alternates: { canonical: "/actualites" },
   openGraph: {
     title: "Actualités",
@@ -51,15 +51,15 @@ export default async function PageActualites() {
       <BannierePage
         surtitre="Actualités"
         titre="Nouvelles des convois et du terrain"
-        chapo="Ce qui se passe entre deux livraisons : livraison d'un lot, départ d'un conteneur, installation d'une salle, difficultés rencontrées."
-        ton="rouge"
+        chapo="Ce qui se passe entre deux livraisons : départ d'un conteneur, installation d'une salle, difficultés rencontrées."
+        ton="terre"
         photo={trouverPhotoBanniere("actualites")}
       />
 
       <Section>
         <div className="contenu">
           {articles.length > 0 ? (
-            <ul data-apparition-cascade="" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {articles.map((article, index) => (
                 <li key={article.id}>
                   <CarteArticle article={article} priorite={index < 2} />

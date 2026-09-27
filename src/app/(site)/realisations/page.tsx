@@ -13,7 +13,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Réalisations",
   description:
-    "Les projets menés à leur terme : lieu, matériel livré et résultat obtenu pour chaque école, mairie ou association équipée, en France comme au Congo.",
+    "Les projets menés à leur terme : lieu, matériel livré et résultat obtenu pour chaque école, mairie ou association équipée au Congo.",
   alternates: { canonical: "/realisations" },
   openGraph: {
     title: "Réalisations",
@@ -61,7 +61,7 @@ export default async function PageRealisations() {
         surtitre="Réalisations"
         titre="Ce que le matériel est devenu"
         chapo="Chaque fiche indique le lieu, le matériel livré et ce qu'il a permis de faire. De quoi vérifier que la démarche va au bout."
-        ton="bleu"
+        ton="vert"
         photo={trouverPhotoBanniere("realisations")}
       />
 
@@ -73,7 +73,7 @@ export default async function PageRealisations() {
                 {projets.length} projet{projets.length > 1 ? "s" : ""} documenté
                 {projets.length > 1 ? "s" : ""}.
               </p>
-              <ul data-apparition-cascade="" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {projets.map((projet, index) => (
                   <li key={projet.id}>
                     <CarteProjet projet={projet} priorite={index < 2} />
@@ -90,7 +90,7 @@ export default async function PageRealisations() {
             </EtatVide>
           )}
 
-          <div className="rounded-douce border-bordure bg-nuage mt-12 border p-6 md:p-8">
+          <div className="rounded-douce border-bordure bg-sable mt-12 border p-6 md:p-8">
             <h2 className="font-titre text-2xl font-bold">
               Votre entreprise peut être le point de départ du prochain projet
             </h2>
