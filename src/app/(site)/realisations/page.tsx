@@ -73,7 +73,7 @@ export default async function PageRealisations() {
                 {projets.length} projet{projets.length > 1 ? "s" : ""} documenté
                 {projets.length > 1 ? "s" : ""}.
               </p>
-              <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <ul data-apparition-cascade="" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {projets.map((projet, index) => (
                   <li key={projet.id}>
                     <CarteProjet projet={projet} priorite={index < 2} />

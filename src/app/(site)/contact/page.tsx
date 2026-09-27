@@ -27,7 +27,10 @@ export default function PageContact() {
       />
 
       <Section>
-        <div className="contenu grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+        <div
+          data-apparition-cascade=""
+          className="contenu grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start"
+        >
           <div>
             {/*
               `useSearchParams` impose une frontière Suspense : sans elle, toute

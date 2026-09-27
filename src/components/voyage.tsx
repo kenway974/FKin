@@ -304,9 +304,12 @@ export function Voyage() {
       className="voyage py-20 md:py-28"
     >
       <div className="contenu">
-        <div className="mx-auto max-w-3xl text-center">
+        <div data-apparition="" className="mx-auto max-w-3xl text-center">
           <p className="text-rouge mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-            <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+            <span
+              className="barre-surtitre bg-rouge-vif inline-block h-2 w-6 rounded-full"
+              aria-hidden="true"
+            />
             Le voyage d&apos;un don
           </p>
           <h2 id="titre-voyage" className="text-4xl font-bold md:text-6xl">
@@ -391,6 +394,7 @@ export function Voyage() {
                 <p className="entree text-doux mt-4 leading-relaxed md:text-lg">{etape.texte}</p>
                 <p className="entree mt-5 flex items-baseline gap-3">
                   <span
+                    data-compteur=""
                     className={cn(
                       "font-titre text-4xl font-bold whitespace-nowrap",
                       textes[etape.ton],

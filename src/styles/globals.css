@@ -225,7 +225,7 @@ p {
 /* Apparition déclenchée par le défilement — progressive enhancement. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .anim-defilement {
+    :root:not(.js-apparitions) .anim-defilement {
       animation: apparition 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-timeline: view();
       animation-range: entry 0% entry 55%;
@@ -787,4 +787,114 @@ p {
 }
 .blob-derive {
   animation: blob-derive 26s ease-in-out infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Apparitions au défilement (composant Apparitions)
+   --------------------------------------------------------------------------
+   Rien n'est masqué tant que le script n'a pas posé `.js-apparitions` :
+   sans JavaScript, tout le contenu est visible.
+   -------------------------------------------------------------------------- */
+
+.js-apparitions :is([data-apparition], .anim-defilement) {
+  transition:
+    opacity 0.7s ease var(--delai, 0s),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) var(--delai, 0s);
+}
+.js-apparitions :is([data-apparition], .anim-defilement):not([data-visible]) {
+  opacity: 0;
+  transform: translateY(2.25rem);
+}
+.js-apparitions [data-apparition="gauche"]:not([data-visible]) {
+  transform: translateX(-3rem);
+}
+.js-apparitions [data-apparition="droite"]:not([data-visible]) {
+  transform: translateX(3rem);
+}
+.js-apparitions [data-apparition="zoom"]:not([data-visible]) {
+  transform: scale(0.82);
+}
+
+/* La barre rouge des surtitres se déploie à l'arrivée du titre. */
+.barre-surtitre {
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+}
+.js-apparitions [data-apparition]:not([data-visible]) .barre-surtitre {
+  transform: scaleX(0);
+}
+
+/* Le trait courbe des liens se dessine à l'arrivée du bloc. */
+.js-apparitions [data-apparition]:not([data-visible]) .trait-courbe::after {
+  transform: scaleX(0);
+}
+
+/* ---------- Héros : séquence d'ouverture ---------- */
+
+@keyframes trace-entree {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes montee-douce {
+  from {
+    opacity: 0;
+    transform: translateY(6%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes coup-de-coude {
+  0%,
+  86%,
+  100% {
+    transform: translateX(0);
+  }
+  90% {
+    transform: translateX(5px);
+  }
+  94% {
+    transform: translateX(-2px);
+  }
+  97% {
+    transform: translateX(3px);
+  }
+}
+
+/* Le ruban rouge et le liseré blanc se dessinent au chargement. */
+.trace-heros {
+  stroke-dasharray: 1;
+  animation: trace-entree 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.25s both;
+}
+.trace-heros-2 {
+  animation-delay: 0.45s;
+}
+/* La vague bleue monte, les enfants entrent en scène. */
+.vague-heros {
+  animation: montee-douce 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.sujet-heros {
+  animation: montee-douce 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+/* La flèche du bouton principal donne un petit coup de coude, de temps en
+   temps, pour attirer l'œil ; elle se tait au survol. */
+.appel-attention > svg {
+  animation: coup-de-coude 5s ease-in-out 2.5s infinite;
+}
+.appel-attention:hover > svg,
+.appel-attention:focus-visible > svg {
+  animation: none;
+}
+
+/* Le cœur du logo bat au survol. */
+.logo-battant:hover img,
+.logo-battant:focus-visible img {
+  animation: picto-battement 1.2s ease-in-out;
 }

@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { Apparitions } from "@/components/apparitions";
 import { site } from "@/lib/site";
 import { urlSite } from "@/lib/env";
 
@@ -56,6 +57,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer />
       </div>
+      <Apparitions />
     </>
   );
 }

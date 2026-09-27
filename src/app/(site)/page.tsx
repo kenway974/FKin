@@ -54,7 +54,7 @@ export default async function PageAccueil() {
             height={1696}
             priority
             sizes="(min-width: 1024px) 40vw, 70vw"
-            className="h-full w-auto max-w-none drop-shadow-[0_24px_40px_rgba(17,29,54,0.45)]"
+            className="sujet-heros h-full w-auto max-w-none drop-shadow-[0_24px_40px_rgba(17,29,54,0.45)]"
           />
         }
       >
@@ -76,7 +76,7 @@ export default async function PageAccueil() {
         </h1>
 
         <div className="anim-entree anim-retard-2 mt-8 flex flex-wrap items-center gap-x-8 gap-y-5 md:mt-10">
-          <Button asChild taille="lg">
+          <Button asChild taille="lg" className="appel-attention">
             <Link href="/contact?profil=entreprise">
               Proposer un don
               <ArrowRight aria-hidden="true" />
@@ -170,15 +170,23 @@ export default async function PageAccueil() {
         />
 
         <div className="contenu relative">
-          <p className="text-rouge-clair mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-            <span className="bg-rouge-clair inline-block h-2 w-6 rounded-full" aria-hidden="true" />
-            Au Congo, au-delà de la distribution
-          </p>
-          <h2 id="titre-congo" className="max-w-3xl text-3xl font-bold md:text-6xl">
-            Réparer, transmettre, former
-          </h2>
+          <div data-apparition="">
+            <p className="text-rouge-clair mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
+              <span
+                className="barre-surtitre bg-rouge-clair inline-block h-2 w-6 rounded-full"
+                aria-hidden="true"
+              />
+              Au Congo, au-delà de la distribution
+            </p>
+            <h2 id="titre-congo" className="max-w-3xl text-3xl font-bold md:text-6xl">
+              Réparer, transmettre, former
+            </h2>
+          </div>
 
-          <div className="mt-14 grid gap-14 md:mt-20 md:grid-cols-2 md:gap-20">
+          <div
+            data-apparition-cascade=""
+            className="mt-14 grid gap-14 md:mt-20 md:grid-cols-2 md:gap-20"
+          >
             <div className="parallaxe-vue flex flex-col items-start gap-5 [--parallaxe:1rem] md:[--parallaxe:0.75rem]">
               <Blob teinte="bg-bleu-vif" variante={1} className="size-24 md:size-28">
                 <Recycle className="size-10 md:size-12" aria-hidden="true" />
@@ -310,7 +318,10 @@ export default async function PageAccueil() {
               aria-hidden="true"
               className="blob-derive forme-blob-1 absolute -right-20 -bottom-24 -z-10 size-72 bg-white/10 md:size-96"
             />
-            <div className="parallaxe-vue max-w-md [--parallaxe:1rem]">
+            <div
+              data-apparition-cascade="gauche"
+              className="parallaxe-vue max-w-md [--parallaxe:1rem]"
+            >
               <p className="text-sm font-extrabold tracking-[0.14em] text-white/85 uppercase">
                 Donateurs
               </p>
@@ -354,7 +365,10 @@ export default async function PageAccueil() {
               aria-hidden="true"
               className="blob-derive forme-blob-2 absolute -right-24 -bottom-20 -z-10 size-72 bg-white/10 [animation-delay:-12s] md:size-96"
             />
-            <div className="parallaxe-vue max-w-md [--parallaxe:1rem] md:[--parallaxe:2.25rem]">
+            <div
+              data-apparition-cascade="droite"
+              className="parallaxe-vue max-w-md [--parallaxe:1rem] md:[--parallaxe:2.25rem]"
+            >
               <p className="text-sm font-extrabold tracking-[0.14em] text-white/85 uppercase">
                 Bénéficiaires
               </p>

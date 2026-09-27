@@ -41,30 +41,36 @@ export function TitreSection({
   const Titre = niveau === 1 ? "h1" : "h2";
 
   return (
-    <div
-      className={cn(
-        "parallaxe-vue max-w-3xl [--parallaxe:1.25rem]",
-        centre && "mx-auto text-center",
-      )}
-    >
-      {surtitre ? (
-        <p
+    // Apparition à l'arrivée à l'écran (sur ce bloc), parallaxe légère (sur
+    // le bloc intérieur) : deux éléments distincts, pour que les deux
+    // mouvements ne se contrarient pas.
+    <div data-apparition="" className={cn("max-w-3xl", centre && "mx-auto text-center")}>
+      <div className="parallaxe-vue [--parallaxe:1.25rem]">
+        {surtitre ? (
+          <p
+            className={cn(
+              "text-rouge mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase",
+              centre && "justify-center",
+            )}
+          >
+            <span
+              className="barre-surtitre bg-rouge-vif inline-block h-2 w-6 rounded-full"
+              aria-hidden="true"
+            />
+            {surtitre}
+          </p>
+        ) : null}
+        <Titre
+          id={id}
           className={cn(
-            "text-rouge mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase",
-            centre && "justify-center",
+            "font-bold",
+            niveau === 1 ? "text-4xl md:text-6xl" : "text-3xl md:text-5xl",
           )}
         >
-          <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
-          {surtitre}
-        </p>
-      ) : null}
-      <Titre
-        id={id}
-        className={cn("font-bold", niveau === 1 ? "text-4xl md:text-6xl" : "text-3xl md:text-5xl")}
-      >
-        {titre}
-      </Titre>
-      {chapo ? <p className="text-doux mt-4 text-lg leading-relaxed">{chapo}</p> : null}
+          {titre}
+        </Titre>
+        {chapo ? <p className="text-doux mt-4 text-lg leading-relaxed">{chapo}</p> : null}
+      </div>
     </div>
   );
 }
@@ -151,7 +157,9 @@ export function ChiffreCle({
           aria-hidden="true"
           className="blob-anime forme-blob-1 bg-bleu-voile absolute inset-0 -z-10"
         />
-        <span className="font-titre text-bleu text-4xl font-bold md:text-5xl">{valeur}</span>
+        <span data-compteur="" className="font-titre text-bleu text-4xl font-bold md:text-5xl">
+          {valeur}
+        </span>
       </span>
       <p className="text-encre mt-1 font-semibold">{libelle}</p>
       {precision ? <p className="text-doux mt-1 text-sm">{precision}</p> : null}

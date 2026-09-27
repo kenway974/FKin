@@ -63,7 +63,7 @@ export function Header() {
       <div className="contenu flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           href="/"
-          className="flex items-center gap-2.5"
+          className="logo-battant flex items-center gap-2.5"
           aria-label={`${site.nom} — retour à l'accueil`}
         >
           {/* Sur le marine, le pied du livre se confondrait avec le fond : le

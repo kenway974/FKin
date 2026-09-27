@@ -97,7 +97,11 @@ function VagueScene() {
             <stop offset="1" stopColor="#8fd3f4" stopOpacity="0" />
           </radialGradient>
         </defs>
-        <path d="M0 520V118C120 52 260 92 400 22V520Z" fill="url(#vague-bleue-p)" />
+        <path
+          d="M0 520V118C120 52 260 92 400 22V520Z"
+          fill="url(#vague-bleue-p)"
+          className="vague-heros"
+        />
         <rect width="400" height="520" fill="url(#halo-p)" />
         <path
           d="M-20 110C110 38 255 80 420 8"
@@ -105,6 +109,8 @@ function VagueScene() {
           stroke="#ef433f"
           strokeWidth="22"
           strokeLinecap="round"
+          pathLength={1}
+          className="trace-heros"
         />
         <path
           d="M-20 90C110 18 255 60 420 -12"
@@ -113,6 +119,8 @@ function VagueScene() {
           strokeOpacity="0.85"
           strokeWidth="5"
           strokeLinecap="round"
+          pathLength={1}
+          className="trace-heros trace-heros-2"
         />
       </svg>
 
@@ -137,6 +145,7 @@ function VagueScene() {
         <path
           d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z"
           fill="url(#vague-bleue-l)"
+          className="vague-heros"
         />
         <path d="M540 700C575 505 690 365 885 290S1155 160 1200 30V700Z" fill="url(#halo-l)" />
         <path
@@ -145,6 +154,8 @@ function VagueScene() {
           stroke="#ef433f"
           strokeWidth="34"
           strokeLinecap="round"
+          pathLength={1}
+          className="trace-heros"
         />
         <path
           d="M462 740C505 490 630 322 838 242S1105 108 1190 -30"
@@ -153,6 +164,8 @@ function VagueScene() {
           strokeOpacity="0.85"
           strokeWidth="8"
           strokeLinecap="round"
+          pathLength={1}
+          className="trace-heros trace-heros-2"
         />
       </svg>
     </div>

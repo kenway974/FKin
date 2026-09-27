@@ -117,7 +117,7 @@ export default function PageServices() {
             chapo="Sans coût ni logistique de votre côté. Notre engagement : sécurité des données, traçabilité du lot, retour documenté sur son usage."
           />
 
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {servicesEntreprises.map((service) => (
               <li key={service.titre}>
                 <Card className="h-full">
@@ -162,7 +162,7 @@ export default function PageServices() {
             chapo="Demandes examinées au fil des collectes et des arrivages. Priorité aux structures à public scolaire disposant d'un local sécurisable et alimenté en électricité."
           />
 
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2">
+          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-2">
             {servicesBeneficiaires.map((service) => (
               <li key={service.titre}>
                 <Card className="h-full">
@@ -221,7 +221,7 @@ export default function PageServices() {
             chapo="Une partie du matériel arrive endommagée. Plutôt que de la mettre au rebut, nous la confions à des recycleries à Kinshasa, où des jeunes apprennent à le remettre en état."
           />
 
-          <ul className="mt-10 grid gap-5 sm:grid-cols-3">
+          <ul data-apparition-cascade="" className="mt-10 grid gap-5 sm:grid-cols-3">
             {[
               {
                 icone: Recycle,

@@ -118,7 +118,10 @@ export default function PageCommentCaMarche() {
           {/* Frise verticale : une pastille numérotée par étape, reliées par un
               fil en pointillés. Les couleurs du logo alternent pour rythmer la
               lecture. */}
-          <ol className="before:border-bordure relative space-y-5 before:absolute before:top-8 before:bottom-8 before:left-7 before:border-l-[3px] before:border-dotted md:before:left-8">
+          <ol
+            data-apparition-cascade=""
+            className="before:border-bordure relative space-y-5 before:absolute before:top-8 before:bottom-8 before:left-7 before:border-l-[3px] before:border-dotted md:before:left-8"
+          >
             {etapes.map((etape, index) => (
               <li key={etape.numero} className="relative flex gap-4 md:gap-6">
                 <span
@@ -154,7 +157,7 @@ export default function PageCommentCaMarche() {
             </Alert>
           </div>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div data-apparition-cascade="" className="mt-10 grid gap-4 sm:grid-cols-2">
             <Card>
               <CardBody className="space-y-3">
                 <CardTitre className="text-lg">Vous êtes une entreprise</CardTitre>

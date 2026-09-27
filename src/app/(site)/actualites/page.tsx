@@ -59,7 +59,7 @@ export default async function PageActualites() {
       <Section>
         <div className="contenu">
           {articles.length > 0 ? (
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul data-apparition-cascade="" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {articles.map((article, index) => (
                 <li key={article.id}>
                   <CarteArticle article={article} priorite={index < 2} />

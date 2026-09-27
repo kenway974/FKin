@@ -11,9 +11,12 @@ export function Footer() {
       <Vague className="text-marine" retourne />
       <div className="bg-marine relative overflow-hidden">
         <Coeur className="text-rouge-vif -right-16 -bottom-20 -z-10 w-72 opacity-15 md:w-96" />
-        <div className="contenu grid gap-10 py-12 md:grid-cols-3 md:py-16">
+        <div
+          data-apparition-cascade=""
+          className="contenu grid gap-10 py-12 md:grid-cols-3 md:py-16"
+        >
           <div className="space-y-3">
-            <div className="flex items-center gap-2.5">
+            <div className="logo-battant flex items-center gap-2.5">
               <span className="inline-flex rounded-full bg-white p-2">
                 <Logo className="h-8" />
               </span>
