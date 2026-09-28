@@ -894,3 +894,130 @@ p {
 .logo-battant:focus-visible img {
   animation: picto-battement 1.2s ease-in-out;
 }
+
+/* ------------------------------------------------------------------------
+   Écran d'ouverture (voir components/intro.tsx).
+   Chronologie : logo (0 → 0,5 s), cartes qui s'écartent, font un tour et
+   demi puis rejoignent le centre (0,15 → 2,05 s), battement du logo
+   (1,9 s), rideau qui remonte (2,15 → 2,9 s). Transformations uniquement.
+   ------------------------------------------------------------------------ */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  cursor: pointer;
+  will-change: transform;
+  animation: intro-sortie 0.75s cubic-bezier(0.7, 0, 0.2, 1) 2.15s both;
+}
+.intro.intro-passee {
+  animation: intro-sortie-rapide 0.5s cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+.intro-vue .intro {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+}
+@keyframes intro-sortie {
+  to {
+    transform: translate3d(0, -120%, 0);
+  }
+}
+@keyframes intro-sortie-rapide {
+  to {
+    transform: translate3d(0, -120%, 0);
+  }
+}
+
+.intro-scene {
+  --rayon: min(8.5rem, 30vw);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+}
+@media (min-width: 768px) {
+  .intro-scene {
+    --rayon: 15rem;
+  }
+}
+
+.intro-battement {
+  animation: intro-battement 0.5s ease-in-out 1.9s both;
+}
+.intro-logo {
+  animation: intro-logo 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes intro-logo {
+  from {
+    transform: scale(0.6);
+  }
+}
+@keyframes intro-battement {
+  40% {
+    transform: scale(1.14);
+  }
+}
+
+.intro-orbite {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  animation: intro-orbite 1.9s cubic-bezier(0.45, 0, 0.3, 1) 0.15s both;
+}
+.intro-contre {
+  animation: intro-contre 1.9s cubic-bezier(0.45, 0, 0.3, 1) 0.15s both;
+}
+.intro-bras {
+  position: absolute;
+}
+.intro-rayon {
+  animation: intro-rayon 1.9s cubic-bezier(0.45, 0, 0.3, 1) 0.15s both;
+}
+.intro-carte {
+  width: min(5.5rem, 22vw);
+  max-width: none;
+  translate: -50% -50%;
+}
+@media (min-width: 768px) {
+  .intro-carte {
+    width: 8rem;
+  }
+}
+@keyframes intro-orbite {
+  from {
+    transform: rotate(-90deg);
+  }
+  to {
+    transform: rotate(450deg);
+  }
+}
+@keyframes intro-contre {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(-450deg);
+  }
+}
+@keyframes intro-rayon {
+  0% {
+    transform: translateX(0) scale(0.2);
+  }
+  22%,
+  70% {
+    transform: translateX(var(--rayon)) scale(1);
+  }
+  100% {
+    transform: translateX(0) scale(0.15);
+  }
+}
+
+/* Tant que le rideau est baissé, les animations de la page attendent. */
+.intro-en-cours .intro ~ *,
+.intro-en-cours .intro ~ * * {
+  animation-play-state: paused !important;
+}

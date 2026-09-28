@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Apparitions } from "@/components/apparitions";
+import { Intro, SCRIPT_INTRO } from "@/components/intro";
 import { site } from "@/lib/site";
 import { urlSite } from "@/lib/env";
 
@@ -50,6 +51,11 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         // n'est injectée ici, il n'y a donc pas de surface XSS.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesStructurees) }}
       />
+      {/* Doit précéder l'écran d'ouverture : décide, avant le premier
+          affichage, s'il se joue (première page de la visite). Contenu
+          statique, aucune donnée injectée. */}
+      <script dangerouslySetInnerHTML={{ __html: SCRIPT_INTRO }} />
+      <Intro />
       <div className="flex min-h-dvh flex-col">
         <Header />
         <main id="contenu-principal" className="flex-1">

@@ -76,7 +76,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${policeTitre.variable} ${policeTexte.variable}`}>
+    // `suppressHydrationWarning` : le script de l'écran d'ouverture ajoute une
+    // classe à <html> avant l'hydratation (voir components/intro.tsx).
+    <html
+      lang="fr"
+      className={`${policeTitre.variable} ${policeTexte.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh">
         {/* Lien d'évitement : premier élément focalisable de la page. */}
         <a
