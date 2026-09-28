@@ -5,7 +5,7 @@ import type { UseFormRegisterReturn } from "react-hook-form";
 import { Camera, Check, LoaderCircle, X } from "lucide-react";
 import { Blob } from "@/components/formes";
 import { MessageErreur } from "@/components/ui/field";
-import { compresserImage } from "@/lib/compression-image";
+import { ErreurPhoto, compresserImage } from "@/lib/compression-image";
 import { PHOTO_POIDS_MAX, PHOTOS_MAX } from "@/lib/validation/contact";
 import { cn } from "@/lib/utils";
 
@@ -160,6 +160,7 @@ export function SelecteurPhotos({
   aide: string;
 }) {
   const champ = React.useRef<HTMLInputElement>(null);
+  const idChamp = React.useId();
   const [enCours, setEnCours] = React.useState(false);
   const [erreur, setErreur] = React.useState<string | null>(null);
   const places = PHOTOS_MAX - photos.length;
@@ -169,27 +170,30 @@ export function SelecteurPhotos({
     setErreur(null);
     setEnCours(true);
     const nouvelles: PhotoJointe[] = [];
-    let refusees = 0;
+    let illisibles = 0;
+    let lourdes = 0;
     for (const fichier of Array.from(fichiers).slice(0, places)) {
       try {
-        const compressee = await compresserImage(fichier);
-        if (compressee.size > PHOTO_POIDS_MAX) throw new Error("trop lourde");
+        const compressee = await compresserImage(fichier, PHOTO_POIDS_MAX);
         nouvelles.push({
           id: crypto.randomUUID(),
           fichier: compressee,
           apercu: URL.createObjectURL(compressee),
         });
-      } catch {
-        refusees++;
+      } catch (erreurPhoto) {
+        if (erreurPhoto instanceof ErreurPhoto && erreurPhoto.raison === "trop-lourde") lourdes++;
+        else illisibles++;
       }
     }
     if (fichiers.length > places) setErreur(`${PHOTOS_MAX} photos au maximum.`);
-    else if (refusees) {
+    else if (illisibles) {
       setErreur(
-        refusees > 1
-          ? `${refusees} fichiers n'ont pas pu être lus comme des photos.`
-          : "Un fichier n'a pas pu être lu comme une photo.",
+        illisibles > 1
+          ? `${illisibles} fichiers ne sont pas des photos lisibles par votre navigateur. Essayez une capture d'écran de la photo, ou le format JPEG.`
+          : "Ce fichier n'est pas une photo lisible par votre navigateur. Essayez une capture d'écran de la photo, ou le format JPEG.",
       );
+    } else if (lourdes) {
+      setErreur("Une photo est trop détaillée pour être envoyée. Essayez-en une autre.");
     }
     onChange([...photos, ...nouvelles]);
     setEnCours(false);
@@ -234,51 +238,55 @@ export function SelecteurPhotos({
           </div>
         ))}
 
+        {/* Le bouton est le <label> du champ fichier : le sélecteur de
+            photos s'ouvre alors nativement, y compris dans les navigateurs
+            intégrés aux applications, où un clic simulé en JavaScript est
+            parfois ignoré. */}
         {places > 0 ? (
-          <button
-            type="button"
-            onClick={() => champ.current?.click()}
-            disabled={enCours}
-            aria-describedby="aide-photos"
-            className="group focus-visible:ring-bleu flex items-center gap-3 rounded-full text-left ring-offset-4 focus-visible:ring-3 focus-visible:outline-none disabled:opacity-70"
-          >
-            <Blob
-              teinte="bg-bleu-voile group-hover:bg-bleu-vif transition-colors"
-              variante={2}
-              className="text-bleu size-16 transition-colors group-hover:text-white md:size-20"
+          <div className="relative">
+            <input
+              ref={champ}
+              id={idChamp}
+              type="file"
+              accept="image/*"
+              multiple
+              disabled={enCours}
+              aria-describedby="aide-photos"
+              className="peer sr-only"
+              onChange={(evenement) => ajouter(evenement.target.files)}
+            />
+            <label
+              htmlFor={idChamp}
+              className="group peer-focus-visible:ring-bleu flex cursor-pointer items-center gap-3 rounded-full ring-offset-4 peer-focus-visible:ring-3 peer-disabled:cursor-wait peer-disabled:opacity-70"
             >
-              {enCours ? (
-                <LoaderCircle className="size-7 animate-spin" aria-hidden="true" />
-              ) : (
-                <Camera className="size-7" aria-hidden="true" />
-              )}
-            </Blob>
-            <span>
-              <span className="text-encre block font-semibold">
-                {enCours
-                  ? "Préparation…"
-                  : photos.length
-                    ? "Ajouter une photo"
-                    : "Ajouter des photos"}
+              <Blob
+                teinte="bg-bleu-voile group-hover:bg-bleu-vif transition-colors"
+                variante={2}
+                className="text-bleu size-16 transition-colors group-hover:text-white md:size-20"
+              >
+                {enCours ? (
+                  <LoaderCircle className="size-7 animate-spin" aria-hidden="true" />
+                ) : (
+                  <Camera className="size-7" aria-hidden="true" />
+                )}
+              </Blob>
+              <span>
+                <span className="text-encre block font-semibold">
+                  {enCours
+                    ? "Préparation…"
+                    : photos.length
+                      ? "Ajouter une photo"
+                      : "Ajouter des photos"}
+                </span>
+                <span className="text-doux block text-sm">
+                  {photos.length}/{PHOTOS_MAX}
+                </span>
               </span>
-              <span className="text-doux block text-sm">
-                {photos.length}/{PHOTOS_MAX}
-              </span>
-            </span>
-          </button>
+            </label>
+          </div>
         ) : null}
       </div>
 
-      <input
-        ref={champ}
-        type="file"
-        accept="image/*"
-        multiple
-        tabIndex={-1}
-        aria-hidden="true"
-        className="sr-only"
-        onChange={(evenement) => ajouter(evenement.target.files)}
-      />
       {erreur ? <MessageErreur>{erreur}</MessageErreur> : null}
     </div>
   );
