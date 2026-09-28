@@ -78,6 +78,9 @@ export const schemaProjet = z.object({
     .or(z.literal("")),
   publie: z.boolean(),
   ordre: z.number().int().min(0).max(999),
+  /** Position sur la carte des structures équipées (facultative). */
+  latitude: z.number().min(-90).max(90).nullable(),
+  longitude: z.number().min(-180).max(180).nullable(),
 });
 
 export type DonneesProjet = z.infer<typeof schemaProjet>;
@@ -85,3 +88,22 @@ export type DonneesProjet = z.infer<typeof schemaProjet>;
 /** Extensions et taille acceptées pour les images téléversées vers Storage. */
 export const IMAGE_TYPES_ACCEPTES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 export const IMAGE_TAILLE_MAX_OCTETS = 5 * 1024 * 1024; // 5 Mo
+
+/** Chiffre d'impact affiché sur la page d'accueil. */
+export const schemaChiffre = z.object({
+  valeur: z
+    .number({ message: "Indiquez un nombre." })
+    .int("Nombre entier uniquement.")
+    .min(0, "Le nombre doit être positif.")
+    .max(99_999_999, "Nombre trop grand."),
+  suffixe: z.string().trim().max(12, "12 caractères au maximum.").optional().or(z.literal("")),
+  libelle: z
+    .string()
+    .trim()
+    .min(3, "Décrivez ce que compte ce chiffre.")
+    .max(80, "80 caractères au maximum."),
+  precision: z.string().trim().max(120, "120 caractères au maximum.").optional().or(z.literal("")),
+  ordre: z.number().int().min(0).max(99),
+});
+
+export type DonneesChiffre = z.infer<typeof schemaChiffre>;

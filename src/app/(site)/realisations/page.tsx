@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { EtatVide, Section } from "@/components/sections";
+import { Bande, EtatVide, Section, TitreSection } from "@/components/sections";
+import { CarteStructures } from "@/components/carte-structures";
 import { BannierePage } from "@/components/bannieres";
 import { DeuxPortes } from "@/components/deux-portes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
@@ -89,6 +90,35 @@ export default async function PageRealisations() {
           )}
         </div>
       </Section>
+
+      {/* Carte des structures équipées : les projets dont la fiche porte une
+          position, en France et au Congo. */}
+      <Bande fond="nuage" aria-labelledby="titre-carte">
+        <div className="contenu space-y-12">
+          <TitreSection
+            id="titre-carte"
+            surtitre="Sur la carte"
+            titre="Les structures équipées"
+            chapo="Écoles, mairies et associations qui travaillent aujourd'hui avec du matériel collecté par nos soins."
+          />
+          <CarteStructures
+            points={projets.flatMap((projet) =>
+              // `typeof` plutôt que `!== null` : tant que la migration n'est pas
+              // appliquée, ces colonnes sont absentes (undefined).
+              typeof projet.latitude === "number" && typeof projet.longitude === "number"
+                ? [
+                    {
+                      titre: projet.titre,
+                      lieu: projet.lieu,
+                      latitude: projet.latitude,
+                      longitude: projet.longitude,
+                    },
+                  ]
+                : [],
+            )}
+          />
+        </div>
+      </Bande>
 
       <DeuxPortes />
     </>

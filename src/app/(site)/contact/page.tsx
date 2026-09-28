@@ -1,11 +1,17 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, Zap } from "lucide-react";
-import { Point, Section } from "@/components/sections";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Bande, Point, Section, TitreSection } from "@/components/sections";
+import { Button } from "@/components/ui/button";
+import { Faq } from "@/components/faq";
+import { FAQ } from "@/lib/faq";
 import { BannierePage } from "@/components/bannieres";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { FormulaireContact } from "./formulaire-contact";
 import { site } from "@/lib/site";
+import { LienWhatsApp } from "@/components/whatsapp";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -66,6 +72,9 @@ export default function PageContact() {
                   {site.email}
                 </a>
               </p>
+              <p>
+                <LienWhatsApp className="text-encre hover:text-rouge" />
+              </p>
               <p className="flex gap-2">
                 <MapPin className="text-rouge mt-1 size-4 shrink-0" aria-hidden="true" />
                 Collecte partout en France. Distribution en France, et au Congo à Kinshasa et dans
@@ -92,6 +101,24 @@ export default function PageContact() {
           </aside>
         </div>
       </Section>
+
+      {/* Les questions qui freinent le plus souvent un premier message. */}
+      <Bande fond="nuage" aria-labelledby="titre-faq-contact">
+        <div className="contenu max-w-4xl space-y-10">
+          <TitreSection
+            id="titre-faq-contact"
+            surtitre="Avant d'écrire"
+            titre="Vos questions, nos réponses"
+          />
+          <Faq nom="faq-contact" questions={FAQ.filter((question) => question.essentielle)} />
+          <Button asChild variante="courbe">
+            <Link href="/comment-ca-marche#titre-faq">
+              Toutes les questions fréquentes
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
+      </Bande>
     </>
   );
 }

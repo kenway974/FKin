@@ -21,6 +21,9 @@
 --    6. Table `messages`
 --    7. Politiques RLS
 --    8. Bucket de stockage des images
+--    9. Formulaire de don en étapes (détails, photos, bucket privé)
+--   10. Table `chiffres_cles`
+--   11. Position des projets sur la carte
 -- =============================================================================
 
 
@@ -383,6 +386,116 @@ create policy "Les admins suppriment des images"
   on storage.objects for delete
   to authenticated
   using (bucket_id = 'medias' and public.est_admin());
+
+
+-- -----------------------------------------------------------------------------
+--  9. Formulaire de don en étapes : détails structurés et photos
+-- -----------------------------------------------------------------------------
+--  Les réponses des étapes (matériel, quantités, état, enlèvement ou besoins)
+--  sont rangées dans `details`, les photos jointes dans `photos` (chemins dans
+--  le bucket privé `photos-dons`). Le texte lisible reste dans `message` : un
+--  message reste donc complet même sans ces colonnes.
+
+alter table public.messages add column if not exists details jsonb;
+alter table public.messages add column if not exists photos text[] not null default '{}';
+
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'messages_photos_max') then
+    alter table public.messages
+      add constraint messages_photos_max check (coalesce(array_length(photos, 1), 0) <= 5);
+  end if;
+end $$;
+
+comment on column public.messages.details is
+  'Réponses structurées du formulaire en étapes (type de matériel, quantités, état, lieu…).';
+comment on column public.messages.photos is
+  'Chemins des photos jointes dans le bucket privé « photos-dons » (5 au maximum).';
+
+-- Bucket PRIVÉ : les photos ne sont jamais publiques. Le serveur les dépose
+-- avec la clé service_role ; les admins les consultent par liens signés.
+-- Taille (1 Mo) et formats sont bornés au niveau du bucket lui-même.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('photos-dons', 'photos-dons', false, 1048576,
+        array['image/webp', 'image/jpeg', 'image/png'])
+on conflict (id) do update
+  set public = false,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+-- Aucune politique d'insertion : seul le serveur (service_role) téléverse.
+drop policy if exists "Les admins consultent les photos de dons" on storage.objects;
+create policy "Les admins consultent les photos de dons"
+  on storage.objects for select
+  to authenticated
+  using (bucket_id = 'photos-dons' and public.est_admin());
+
+drop policy if exists "Les admins suppriment les photos de dons" on storage.objects;
+create policy "Les admins suppriment les photos de dons"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'photos-dons' and public.est_admin());
+
+
+-- -----------------------------------------------------------------------------
+--  10. Table `chiffres_cles` — chiffres d'impact de la page d'accueil
+-- -----------------------------------------------------------------------------
+--  Saisis par l'équipe depuis le back-office. Tant que la table est vide,
+--  l'accueil affiche les chiffres calculés automatiquement.
+
+create table if not exists public.chiffres_cles (
+  id         uuid primary key default gen_random_uuid(),
+  valeur     integer not null,
+  suffixe    text not null default '',
+  libelle    text not null,
+  precision  text,
+  ordre      integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+
+  constraint chiffres_valeur_positive  check (valeur >= 0),
+  constraint chiffres_libelle_non_vide check (length(trim(libelle)) > 0),
+  constraint chiffres_suffixe_court    check (length(suffixe) <= 12)
+);
+
+drop trigger if exists chiffres_cles_maj_updated_at on public.chiffres_cles;
+create trigger chiffres_cles_maj_updated_at
+  before update on public.chiffres_cles
+  for each row execute function public.maj_updated_at();
+
+alter table public.chiffres_cles enable row level security;
+
+drop policy if exists "Chiffres visibles par tous" on public.chiffres_cles;
+create policy "Chiffres visibles par tous"
+  on public.chiffres_cles for select
+  to anon, authenticated
+  using (true);
+
+drop policy if exists "Les admins gèrent les chiffres" on public.chiffres_cles;
+create policy "Les admins gèrent les chiffres"
+  on public.chiffres_cles for all
+  to authenticated
+  using (public.est_admin())
+  with check (public.est_admin());
+
+
+-- -----------------------------------------------------------------------------
+--  11. Position des projets sur la carte des structures équipées
+-- -----------------------------------------------------------------------------
+
+alter table public.projets add column if not exists latitude  double precision;
+alter table public.projets add column if not exists longitude double precision;
+
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'projets_position_valide') then
+    alter table public.projets
+      add constraint projets_position_valide check (
+        (latitude is null and longitude is null)
+        or (latitude between -90 and 90 and longitude between -180 and 180)
+      );
+  end if;
+end $$;
 
 
 -- =============================================================================

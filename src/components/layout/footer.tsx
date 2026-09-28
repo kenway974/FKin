@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
 import { navigation, site } from "@/lib/site";
+import { LienWhatsApp } from "@/components/whatsapp";
 import { Logo } from "@/components/layout/logo";
 import { Coeur, Vague } from "@/components/formes";
 
@@ -52,6 +53,9 @@ export function Footer() {
                 >
                   {site.email}
                 </a>
+              </li>
+              <li>
+                <LienWhatsApp className="hover:text-rouge-clair" />
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="text-rouge-clair mt-0.5 size-4 shrink-0" aria-hidden="true" />

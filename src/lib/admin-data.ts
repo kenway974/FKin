@@ -1,7 +1,7 @@
 import "server-only";
 
 import { creerClientServeur } from "@/lib/supabase/server";
-import type { Article, Message, Projet } from "@/types/database";
+import type { Article, ChiffreCle, Message, Projet } from "@/types/database";
 
 /**
  * Lectures du back-office.
@@ -81,6 +81,39 @@ export async function trouverMessage(id: string): Promise<Message | null> {
 
   const { data, error } = await supabase.from("messages").select("*").eq("id", id).maybeSingle();
   return verifier("le chargement du message", data, error);
+}
+
+/** Chiffres d'impact de la page d'accueil, dans l'ordre d'affichage. */
+export async function listerChiffres(): Promise<ChiffreCle[]> {
+  const supabase = await creerClientServeur();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("chiffres_cles")
+    .select("*")
+    .order("ordre", { ascending: true })
+    .order("created_at", { ascending: true });
+  return verifier("le chargement des chiffres", data, error) ?? [];
+}
+
+/**
+ * Liens temporaires (une heure) vers les photos jointes à un message. Le
+ * bucket est privé : sans ces liens signés, les photos ne sont lisibles par
+ * personne, pas même en connaissant leur chemin.
+ */
+export async function lierPhotosMessage(chemins: string[]): Promise<string[]> {
+  if (!chemins.length) return [];
+  const supabase = await creerClientServeur();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase.storage
+    .from("photos-dons")
+    .createSignedUrls(chemins, 60 * 60);
+  if (error) {
+    console.error("[admin] Liens des photos indisponibles :", error);
+    return [];
+  }
+  return data.flatMap((element) => (element.signedUrl ? [element.signedUrl] : []));
 }
 
 /** Compteurs affichés sur le tableau de bord. */

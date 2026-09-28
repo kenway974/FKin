@@ -41,11 +41,26 @@ export async function supprimerMessage(id: string): Promise<ResultatAction> {
   const supabase = await creerClientServeur();
   if (!supabase) return { statut: "erreur", message: "Supabase n'est pas configuré." };
 
+  // Les photos jointes sont supprimées avec le message : rien ne reste dans
+  // le bucket privé une fois la demande effacée.
+  const { data: photos } = await supabase
+    .from("messages")
+    .select("photos")
+    .eq("id", id)
+    .maybeSingle();
+
   const { error } = await supabase.from("messages").delete().eq("id", id);
 
   if (error) {
     console.error("[admin] Suppression du message impossible :", error);
     return { statut: "erreur", message: "La suppression a échoué." };
+  }
+
+  if (photos?.photos?.length) {
+    const { error: erreurPhotos } = await supabase.storage
+      .from("photos-dons")
+      .remove(photos.photos);
+    if (erreurPhotos) console.error("[admin] Photos du message non supprimées :", erreurPhotos);
   }
 
   revalidatePath("/admin");

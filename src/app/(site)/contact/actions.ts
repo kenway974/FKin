@@ -3,7 +3,14 @@
 import { headers } from "next/headers";
 import { Resend } from "resend";
 import { z } from "zod";
-import { DELAI_MINIMAL_ENVOI_MS, schemaContact } from "@/lib/validation/contact";
+import {
+  DELAI_MINIMAL_ENVOI_MS,
+  PHOTO_POIDS_MAX,
+  PHOTOS_MAX,
+  resumerDemande,
+  schemaContact,
+} from "@/lib/validation/contact";
+import type { DetailsDon } from "@/types/database";
 import { creerClientService } from "@/lib/supabase/server";
 import { cleDepuisEntetes, verifierLimite } from "@/lib/rate-limit";
 import { env, resendConfigure } from "@/lib/env";
@@ -13,10 +20,11 @@ import type { ResultatContact } from "@/lib/actions-types";
  * Traitement du formulaire de contact.
  *
  * Ordre des contrôles, du moins coûteux au plus coûteux :
+ *   0. validation zod (le schéma partagé avec le client) ;
  *   1. honeypot et piège temporel — écartent les robots sans toucher au réseau ;
- *   2. limitation de débit par IP ;
- *   3. validation zod (le schéma partagé avec le client) ;
- *   4. enregistrement en base ;
+ *   2. photos : nombre, poids et format réel (signature des fichiers) ;
+ *   3. limitation de débit par IP ;
+ *   4. enregistrement : photos dans le bucket privé, puis message en base ;
  *   5. notification par e-mail.
  *
  * L'étape 4 fait autorité : si l'e-mail échoue, le message est malgré tout
@@ -24,7 +32,15 @@ import type { ResultatContact } from "@/lib/actions-types";
  * demande à cause d'un problème chez Resend.
  */
 
-export async function envoyerMessageContact(donneesBrutes: unknown): Promise<ResultatContact> {
+export async function envoyerMessageContact(formulaire: FormData): Promise<ResultatContact> {
+  // Les réponses arrivent en JSON (champ `donnees`), les photos en fichiers.
+  let donneesBrutes: unknown;
+  try {
+    donneesBrutes = JSON.parse(String(formulaire.get("donnees") ?? ""));
+  } catch {
+    return { statut: "erreur", message: "Formulaire illisible. Merci de réessayer." };
+  }
+
   const analyse = schemaContact.safeParse(donneesBrutes);
 
   if (!analyse.success) {
@@ -52,7 +68,14 @@ export async function envoyerMessageContact(donneesBrutes: unknown): Promise<Res
     };
   }
 
-  // --- 2. Limitation de débit ----------------------------------------------
+  // --- 2. Photos : nombre, poids et format réel ------------------------------
+  const photos = formulaire
+    .getAll("photos")
+    .filter((valeur): valeur is File => valeur instanceof File);
+  const controle = await controlerPhotos(photos);
+  if (!controle.ok) return { statut: "erreur", message: controle.message };
+
+  // --- 3. Limitation de débit ----------------------------------------------
   const entetes = await headers();
   const limite = verifierLimite(`contact:${cleDepuisEntetes(entetes)}`, 5, 60 * 60 * 1000);
 
@@ -64,10 +87,10 @@ export async function envoyerMessageContact(donneesBrutes: unknown): Promise<Res
     };
   }
 
-  // --- 3. Enregistrement en base -------------------------------------------
+  // --- 4. Enregistrement ----------------------------------------------------
   // Client « service_role » : le rôle anonyme n'a aucun droit d'écriture sur la
-  // table `messages`, un visiteur ne peut donc pas y insérer de lignes en
-  // dehors de cette action.
+  // table `messages` ni sur le bucket des photos ; un visiteur ne peut donc rien
+  // déposer en dehors de cette action.
   const supabase = creerClientService();
 
   if (!supabase) {
@@ -79,18 +102,60 @@ export async function envoyerMessageContact(donneesBrutes: unknown): Promise<Res
     };
   }
 
+  // Photos d'abord, dans le bucket privé ; en cas d'échec de l'enregistrement
+  // du message, elles sont supprimées pour ne rien laisser d'orphelin.
+  const chemins: string[] = [];
+  for (const photo of controle.photos) {
+    const chemin = `${new Date().toISOString().slice(0, 7)}/${crypto.randomUUID()}.${photo.extension}`;
+    const { error } = await supabase.storage
+      .from(BUCKET_PHOTOS)
+      .upload(chemin, photo.fichier, { contentType: photo.type, upsert: false });
+    if (error) {
+      console.error("[contact] Échec du téléversement d'une photo :", error);
+      await supprimerPhotos(chemins);
+      return {
+        statut: "erreur",
+        message:
+          "Vos photos n'ont pas pu être envoyées. Réessayez, ou envoyez la demande sans photo.",
+      };
+    }
+    chemins.push(chemin);
+  }
+
+  const { sujet, message } = resumerDemande(donnees);
+  const details: DetailsDon =
+    donnees.typeEmetteur === "entreprise"
+      ? {
+          materiel: donnees.materiel,
+          quantite: donnees.quantite,
+          etat: donnees.etat,
+          ville: donnees.ville,
+          delai: donnees.delai,
+        }
+      : {
+          materiel: donnees.materiel,
+          quantite: donnees.quantite,
+          structure: donnees.structure,
+          effectifs: donnees.effectifs,
+          ville: donnees.ville,
+          pays: donnees.pays,
+        };
+
   const { error } = await supabase.from("messages").insert({
     nom: donnees.nom,
     email: donnees.email,
     organisation: donnees.organisation || null,
     telephone: donnees.telephone || null,
     type_emetteur: donnees.typeEmetteur,
-    sujet: donnees.sujet,
-    message: donnees.message,
+    sujet,
+    message,
+    details,
+    photos: chemins,
   });
 
   if (error) {
     console.error("[contact] Échec de l'enregistrement du message :", error);
+    await supprimerPhotos(chemins);
     return {
       statut: "erreur",
       message:
@@ -98,14 +163,63 @@ export async function envoyerMessageContact(donneesBrutes: unknown): Promise<Res
     };
   }
 
-  // --- 4. Notification par e-mail ------------------------------------------
-  await notifierParEmail(donnees);
+  // --- 5. Notification par e-mail ------------------------------------------
+  await notifierParEmail({ ...donnees, sujet, message, nombrePhotos: chemins.length });
 
   return {
     statut: "succes",
     message:
-      "Merci, votre message a bien été transmis. Nous revenons vers vous sous 72 heures ouvrées.",
+      donnees.typeEmetteur === "entreprise"
+        ? "Merci ! Votre proposition de don est bien arrivée. Nous revenons vers vous sous 72 heures ouvrées."
+        : "Merci ! Votre demande est bien arrivée. Nous revenons vers vous sous 72 heures ouvrées.",
   };
+
+  async function supprimerPhotos(liste: string[]) {
+    if (liste.length) await supabase!.storage.from(BUCKET_PHOTOS).remove(liste);
+  }
+}
+
+/** Bucket privé des photos jointes (voir `supabase/schema.sql`, section 9). */
+const BUCKET_PHOTOS = "photos-dons";
+
+type PhotoControlee = { fichier: File; type: string; extension: string };
+
+/**
+ * Vérifie les photos reçues. Le type annoncé par le navigateur n'est pas
+ * digne de confiance : le format est reconnu à partir des premiers octets du
+ * fichier (« signature »), et seuls WebP, JPEG et PNG sont acceptés.
+ */
+async function controlerPhotos(
+  photos: File[],
+): Promise<{ ok: true; photos: PhotoControlee[] } | { ok: false; message: string }> {
+  if (photos.length > PHOTOS_MAX) {
+    return { ok: false, message: `${PHOTOS_MAX} photos au maximum.` };
+  }
+
+  const controlees: PhotoControlee[] = [];
+  for (const photo of photos) {
+    if (photo.size === 0 || photo.size > PHOTO_POIDS_MAX) {
+      return { ok: false, message: "Une photo est trop lourde. Réessayez avec une autre photo." };
+    }
+    const octets = new Uint8Array(await photo.slice(0, 12).arrayBuffer());
+    const format = reconnaitreFormat(octets);
+    if (!format) {
+      return { ok: false, message: "Seules les photos JPEG, PNG ou WebP sont acceptées." };
+    }
+    controlees.push({ fichier: photo, ...format });
+  }
+  return { ok: true, photos: controlees };
+}
+
+function reconnaitreFormat(o: Uint8Array) {
+  if (o[0] === 0xff && o[1] === 0xd8 && o[2] === 0xff)
+    return { type: "image/jpeg", extension: "jpg" };
+  if (o[0] === 0x89 && o[1] === 0x50 && o[2] === 0x4e && o[3] === 0x47)
+    return { type: "image/png", extension: "png" };
+  const texte = String.fromCharCode(...o);
+  if (texte.startsWith("RIFF") && texte.slice(8, 12) === "WEBP")
+    return { type: "image/webp", extension: "webp" };
+  return null;
 }
 
 /**
@@ -121,6 +235,7 @@ async function notifierParEmail(donnees: {
   typeEmetteur: "entreprise" | "beneficiaire";
   sujet: string;
   message: string;
+  nombrePhotos: number;
 }) {
   if (!resendConfigure) {
     console.warn("[contact] Resend non configuré : notification e-mail ignorée.");
@@ -141,6 +256,9 @@ async function notifierParEmail(donnees: {
     "",
     donnees.message,
     "",
+    donnees.nombrePhotos
+      ? `${donnees.nombrePhotos} photo${donnees.nombrePhotos > 1 ? "s" : ""} jointe${donnees.nombrePhotos > 1 ? "s" : ""}, à consulter dans l'espace d'administration.`
+      : null,
     "—",
     "Message envoyé depuis le formulaire de contact du site.",
   ]

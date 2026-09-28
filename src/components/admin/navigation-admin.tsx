@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Images, LayoutDashboard, Mail } from "lucide-react";
+import { ChartColumnIncreasing, FileText, Images, LayoutDashboard, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const onglets = [
@@ -10,6 +10,7 @@ const onglets = [
   { href: "/admin/articles", libelle: "Articles", icone: FileText, exact: false },
   { href: "/admin/projets", libelle: "Projets", icone: Images, exact: false },
   { href: "/admin/messages", libelle: "Messages", icone: Mail, exact: false },
+  { href: "/admin/chiffres", libelle: "Chiffres", icone: ChartColumnIncreasing, exact: false },
 ] as const;
 
 /** Barre d'onglets du back-office. Le seul composant client de cette section. */

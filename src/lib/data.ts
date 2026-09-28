@@ -2,7 +2,7 @@ import "server-only";
 
 import { creerClientPublic } from "@/lib/supabase/server";
 import { supabaseConfigure } from "@/lib/env";
-import type { Article, Projet } from "@/types/database";
+import type { Article, ChiffreCle, Projet } from "@/types/database";
 
 /**
  * Lectures publiques de la base.
@@ -141,4 +141,87 @@ export async function listerProjetsPublies(limite?: number): Promise<Projet[]> {
     return [];
   }
   return data ?? [];
+}
+
+/**
+ * Chiffres d'impact saisis par l'équipe dans le back-office. Liste vide si la
+ * table n'existe pas encore ou est vide : l'accueil affiche alors les chiffres
+ * calculés automatiquement.
+ */
+export async function listerChiffresCles(): Promise<ChiffreCle[]> {
+  const supabase = creerClientPublic();
+  if (!supabase) {
+    signaler("listerChiffresCles", null);
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("chiffres_cles")
+    .select("id, valeur, suffixe, libelle, precision, ordre, created_at, updated_at")
+    .order("ordre", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    signaler("listerChiffresCles", error);
+    return [];
+  }
+  return data ?? [];
+}
+
+/** Un chiffre tel qu'affiché sur la page d'accueil. */
+export type ChiffreAffiche = { valeur: string; libelle: string; precision?: string };
+
+/**
+ * Chiffres de la section « Notre action en bref » : ceux saisis par l'équipe
+ * dans le back-office en priorité ; à défaut, ceux calculés à partir du
+ * contenu publié (jamais inventés). Liste vide s'il n'y a rien à montrer.
+ */
+export async function chiffresAccueil(): Promise<ChiffreAffiche[]> {
+  const saisis = await listerChiffresCles();
+  if (saisis.length) {
+    return saisis.map((chiffre) => ({
+      valeur: formaterChiffre(chiffre.valeur, chiffre.suffixe),
+      libelle: chiffre.libelle,
+      precision: chiffre.precision ?? undefined,
+    }));
+  }
+
+  const statistiques = await compterPourAccueil();
+  if (!statistiques.projets) return [];
+
+  // Le « 100 % documentées » n'est pas une promesse commerciale : la colonne
+  // `resultat` est obligatoire en base, aucune fiche ne peut donc exister
+  // sans son compte rendu d'usage.
+  return [
+    {
+      valeur: String(statistiques.projets),
+      libelle: statistiques.projets > 1 ? "projets menés à terme" : "projet mené à terme",
+      precision: "Chacun détaillé dans nos réalisations",
+    },
+    {
+      valeur: String(statistiques.lieux),
+      libelle: statistiques.lieux > 1 ? "lieux équipés" : "lieu équipé",
+      precision: "Écoles, mairies, associations",
+    },
+    {
+      valeur: String(statistiques.articles),
+      libelle: "comptes rendus publiés",
+      precision: "Livraisons, installations, retours de terrain",
+    },
+    {
+      valeur: "100 %",
+      libelle: "des projets documentés",
+      precision: "Lieu, matériel livré et résultat obtenu",
+    },
+  ];
+}
+
+/**
+ * « 1200 » + « % » → « 1 200 % » ; « + » reste collé (« 250+ »). Espaces
+ * insécables fines, comme le veut la typographie française.
+ */
+function formaterChiffre(valeur: number, suffixe: string) {
+  const nombre = valeur.toLocaleString("fr-FR");
+  if (!suffixe) return nombre;
+  return suffixe.startsWith("+") ? `${nombre}${suffixe}` : `${nombre}\u202f${suffixe}`;
 }

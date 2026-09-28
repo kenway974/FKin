@@ -58,6 +58,12 @@ const nextConfig = {
   reactStrictMode: true,
   // N'annonce pas la techno utilisée dans les en-têtes de réponse.
   poweredByHeader: false,
+  experimental: {
+    // Le formulaire de contact transporte jusqu'à 5 photos compressées
+    // (800 Ko chacune au plus) ; l'hébergeur plafonne de toute façon une
+    // requête à 4,5 Mo.
+    serverActions: { bodySizeLimit: "4.5mb" },
+  },
   images: {
     // Formats modernes : nettement plus légers sur connexion lente.
     formats: ["image/avif", "image/webp"],

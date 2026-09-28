@@ -17,6 +17,7 @@ import {
   Select,
   Textarea,
 } from "@/components/ui/field";
+import { SelecteurPosition } from "@/components/admin/selecteur-position";
 import { TeleversementImage } from "@/components/admin/televersement-image";
 import { schemaProjet, type DonneesProjet } from "@/lib/validation/contenu";
 import { genererSlug } from "@/lib/utils";
@@ -52,11 +53,15 @@ export function FormulaireProjet({ projet }: { projet?: Projet }) {
       imageAlt: projet?.image_alt ?? "",
       publie: projet?.publie ?? true,
       ordre: projet?.ordre ?? 0,
+      latitude: projet?.latitude ?? null,
+      longitude: projet?.longitude ?? null,
     },
   });
 
   const titre = watch("titre");
   const imageUrl = watch("imageUrl") ?? "";
+  const latitude = watch("latitude") ?? null;
+  const longitude = watch("longitude") ?? null;
 
   // Le slug se génère automatiquement à partir du titre tant que l'utilisateur
   // ne l'a pas modifié à la main. En édition, on ne l'écrase pas.
@@ -287,6 +292,25 @@ export function FormulaireProjet({ projet }: { projet?: Projet }) {
               </AideChamp>
               <MessageErreur>{errors.imageAlt?.message}</MessageErreur>
             </Champ>
+          </div>
+
+          <div>
+            <h2 className="text-rouge mb-4 flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
+              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+              Sur la carte
+            </h2>
+            <SelecteurPosition
+              latitude={latitude}
+              longitude={longitude}
+              onChange={(nouvelleLatitude, nouvelleLongitude) => {
+                setValue("latitude", nouvelleLatitude, { shouldDirty: true, shouldValidate: true });
+                setValue("longitude", nouvelleLongitude, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+            />
+            <MessageErreur>{errors.latitude?.message ?? errors.longitude?.message}</MessageErreur>
           </div>
         </div>
       </div>

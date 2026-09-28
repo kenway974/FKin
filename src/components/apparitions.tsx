@@ -125,24 +125,27 @@ export function Apparitions() {
 
 /**
  * Fait compter le premier nombre d'un texte de 0 à sa valeur (« 72 h » :
- * 0 h, 1 h… 72 h), en ralentissant sur la fin. Une seule fois par élément.
+ * 0 h, 1 h… 72 h ; « 1 200 » garde ses espaces), en ralentissant sur la fin.
+ * Une seule fois par élément.
  */
 function compter(el: HTMLElement) {
   if (el.dataset.compte) return;
   el.dataset.compte = "1";
   const texte = el.textContent ?? "";
-  const trouve = texte.match(/\d+/);
+  // Un nombre peut contenir des séparateurs de milliers (« 1 200 »).
+  const trouve = texte.match(/\d(?:[\d\s\u00a0\u202f]*\d)?/);
   if (!trouve || trouve.index === undefined) return;
-  const cible = Number(trouve[0]);
+  const cible = Number(trouve[0].replace(/\D/g, ""));
   if (!cible) return;
   const avant = texte.slice(0, trouve.index);
   const apres = texte.slice(trouve.index + trouve[0].length);
+  const format = (n: number) => (cible >= 1000 ? n.toLocaleString("fr-FR") : String(n));
   const duree = 1100;
   const debut = performance.now();
   const pas = (maintenant: number) => {
     const t = Math.min((maintenant - debut) / duree, 1);
     const adouci = 1 - Math.pow(1 - t, 3);
-    el.textContent = `${avant}${Math.round(cible * adouci)}${apres}`;
+    el.textContent = `${avant}${format(Math.round(cible * adouci))}${apres}`;
     if (t < 1) requestAnimationFrame(pas);
   };
   requestAnimationFrame(pas);

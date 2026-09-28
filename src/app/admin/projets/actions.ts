@@ -33,6 +33,8 @@ function versLigne(donnees: z.infer<typeof schemaProjet>) {
     image_alt: donnees.imageAlt || null,
     publie: donnees.publie,
     ordre: donnees.ordre,
+    latitude: donnees.latitude,
+    longitude: donnees.longitude,
   };
 }
 

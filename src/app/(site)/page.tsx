@@ -10,7 +10,7 @@ import { DeuxPortes } from "@/components/deux-portes";
 import { Blob, OndeBord } from "@/components/formes";
 import { CarteProjet } from "@/components/carte-projet";
 import { CarteArticle } from "@/components/carte-article";
-import { compterPourAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
+import { chiffresAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -36,10 +36,10 @@ const vitesses = [
 export default async function PageAccueil() {
   // Requêtes indépendantes : lancées en parallèle pour ne pas additionner les
   // temps d'attente sur une connexion lente.
-  const [projets, articles, statistiques] = await Promise.all([
+  const [projets, articles, chiffres] = await Promise.all([
     listerProjetsPublies(3),
     listerArticlesPublies(3),
-    compterPourAccueil(),
+    chiffresAccueil(),
   ]);
 
   return (
@@ -104,9 +104,11 @@ export default async function PageAccueil() {
       <Voyage />
 
       {/* ------------------------------------------------------------- Chiffres */}
-      {/* Masquée tant qu'aucun projet n'est publié : mieux vaut pas de section
+      {/* Chiffres saisis par l'équipe dans le back-office s'il y en a ;
+          sinon, chiffres calculés à partir du contenu publié. Section
+          masquée tant qu'il n'y a rien à montrer : mieux vaut pas de section
           du tout qu'une rangée de zéros. */}
-      {statistiques.projets > 0 ? (
+      {chiffres.length > 0 ? (
         <Section fond="nuage">
           <div className="contenu">
             <TitreSection
@@ -114,38 +116,20 @@ export default async function PageAccueil() {
               titre="Une démarche mesurée, pas une promesse"
               chapo="Chaque chiffre correspond à des livraisons documentées et signées sur le terrain."
             />
-            {/*
-            Ces chiffres sont calculés à partir de la base, jamais saisis en dur.
-            Une page qui affiche des statistiques inventées ruinerait exactement
-            la crédibilité que ce site cherche à établir : ici, chaque nombre
-            correspond à une fiche réellement publiée dans le back-office et
-            vérifiable en un clic depuis la page Réalisations.
-
-            Le « 100 % documentées » n'est pas une promesse commerciale : la
-            colonne `resultat` est obligatoire en base, aucune fiche ne peut
-            donc exister sans son compte rendu d'usage.
-          */}
-            <div className="anim-defilement mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <ChiffreCle
-                valeur={String(statistiques.projets)}
-                libelle={statistiques.projets > 1 ? "projets menés à terme" : "projet mené à terme"}
-                precision="Chacun détaillé dans nos réalisations"
-              />
-              <ChiffreCle
-                valeur={String(statistiques.lieux)}
-                libelle={statistiques.lieux > 1 ? "lieux équipés" : "lieu équipé"}
-                precision="Écoles, mairies, associations"
-              />
-              <ChiffreCle
-                valeur={String(statistiques.articles)}
-                libelle="comptes rendus publiés"
-                precision="Livraisons, installations, retours de terrain"
-              />
-              <ChiffreCle
-                valeur="100 %"
-                libelle="des projets documentés"
-                precision="Lieu, matériel livré et résultat obtenu"
-              />
+            <div
+              className={cn(
+                "anim-defilement mt-8 grid gap-4 sm:grid-cols-2",
+                chiffres.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3",
+              )}
+            >
+              {chiffres.map((chiffre) => (
+                <ChiffreCle
+                  key={chiffre.libelle}
+                  valeur={chiffre.valeur}
+                  libelle={chiffre.libelle}
+                  precision={chiffre.precision}
+                />
+              ))}
             </div>
           </div>
         </Section>

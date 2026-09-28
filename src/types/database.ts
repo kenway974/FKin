@@ -43,6 +43,8 @@ export type Projet = {
   image_alt: string | null;
   publie: boolean;
   ordre: number;
+  latitude: number | null;
+  longitude: number | null;
   created_at: string;
   updated_at: string;
 };
@@ -57,7 +59,34 @@ export type Message = {
   sujet: string;
   message: string;
   lu: boolean;
+  /** Réponses structurées du formulaire en étapes (null pour les anciens messages). */
+  details: DetailsDon | null;
+  /** Chemins des photos jointes dans le bucket privé « photos-dons ». */
+  photos: string[];
   created_at: string;
+};
+
+/** Réponses du formulaire en étapes, rangées dans `messages.details`. */
+export type DetailsDon = {
+  materiel?: string[];
+  quantite?: string;
+  etat?: string;
+  ville?: string;
+  pays?: string;
+  delai?: string;
+  structure?: string;
+  effectifs?: string;
+};
+
+export type ChiffreCle = {
+  id: string;
+  valeur: number;
+  suffixe: string;
+  libelle: string;
+  precision: string | null;
+  ordre: number;
+  created_at: string;
+  updated_at: string;
 };
 
 export type Admin = {
@@ -86,7 +115,9 @@ export type Database = {
       };
       projets: {
         Row: Projet;
-        Insert: Omit<Projet, "id" | "created_at" | "updated_at"> & {
+        Insert: Omit<Projet, "id" | "created_at" | "updated_at" | "latitude" | "longitude"> & {
+          latitude?: number | null;
+          longitude?: number | null;
           id?: string;
           created_at?: string;
           updated_at?: string;
@@ -96,12 +127,24 @@ export type Database = {
       };
       messages: {
         Row: Message;
-        Insert: Omit<Message, "id" | "created_at" | "lu"> & {
+        Insert: Omit<Message, "id" | "created_at" | "lu" | "details" | "photos"> & {
           id?: string;
           created_at?: string;
           lu?: boolean;
+          details?: DetailsDon | null;
+          photos?: string[];
         };
         Update: Partial<Omit<Message, "id" | "created_at">>;
+        Relationships: [];
+      };
+      chiffres_cles: {
+        Row: ChiffreCle;
+        Insert: Omit<ChiffreCle, "id" | "created_at" | "updated_at" | "suffixe" | "precision"> & {
+          id?: string;
+          suffixe?: string;
+          precision?: string | null;
+        };
+        Update: Partial<Omit<ChiffreCle, "id" | "created_at">>;
         Relationships: [];
       };
       admins: {

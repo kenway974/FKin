@@ -1120,3 +1120,32 @@ p {
 .intro-en-cours .intro ~ * * {
   animation-play-state: paused !important;
 }
+
+/* Carte des structures équipées : onde qui pulse autour de chaque point. */
+.point-carte-onde {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: onde-point 2.4s ease-out infinite;
+}
+@keyframes onde-point {
+  from {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .point-carte-onde {
+    animation: none;
+  }
+}
+
+/* FAQ : la réponse glisse doucement à l'ouverture (transform et opacité). */
+@media (prefers-reduced-motion: no-preference) {
+  .faq-question[open] .faq-reponse {
+    animation: apparition 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}

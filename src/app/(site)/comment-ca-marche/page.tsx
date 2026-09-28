@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Alert } from "@/components/ui/alert";
-import { Section } from "@/components/sections";
+import { Section, TitreSection } from "@/components/sections";
+import { Faq, donneesFaq } from "@/components/faq";
+import { FAQ } from "@/lib/faq";
 import { DeuxPortes } from "@/components/deux-portes";
 import { BannierePage } from "@/components/bannieres";
 import { trouverPhotoBanniere } from "@/lib/visuels";
@@ -155,6 +157,23 @@ export default function PageCommentCaMarche() {
           </div>
         </div>
       </Section>
+
+      {/* ------------------------------------------------ Questions fréquentes */}
+      <Section aria-labelledby="titre-faq">
+        <div className="contenu max-w-4xl space-y-10">
+          <TitreSection
+            id="titre-faq"
+            surtitre="Questions fréquentes"
+            titre="Ce qu'on nous demande le plus souvent"
+          />
+          <Faq questions={FAQ} />
+        </div>
+      </Section>
+      <script
+        type="application/ld+json"
+        // Contenu statique issu de `lib/faq.ts` : aucune donnée utilisateur.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesFaq(FAQ)) }}
+      />
 
       <DeuxPortes />
     </>
