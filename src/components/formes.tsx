@@ -114,6 +114,7 @@ export function Blob({
   className,
   teinte = "bg-white/10",
   variante = 1,
+  anime = true,
   children,
 }: {
   className?: string;
@@ -121,13 +122,20 @@ export function Blob({
   teinte?: string;
   /** Trois silhouettes différentes, pour ne jamais répéter la même. */
   variante?: 1 | 2 | 3;
+  /** `false` : forme immobile (back-office, où rien ne tourne en boucle). */
+  anime?: boolean;
   children?: ReactNode;
 }) {
   return (
     <span className={cn("relative isolate inline-grid place-items-center", className)}>
       <span
         aria-hidden="true"
-        className={cn("blob-anime absolute inset-0 -z-10", teinte, `forme-blob-${variante}`)}
+        className={cn(
+          "absolute inset-0 -z-10",
+          anime && "blob-anime",
+          teinte,
+          `forme-blob-${variante}`,
+        )}
       />
       {children}
     </span>

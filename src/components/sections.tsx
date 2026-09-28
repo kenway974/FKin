@@ -132,7 +132,16 @@ export function VisuelParDefaut({
 }
 
 /** État vide : affiché quand une liste alimentée par la base ne renvoie rien. */
-export function EtatVide({ titre, children }: { titre: string; children?: React.ReactNode }) {
+export function EtatVide({
+  titre,
+  anime = true,
+  children,
+}: {
+  titre: string;
+  /** `false` : forme immobile (back-office, où rien ne tourne en boucle). */
+  anime?: boolean;
+  children?: React.ReactNode;
+}) {
   return (
     // Pas de cadre : le message est posé sur une grande forme souple, pâle,
     // qui tourne lentement derrière lui.
@@ -141,7 +150,10 @@ export function EtatVide({ titre, children }: { titre: string; children?: React.
     <div className="relative isolate mx-auto grid min-h-[20rem] max-w-xl place-items-center content-center overflow-x-clip px-10 text-center md:min-h-[24rem]">
       <span
         aria-hidden="true"
-        className="blob-anime forme-blob-2 bg-bleu-voile absolute top-1/2 left-1/2 -z-10 aspect-square w-[min(88%,20rem)] -translate-x-1/2 -translate-y-1/2 md:w-[23rem]"
+        className={cn(
+          "forme-blob-2 bg-bleu-voile absolute top-1/2 left-1/2 -z-10 aspect-square w-[min(88%,20rem)] -translate-x-1/2 -translate-y-1/2 md:w-[23rem]",
+          anime && "blob-anime",
+        )}
       />
       <p className="font-titre text-encre text-xl font-semibold md:text-2xl">{titre}</p>
       {children ? <div className="text-doux mt-2 max-w-sm">{children}</div> : null}

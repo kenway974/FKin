@@ -7,16 +7,16 @@ export const metadata = { title: "Nouveau projet" };
 
 export default function PageNouveauProjet() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       <div>
-        <Button asChild variante="lien" taille="sm" className="px-0">
+        <Button asChild variante="courbe" taille="sm">
           <Link href="/admin/projets">
             <ArrowLeft className="size-4" aria-hidden="true" />
             Retour aux projets
           </Link>
         </Button>
-        <h1 className="font-titre mt-2 text-2xl font-bold">Nouveau projet</h1>
-        <p className="text-doux mt-1">
+        <h1 className="mt-5 text-3xl font-bold text-balance md:text-4xl">Nouveau projet</h1>
+        <p className="text-doux mt-2 max-w-3xl text-lg">
           Renseignez surtout le lieu, le matériel livré et le résultat obtenu : c&apos;est ce que
           les entreprises regardent en premier.
         </p>

@@ -17,8 +17,8 @@ export function NavigationAdmin() {
   const chemin = usePathname();
 
   return (
-    <nav aria-label="Sections de l'administration" className="border-bordure border-t">
-      <ul className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-3">
+    <nav aria-label="Sections de l'administration">
+      <ul className="mx-auto flex max-w-7xl gap-1.5 overflow-x-auto px-4 pb-3">
         {onglets.map((onglet) => {
           const actif = onglet.exact ? chemin === onglet.href : chemin.startsWith(onglet.href);
           return (
@@ -27,10 +27,10 @@ export function NavigationAdmin() {
                 href={onglet.href}
                 aria-current={actif ? "page" : undefined}
                 className={cn(
-                  "inline-flex items-center gap-2 border-b-2 px-3 py-3 text-sm font-medium whitespace-nowrap",
+                  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors",
                   actif
-                    ? "border-rouge text-rouge"
-                    : "text-doux hover:text-encre border-transparent",
+                    ? "bg-rouge-vif text-white"
+                    : "text-white/75 hover:bg-white/10 hover:text-white",
                 )}
               >
                 <onglet.icone className="size-4" aria-hidden="true" />

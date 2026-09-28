@@ -112,8 +112,8 @@ export function FormulaireConnexion() {
       </Champ>
 
       <Button type="submit" taille="lg" className="w-full" disabled={isSubmitting}>
-        <LogIn className="size-4" aria-hidden="true" />
         {isSubmitting ? "Connexion…" : "Se connecter"}
+        <LogIn aria-hidden="true" />
       </Button>
     </form>
   );

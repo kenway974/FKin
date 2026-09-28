@@ -1,26 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-/**
- * Carte de contenu — conteneur neutre réutilisé sur tout le site. Sa forme
- * reprend la silhouette du cœur du logo : trois grands arrondis, un coin serré.
- */
-export function Card({ className, ...proprietes }: React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        "forme-coeur border-bordure overflow-hidden border bg-white shadow-[0_18px_40px_-28px_rgba(22,35,63,0.35)]",
-        className,
-      )}
-      {...proprietes}
-    />
-  );
-}
-
-export function CardBody({ className, ...proprietes }: React.ComponentProps<"div">) {
-  return <div className={cn("p-5 md:p-6", className)} {...proprietes} />;
-}
-
+/** Titre des vignettes (articles, projets). */
 export function CardTitre({ className, ...proprietes }: React.ComponentProps<"h3">) {
   return <h3 className={cn("text-encre text-xl font-semibold", className)} {...proprietes} />;
 }

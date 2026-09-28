@@ -16,16 +16,16 @@ export default async function PageModifierProjet({ params }: { params: Promise<{
   if (!projet) notFound();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Button asChild variante="lien" taille="sm" className="px-0">
+          <Button asChild variante="courbe" taille="sm">
             <Link href="/admin/projets">
               <ArrowLeft className="size-4" aria-hidden="true" />
               Retour aux projets
             </Link>
           </Button>
-          <h1 className="font-titre mt-2 text-2xl font-bold">{projet.titre}</h1>
+          <h1 className="mt-5 text-3xl font-bold text-balance md:text-4xl">{projet.titre}</h1>
         </div>
 
         <BoutonSuppression

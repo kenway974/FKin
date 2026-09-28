@@ -281,8 +281,8 @@ export function FormulaireContact() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <Button type="submit" taille="lg" disabled={isSubmitting}>
-          <Send className="size-4" aria-hidden="true" />
           {isSubmitting ? "Envoi en cours…" : "Envoyer le message"}
+          <Send aria-hidden="true" />
         </Button>
         <p className="text-doux text-sm">
           Les champs marqués d&apos;un astérisque sont obligatoires.

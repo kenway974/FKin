@@ -75,8 +75,8 @@ export default async function PageAccueil() {
           Ce qui dort chez vous <span className="text-rouge-clair">fait école</span> ailleurs.
         </h1>
 
-        <div className="anim-entree anim-retard-2 mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 min-[380px]:mt-8 min-[380px]:gap-y-5 md:mt-10">
-          <Button asChild taille="lg" className="appel-attention">
+        <div className="anim-entree anim-retard-2 mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 min-[380px]:mt-8 min-[380px]:gap-y-5 md:mt-10 lg:gap-x-3 xl:gap-x-8">
+          <Button asChild taille="lg" className="appel-attention lg:pl-6 xl:pl-7">
             <Link href="/contact?profil=entreprise">
               Proposer un don
               <ArrowRight aria-hidden="true" />

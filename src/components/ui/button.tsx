@@ -54,8 +54,9 @@ const variantesBouton = cva(
         "courbe-clair": cn(trait, "text-white [--couleur-trait:var(--color-rouge-clair)]"),
         discret: "rounded-full font-medium text-encre hover:bg-nuage [&_svg]:size-4",
         lien: "font-semibold text-bleu underline decoration-2 underline-offset-4 hover:text-bleu-fonce [&_svg]:size-4",
-        danger:
-          "rounded-full border-2 border-rouge-fonce font-semibold text-rouge-fonce hover:bg-rouge-voile [&_svg]:size-4",
+        // Action destructive : un trait, en rouge foncé, jamais une gélule à
+        // contour (le duo plein / contour est exclu de l'identité du site).
+        danger: cn(trait, "text-rouge-fonce [--couleur-trait:var(--color-rouge-vif)]"),
       },
       taille: {
         sm: "h-10 px-4 text-sm",
@@ -64,30 +65,30 @@ const variantesBouton = cva(
       },
     },
     compoundVariants: [
-      // Pilules : quand une icône est présente, le bord de son côté se resserre
-      // pour que la pastille vienne presque toucher le contour de la gélule.
+      // Pilules : l'icône se place toujours en fin de bouton ; le bord droit
+      // se resserre pour que la pastille vienne presque toucher le contour de
+      // la gélule. (Pas de règle pour une icône en tête : en CSS, une icône
+      // seule est à la fois premier et dernier enfant, et la règle rognait
+      // aussi la marge gauche du texte.)
       {
         variante: ["principal", "secondaire", "clair"],
         taille: "sm",
-        className:
-          "has-[>svg:last-child]:pr-1 has-[>svg:first-child]:pl-1 [&>svg]:size-8 [&>svg]:p-2",
+        className: "has-[>svg:last-child]:pr-1 [&>svg]:size-8 [&>svg]:p-2",
       },
       {
         variante: ["principal", "secondaire", "clair"],
         taille: "md",
-        className:
-          "has-[>svg:last-child]:pr-1.5 has-[>svg:first-child]:pl-1.5 [&>svg]:size-9 [&>svg]:p-2.5",
+        className: "has-[>svg:last-child]:pr-1.5 [&>svg]:size-9 [&>svg]:p-2.5",
       },
       {
         variante: ["principal", "secondaire", "clair"],
         taille: "lg",
-        className:
-          "has-[>svg:last-child]:pr-1.5 has-[>svg:first-child]:pl-1.5 [&>svg]:size-11 [&>svg]:p-3",
+        className: "has-[>svg:last-child]:pr-1.5 [&>svg]:size-11 [&>svg]:p-3",
       },
       // Les traits n'ont ni hauteur fixe ni marge interne : ils s'alignent sur
       // le texte qui les entoure, quelle que soit la taille demandée.
       {
-        variante: ["courbe", "courbe-clair"],
+        variante: ["courbe", "courbe-clair", "danger"],
         className: "h-auto px-0",
       },
     ],

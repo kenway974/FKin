@@ -58,8 +58,8 @@ export function BoutonSuppression({
   return (
     <div className="space-y-1.5">
       {confirmation ? (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-red-900">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <span className="text-rouge-fonce text-sm font-medium">
             Supprimer définitivement « {intitule} » ?
           </span>
           <Button
@@ -89,7 +89,7 @@ export function BoutonSuppression({
       )}
 
       {erreur ? (
-        <p role="alert" className="text-sm font-medium text-red-800">
+        <p role="alert" className="text-rouge-fonce text-sm font-medium">
           {erreur}
         </p>
       ) : null}

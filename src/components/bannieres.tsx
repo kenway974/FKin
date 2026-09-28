@@ -206,6 +206,7 @@ export function BannierePage({
   ton = "marine",
   photo,
   avant,
+  className,
   children,
 }: {
   surtitre?: string;
@@ -215,6 +216,8 @@ export function BannierePage({
   photo?: string | null;
   /** Contenu placé au-dessus du titre (lien de retour, par exemple). */
   avant?: React.ReactNode;
+  /** Classes ajoutées à la bannière (hauteur plein écran, par exemple). */
+  className?: string;
   /** Contenu placé sous le titre (date, auteur…). */
   children?: React.ReactNode;
 }) {
@@ -224,7 +227,10 @@ export function BannierePage({
   return (
     <section
       data-banniere-sombre=""
-      className="bg-marine relative isolate -mt-16 overflow-hidden pt-16 md:-mt-20 md:pt-20"
+      className={cn(
+        "bg-marine relative isolate -mt-16 overflow-hidden pt-16 md:-mt-20 md:pt-20",
+        className,
+      )}
     >
       <div
         className="from-marine-fonce via-marine to-marine-clair absolute inset-0 -z-20 bg-linear-to-br"

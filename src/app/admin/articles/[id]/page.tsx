@@ -16,19 +16,19 @@ export default async function PageModifierArticle({ params }: { params: Promise<
   if (!article) notFound();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Button asChild variante="lien" taille="sm" className="px-0">
+          <Button asChild variante="courbe" taille="sm">
             <Link href="/admin/articles">
               <ArrowLeft className="size-4" aria-hidden="true" />
               Retour aux articles
             </Link>
           </Button>
-          <h1 className="font-titre mt-2 text-2xl font-bold">{article.titre}</h1>
+          <h1 className="mt-5 text-3xl font-bold text-balance md:text-4xl">{article.titre}</h1>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           {article.statut === "publie" ? (
             <Button asChild variante="courbe" taille="sm">
               <Link href={`/actualites/${article.slug}`} target="_blank" rel="noopener noreferrer">

@@ -112,9 +112,9 @@ export function FormulaireArticle({ article }: { article?: Article }) {
         ) : null}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+      <div className="grid gap-14 lg:grid-cols-[1.6fr_1fr] lg:items-start lg:gap-16">
         {/* ------------------------------------------------------- Contenu */}
-        <div className="rounded-douce border-bordure space-y-5 border bg-white p-5 md:p-6">
+        <div className="space-y-7">
           <Champ>
             <Label htmlFor="titre">
               Titre <span aria-hidden="true">*</span>
@@ -185,9 +185,12 @@ export function FormulaireArticle({ article }: { article?: Article }) {
         </div>
 
         {/* ----------------------------------------------------- Publication */}
-        <div className="space-y-5">
-          <div className="rounded-douce border-bordure space-y-5 border bg-white p-5">
-            <h2 className="font-titre text-lg font-bold">Publication</h2>
+        <div className="space-y-12">
+          <div className="space-y-5">
+            <h2 className="text-rouge flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
+              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+              Publication
+            </h2>
 
             <Champ>
               <Label htmlFor="statut">Statut</Label>
@@ -213,8 +216,11 @@ export function FormulaireArticle({ article }: { article?: Article }) {
             </Champ>
           </div>
 
-          <div className="rounded-douce border-bordure border bg-white p-5">
-            <h2 className="font-titre mb-4 text-lg font-bold">Image de couverture</h2>
+          <div>
+            <h2 className="text-rouge mb-4 flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
+              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+              Image de couverture
+            </h2>
 
             <TeleversementImage
               identifiant="image-couverture"
@@ -241,16 +247,16 @@ export function FormulaireArticle({ article }: { article?: Article }) {
         </div>
       </div>
 
-      <div className="border-bordure bg-nuage/95 sticky bottom-0 flex flex-wrap items-center gap-3 border-t py-4 backdrop-blur-sm">
+      <div className="bg-fond/95 sticky bottom-0 flex flex-wrap items-center gap-x-6 gap-y-3 py-4 shadow-[0_-18px_24px_-22px_rgba(22,35,63,0.4)]">
         <Button type="submit" taille="lg" disabled={isSubmitting}>
-          <Save className="size-4" aria-hidden="true" />
           {isSubmitting
             ? "Enregistrement…"
             : modeEdition
               ? "Enregistrer les modifications"
               : "Créer l'article"}
+          <Save aria-hidden="true" />
         </Button>
-        <Button asChild variante="discret">
+        <Button asChild variante="courbe">
           <Link href="/admin/articles">Retour à la liste</Link>
         </Button>
         {isDirty && !isSubmitting ? (

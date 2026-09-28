@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { FileText, Images, Mail, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardBody, CardTitre } from "@/components/ui/card";
+import { Blob } from "@/components/formes";
+import { EtatVide } from "@/components/sections";
+import { EnteteAdmin } from "@/components/admin/entete-admin";
 import { Alert } from "@/components/ui/alert";
 import { compterElements, listerMessages } from "@/lib/admin-data";
 import { recupererAdmin } from "@/lib/auth";
-import { formaterDateHeure } from "@/lib/utils";
+import { cn, formaterDateHeure } from "@/lib/utils";
 import { libellesEmetteur } from "@/lib/validation/contact";
 import { resendConfigure } from "@/lib/env";
 
@@ -26,6 +28,8 @@ export default async function PageAdmin() {
       href: "/admin/articles",
       icone: FileText,
       titre: "Articles",
+      teinte: "bg-rouge-voile text-rouge",
+      variante: 1 as const,
       valeur: compteurs.articles,
       precision:
         compteurs.brouillons > 0
@@ -36,6 +40,8 @@ export default async function PageAdmin() {
       href: "/admin/projets",
       icone: Images,
       titre: "Projets",
+      teinte: "bg-bleu-voile text-bleu",
+      variante: 2 as const,
       valeur: compteurs.projets,
       precision: "dans la galerie",
     },
@@ -43,6 +49,8 @@ export default async function PageAdmin() {
       href: "/admin/messages",
       icone: Mail,
       titre: "Messages",
+      teinte: "bg-nuage-fonce text-marine",
+      variante: 3 as const,
       valeur: compteurs.messages,
       precision:
         compteurs.messagesNonLus > 0
@@ -52,13 +60,25 @@ export default async function PageAdmin() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="font-titre text-2xl font-bold">
-          Bonjour{admin?.nomAffichage ? ` ${admin.nomAffichage}` : ""}
-        </h1>
-        <p className="text-doux mt-1">Voici l&apos;état du site.</p>
-      </div>
+    <div className="space-y-14">
+      <EnteteAdmin
+        surtitre="Tableau de bord"
+        titre={`Bonjour${admin?.nomAffichage ? ` ${admin.nomAffichage}` : ""}`}
+        description="Voici l'état du site."
+      >
+        <Button asChild>
+          <Link href="/admin/articles/nouveau">
+            Nouvel article
+            <Plus aria-hidden="true" />
+          </Link>
+        </Button>
+        <Button asChild variante="secondaire">
+          <Link href="/admin/projets/nouveau">
+            Nouveau projet
+            <Plus aria-hidden="true" />
+          </Link>
+        </Button>
+      </EnteteAdmin>
 
       {!resendConfigure ? (
         <Alert titre="Notifications e-mail désactivées">
@@ -71,72 +91,69 @@ export default async function PageAdmin() {
         </Alert>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        {cartes.map((carte) => (
-          <Link key={carte.href} href={carte.href} className="block">
-            <Card className="h-full transition-shadow hover:shadow-md">
-              <CardBody className="space-y-1">
-                <span className="text-doux flex items-center gap-2 text-sm font-semibold">
-                  <carte.icone className="text-rouge size-4" aria-hidden="true" />
-                  {carte.titre}
+      {/* Compteurs sans cadre : chaque chiffre est posé sur sa forme souple. */}
+      <ul className="grid gap-8 sm:grid-cols-3">
+        {cartes.map((carte) => {
+          const [fond, texte] = carte.teinte.split(" ");
+          return (
+            <li key={carte.href}>
+              <Link href={carte.href} className="group flex items-center gap-5">
+                <Blob
+                  anime={false}
+                  teinte={fond}
+                  variante={carte.variante}
+                  className="size-24 shrink-0 transition-transform duration-300 group-hover:scale-105"
+                >
+                  <span className={cn("font-titre text-4xl font-bold", texte)}>{carte.valeur}</span>
+                </Blob>
+                <span>
+                  <span className="font-titre group-hover:text-rouge flex items-center gap-2 text-xl font-bold transition-colors">
+                    <carte.icone className="size-5" aria-hidden="true" />
+                    {carte.titre}
+                  </span>
+                  <span className="text-doux text-sm">{carte.precision}</span>
                 </span>
-                <p className="font-titre text-3xl font-bold">{carte.valeur}</p>
-                <p className="text-doux text-sm">{carte.precision}</p>
-              </CardBody>
-            </Card>
-          </Link>
-        ))}
-      </div>
-
-      <div className="flex flex-wrap gap-3">
-        <Button asChild>
-          <Link href="/admin/articles/nouveau">
-            <Plus className="size-4" aria-hidden="true" />
-            Nouvel article
-          </Link>
-        </Button>
-        <Button asChild variante="secondaire">
-          <Link href="/admin/projets/nouveau">
-            <Plus className="size-4" aria-hidden="true" />
-            Nouveau projet
-          </Link>
-        </Button>
-      </div>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
 
       <section aria-labelledby="titre-derniers-messages">
-        <h2 id="titre-derniers-messages" className="font-titre text-xl font-bold">
+        <h2 id="titre-derniers-messages" className="text-2xl font-bold">
           Derniers messages reçus
         </h2>
 
         {derniersMessages.length > 0 ? (
-          <ul className="mt-4 space-y-3">
+          <ul className="divide-bordure mt-4 divide-y">
             {derniersMessages.map((message) => (
               <li key={message.id}>
-                <Link href={`/admin/messages/${message.id}`} className="block">
-                  <Card className="transition-shadow hover:shadow-md">
-                    <CardBody className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4">
-                      {!message.lu ? (
-                        <span className="bg-rouge rounded-full px-2 py-0.5 text-xs font-bold text-white">
-                          Nouveau
-                        </span>
-                      ) : null}
-                      <CardTitre className="text-base">{message.sujet}</CardTitre>
-                      <span className="text-doux text-sm">
-                        {message.nom} · {libellesEmetteur[message.type_emetteur]}
-                      </span>
-                      <span className="text-doux ml-auto text-sm">
-                        {formaterDateHeure(message.created_at)}
-                      </span>
-                    </CardBody>
-                  </Card>
+                <Link
+                  href={`/admin/messages/${message.id}`}
+                  className="group flex flex-wrap items-baseline gap-x-3 gap-y-1 py-4"
+                >
+                  {!message.lu ? (
+                    <span className="bg-rouge-vif rounded-full px-2.5 py-0.5 text-xs font-bold text-white">
+                      Nouveau
+                    </span>
+                  ) : null}
+                  <span className="group-hover:text-rouge font-semibold transition-colors">
+                    {message.sujet}
+                  </span>
+                  <span className="text-doux text-sm">
+                    {message.nom} · {libellesEmetteur[message.type_emetteur]}
+                  </span>
+                  <span className="text-doux ml-auto text-sm">
+                    {formaterDateHeure(message.created_at)}
+                  </span>
                 </Link>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="rounded-douce border-bordure text-doux mt-4 border border-dashed bg-white p-6 text-center">
-            Aucun message reçu pour le moment.
-          </p>
+          <EtatVide titre="Aucun message reçu pour le moment" anime={false}>
+            <p>Les demandes envoyées depuis la page Contact apparaîtront ici.</p>
+          </EtatVide>
         )}
       </section>
     </div>

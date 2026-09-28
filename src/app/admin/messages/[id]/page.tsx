@@ -2,12 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Building2, GraduationCap, Reply } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge, Card, CardBody } from "@/components/ui/card";
+import { Blob } from "@/components/formes";
 import { BoutonSuppression } from "@/components/admin/bouton-suppression";
 import { BasculeLecture } from "@/components/admin/bascule-lecture";
 import { marquerMessageLuAuRendu, trouverMessage } from "@/lib/admin-data";
 import { supprimerMessage } from "../actions";
-import { formaterDateHeure } from "@/lib/utils";
+import { cn, formaterDateHeure } from "@/lib/utils";
 import { libellesEmetteur } from "@/lib/validation/contact";
 import { decouperParagraphes } from "@/lib/utils";
 
@@ -25,7 +25,8 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
     await marquerMessageLuAuRendu(message.id);
   }
 
-  const Icone = message.type_emetteur === "entreprise" ? Building2 : GraduationCap;
+  const entreprise = message.type_emetteur === "entreprise";
+  const Icone = entreprise ? Building2 : GraduationCap;
 
   // Pré-remplit une réponse par e-mail avec l'objet d'origine.
   const lienReponse = `mailto:${encodeURIComponent(message.email)}?subject=${encodeURIComponent(
@@ -33,9 +34,9 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
   )}`;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-8">
       <div>
-        <Button asChild variante="lien" taille="sm" className="px-0">
+        <Button asChild variante="courbe" taille="sm">
           <Link href="/admin/messages">
             <ArrowLeft className="size-4" aria-hidden="true" />
             Retour aux messages
@@ -43,84 +44,98 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
         </Button>
       </div>
 
-      <Card>
-        <CardBody className="space-y-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge ton={message.type_emetteur === "entreprise" ? "marine" : "bleu"}>
-              <Icone className="size-3.5" aria-hidden="true" />
+      <article className="space-y-8">
+        <div className="flex items-center gap-4">
+          <Blob
+            anime={false}
+            teinte={entreprise ? "bg-rouge-voile" : "bg-bleu-voile"}
+            variante={entreprise ? 1 : 2}
+            className="size-14 shrink-0"
+          >
+            <Icone
+              className={cn("size-6", entreprise ? "text-rouge" : "text-bleu")}
+              aria-hidden="true"
+            />
+          </Blob>
+          <div>
+            <p className="text-rouge text-sm font-extrabold tracking-[0.14em] uppercase">
               {libellesEmetteur[message.type_emetteur]}
-            </Badge>
-            <span className="text-doux ml-auto text-sm">
+            </p>
+            <p className="text-doux text-sm">
               <time dateTime={message.created_at}>{formaterDateHeure(message.created_at)}</time>
-            </span>
+            </p>
           </div>
+        </div>
 
-          <h1 className="font-titre text-2xl font-bold">{message.sujet}</h1>
+        <h1 className="text-3xl font-bold text-balance md:text-4xl">{message.sujet}</h1>
 
-          <dl className="rounded-douce bg-nuage grid gap-x-6 gap-y-2 p-4 text-sm sm:grid-cols-2">
+        <dl className="grid gap-x-8 gap-y-4 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="text-doux text-xs font-extrabold tracking-[0.12em] uppercase">Nom</dt>
+            <dd className="text-base">{message.nom}</dd>
+          </div>
+          <div>
+            <dt className="text-doux text-xs font-extrabold tracking-[0.12em] uppercase">E-mail</dt>
+            <dd className="text-base">
+              <a
+                href={`mailto:${message.email}`}
+                className="text-rouge underline underline-offset-4"
+              >
+                {message.email}
+              </a>
+            </dd>
+          </div>
+          {message.organisation ? (
             <div>
-              <dt className="font-semibold">Nom</dt>
-              <dd className="text-doux">{message.nom}</dd>
+              <dt className="text-doux text-xs font-extrabold tracking-[0.12em] uppercase">
+                Organisation
+              </dt>
+              <dd className="text-base">{message.organisation}</dd>
             </div>
+          ) : null}
+          {message.telephone ? (
             <div>
-              <dt className="font-semibold">E-mail</dt>
-              <dd>
+              <dt className="text-doux text-xs font-extrabold tracking-[0.12em] uppercase">
+                Téléphone
+              </dt>
+              <dd className="text-base">
                 <a
-                  href={`mailto:${message.email}`}
+                  href={`tel:${message.telephone.replace(/\s/g, "")}`}
                   className="text-rouge underline underline-offset-4"
                 >
-                  {message.email}
+                  {message.telephone}
                 </a>
               </dd>
             </div>
-            {message.organisation ? (
-              <div>
-                <dt className="font-semibold">Organisation</dt>
-                <dd className="text-doux">{message.organisation}</dd>
-              </div>
-            ) : null}
-            {message.telephone ? (
-              <div>
-                <dt className="font-semibold">Téléphone</dt>
-                <dd>
-                  <a
-                    href={`tel:${message.telephone.replace(/\s/g, "")}`}
-                    className="text-rouge underline underline-offset-4"
-                  >
-                    {message.telephone}
-                  </a>
-                </dd>
-              </div>
-            ) : null}
-          </dl>
+          ) : null}
+        </dl>
 
-          {/* Rendu en texte brut : aucun HTML issu du formulaire n'est interprété. */}
-          <div className="space-y-4 leading-relaxed whitespace-pre-line">
-            {decouperParagraphes(message.message).map((paragraphe, index) => (
-              <p key={index}>{paragraphe}</p>
-            ))}
+        {/* Rendu en texte brut : aucun HTML issu du formulaire n'est interprété. */}
+        <div className="space-y-4 text-lg leading-relaxed whitespace-pre-line">
+          {decouperParagraphes(message.message).map((paragraphe, index) => (
+            <p key={index}>{paragraphe}</p>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4 pt-2">
+          <Button asChild>
+            <a href={lienReponse}>
+              Répondre par e-mail
+              <Reply aria-hidden="true" />
+            </a>
+          </Button>
+
+          <BasculeLecture id={message.id} />
+
+          <div className="ml-auto">
+            <BoutonSuppression
+              intitule={message.sujet}
+              onSupprimer={supprimerMessage.bind(null, message.id)}
+              redirectionApres="/admin/messages"
+            />
           </div>
-
-          <div className="border-bordure flex flex-wrap items-center gap-3 border-t pt-5">
-            <Button asChild>
-              <a href={lienReponse}>
-                <Reply className="size-4" aria-hidden="true" />
-                Répondre par e-mail
-              </a>
-            </Button>
-
-            <BasculeLecture id={message.id} />
-
-            <div className="ml-auto">
-              <BoutonSuppression
-                intitule={message.sujet}
-                onSupprimer={supprimerMessage.bind(null, message.id)}
-                redirectionApres="/admin/messages"
-              />
-            </div>
-          </div>
-        </CardBody>
-      </Card>
+        </div>
+      </article>
     </div>
   );
 }

@@ -1,37 +1,49 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { navigation } from "@/lib/site";
+import { BannierePage } from "@/components/bannieres";
+import { Logo } from "@/components/layout/logo";
+import { navigation, site } from "@/lib/site";
 
-/** Page 404 globale. */
+/**
+ * Page 404 globale, dans la langue du héros : plein écran marine, vague et
+ * ruban, puis les pistes pour reprendre la visite. Hors du layout public
+ * (pas d'en-tête) : le logo, en haut, ramène à l'accueil.
+ */
 export default function PageIntrouvable() {
   return (
-    <div className="bg-nuage motif-tissu flex min-h-dvh items-center justify-center px-5 py-20">
-      <div className="contenu max-w-lg text-center">
-        <p className="font-titre text-rouge/40 text-6xl font-bold">404</p>
-        <h1 className="font-titre mt-3 text-3xl font-bold">Cette page n&apos;existe pas</h1>
-        <p className="text-doux mt-3">
-          Le lien est peut-être ancien, ou la page a été renommée. Voici par où reprendre.
-        </p>
+    <BannierePage
+      surtitre="Erreur 404"
+      titre="Cette page n'existe pas"
+      chapo="Le lien est peut-être ancien, ou la page a été renommée. Voici par où reprendre."
+      className="mt-0 flex min-h-dvh flex-col justify-center pt-0 md:mt-0 md:pt-0"
+      avant={
+        <Link href="/" className="font-titre inline-flex items-center gap-3 text-lg font-bold">
+          <span className="rounded-full bg-white p-1.5">
+            <Logo className="h-7" priority />
+          </span>
+          {site.nom}
+        </Link>
+      }
+    >
+      <nav aria-label="Navigation de secours">
+        <ul className="flex flex-wrap gap-x-6 gap-y-3">
+          {navigation.map((lien) => (
+            <li key={lien.href}>
+              <Button asChild variante="courbe-clair">
+                <Link href={lien.href}>{lien.libelle}</Link>
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-        <nav aria-label="Navigation de secours" className="mt-6">
-          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-3">
-            {navigation.map((lien) => (
-              <li key={lien.href}>
-                <Link
-                  href={lien.href}
-                  className="trait-courbe hover:text-rouge inline-block font-semibold [--couleur-trait:var(--color-rouge-vif)]"
-                >
-                  {lien.libelle}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <Button asChild className="mt-8">
-          <Link href="/">Retour à l&apos;accueil</Link>
-        </Button>
-      </div>
-    </div>
+      <Button asChild variante="clair" className="mt-8">
+        <Link href="/">
+          Retour à l&apos;accueil
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </Link>
+      </Button>
+    </BannierePage>
   );
 }
