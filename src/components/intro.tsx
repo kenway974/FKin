@@ -116,17 +116,15 @@ export function Intro() {
 
         <div className="intro-battement">
           <div className="intro-logo">
-            <span className="grid size-32 place-items-center rounded-full bg-white shadow-[0_18px_40px_-18px_rgba(22,35,63,0.45)] md:size-44">
-              <Image
-                src="/marque/respusse-icone.png"
-                alt=""
-                width={576}
-                height={421}
-                priority
-                sizes="128px"
-                className="h-auto w-20 md:w-28"
-              />
-            </span>
+            <Image
+              src="/marque/respusse-icone.png"
+              alt=""
+              width={576}
+              height={421}
+              priority
+              sizes="176px"
+              className="h-auto w-28 md:w-44"
+            />
           </div>
         </div>
       </div>

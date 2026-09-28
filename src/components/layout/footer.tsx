@@ -17,9 +17,7 @@ export function Footer() {
         >
           <div className="space-y-3">
             <div className="logo-battant flex items-center gap-2.5">
-              <span className="inline-flex rounded-full bg-white p-2">
-                <Logo className="h-8" />
-              </span>
+              <Logo className="h-10" />
               <span className="font-titre text-2xl font-semibold">{site.nom}</span>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-white/75">{site.description}</p>

@@ -81,16 +81,8 @@ export function Header() {
           className="logo-battant flex items-center gap-2.5"
           aria-label={`${site.nom} — retour à l'accueil`}
         >
-          {/* Sur le marine, le pied du livre se confondrait avec le fond : le
-              pictogramme est alors posé sur une pastille blanche. */}
-          <span
-            className={cn(
-              "inline-flex rounded-full transition-[background-color,padding] duration-300",
-              transparent && "bg-white p-1.5",
-            )}
-          >
-            <Logo className={cn("shrink-0", transparent ? "h-7 md:h-8" : "h-9 md:h-10")} priority />
-          </span>
+          {/* Le logo est posé tel quel, sans pastille ni contour. */}
+          <Logo className="h-9 shrink-0 md:h-10" priority />
           <span
             className={cn(
               "font-titre text-xl leading-tight font-semibold md:text-2xl",

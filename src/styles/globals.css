@@ -899,7 +899,7 @@ p {
    Écran d'ouverture (voir components/intro.tsx).
    Chronologie : logo (0 → 0,5 s), cartes qui s'écartent, font un tour et
    demi puis rejoignent le centre (0,15 → 2,05 s), battement du logo
-   (1,9 s), rideau qui remonte (2,15 → 2,9 s). Transformations uniquement.
+   (1,9 s), rideau qui remonte (2,15 → 2,9 s). Transformations (et opacité des petites cartes) uniquement.
    ------------------------------------------------------------------------ */
 .intro {
   position: fixed;
@@ -1010,9 +1010,12 @@ p {
   22%,
   70% {
     transform: translateX(var(--rayon)) scale(1);
+    opacity: 1;
   }
+  /* Les cartes se fondent dans le logo en le rejoignant. */
   100% {
-    transform: translateX(0) scale(0.15);
+    transform: translateX(0) scale(0.3);
+    opacity: 0;
   }
 }
 

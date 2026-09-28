@@ -19,9 +19,7 @@ export default function PageIntrouvable() {
       className="mt-0 flex min-h-dvh flex-col justify-center pt-0 md:mt-0 md:pt-0"
       avant={
         <Link href="/" className="font-titre inline-flex items-center gap-3 text-lg font-bold">
-          <span className="rounded-full bg-white p-1.5">
-            <Logo className="h-7" priority />
-          </span>
+          <Logo className="h-10" priority />
           {site.nom}
         </Link>
       }

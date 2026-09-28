@@ -41,9 +41,7 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
       <header className="bg-marine relative z-10 text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-4 gap-y-3 px-5 pt-4 pb-3">
           <Link href="/admin" className="flex items-center gap-3">
-            <span className="rounded-full bg-white p-1.5">
-              <Logo className="h-7" />
-            </span>
+            <Logo className="h-9" />
             <span className="font-titre text-lg font-bold">{site.nom}</span>
             <span className="bg-rouge-vif rounded-full px-2.5 py-0.5 text-xs font-bold">
               Administration
