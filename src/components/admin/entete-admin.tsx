@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Surtitre } from "@/components/ui/surtitre";
 
 /**
  * En-tête des pages du back-office : surtitre à barre rouge, grand titre et
@@ -20,12 +21,7 @@ export function EnteteAdmin({
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
       <div>
-        {surtitre ? (
-          <p className="text-rouge mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-            <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
-            {surtitre}
-          </p>
-        ) : null}
+        {surtitre ? <Surtitre className="mb-3">{surtitre}</Surtitre> : null}
         <h1 className="text-3xl font-bold text-balance md:text-4xl">{titre}</h1>
         {description ? <p className="text-doux mt-2 text-lg">{description}</p> : null}
       </div>

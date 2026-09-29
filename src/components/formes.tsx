@@ -112,6 +112,15 @@ export function OndeBord({
   );
 }
 
+/** Silhouettes de bulle disponibles (classes `forme-blob-1` à `-3`). */
+export type VarianteBlob = 1 | 2 | 3;
+
+/** Fait tourner les trois silhouettes sur une liste, pour ne jamais répéter la même. */
+export const varianteBlob = (index: number) => ((index % 3) + 1) as VarianteBlob;
+
+/** Classe de silhouette pour le n-ième élément d'une liste (photos, vignettes…). */
+export const formeBlob = (index: number) => `forme-blob-${varianteBlob(index)}`;
+
 /**
  * Forme souple, tirée des courbes du cœur : une tache irrégulière qui tourne
  * et respire lentement. Sert de fond à un pictogramme, à un chiffre, ou de
@@ -128,7 +137,7 @@ export function Blob({
   /** Couleur de la forme (classe `bg-*`), indépendante de celle du contenu. */
   teinte?: string;
   /** Trois silhouettes différentes, pour ne jamais répéter la même. */
-  variante?: 1 | 2 | 3;
+  variante?: VarianteBlob;
   /** `false` : forme immobile (back-office, où rien ne tourne en boucle). */
   anime?: boolean;
   children?: ReactNode;

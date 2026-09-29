@@ -17,7 +17,7 @@ const configure = (process.env.WHATSAPP_NUMERO ?? "").replace(/\D/g, "");
 const horsProduction =
   process.env.NODE_ENV === "development" || process.env.VERCEL_ENV === "preview";
 
-export const numeroWhatsApp = configure || (horsProduction ? "33600000000" : "");
+const numeroWhatsApp = configure || (horsProduction ? "33600000000" : "");
 
 /** Vrai quand le numéro affiché est l'exemple factice. */
 export const whatsAppExemple = !configure && Boolean(numeroWhatsApp);

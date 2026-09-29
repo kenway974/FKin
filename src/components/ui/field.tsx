@@ -67,3 +67,58 @@ export function AideChamp({ id, children }: { id?: string; children: React.React
 export function Champ({ className, ...proprietes }: React.ComponentProps<"div">) {
   return <div className={cn("space-y-1.5", className)} {...proprietes} />;
 }
+
+/** Attributs d'accessibilité à poser sur le contrôle d'un `ChampFormulaire`. */
+export type AriaChamp = {
+  id: string;
+  "aria-invalid"?: true;
+  "aria-required"?: true;
+  "aria-describedby"?: string;
+};
+
+/**
+ * Champ complet : libellé (avec astérisque si requis), contrôle, aide et
+ * erreur, reliés entre eux pour les lecteurs d'écran. Le contrôle est fourni
+ * en fonction, qui reçoit les attributs d'accessibilité à lui passer :
+ *
+ *   <ChampFormulaire id="nom" libelle="Nom" requis erreur={errors.nom?.message}>
+ *     {(aria) => <Input {...aria} {...register("nom")} />}
+ *   </ChampFormulaire>
+ */
+export function ChampFormulaire({
+  id,
+  libelle,
+  requis = false,
+  aide,
+  erreur,
+  className,
+  children,
+}: {
+  id: string;
+  libelle: React.ReactNode;
+  requis?: boolean;
+  aide?: React.ReactNode;
+  erreur?: string;
+  className?: string;
+  children: (aria: AriaChamp) => React.ReactNode;
+}) {
+  const decrit = [aide ? `aide-${id}` : null, erreur ? `erreur-${id}` : null]
+    .filter(Boolean)
+    .join(" ");
+  return (
+    <Champ className={className}>
+      <Label htmlFor={id}>
+        {libelle}
+        {requis ? <span aria-hidden="true"> *</span> : null}
+      </Label>
+      {children({
+        id,
+        "aria-invalid": erreur ? true : undefined,
+        "aria-required": requis ? true : undefined,
+        "aria-describedby": decrit || undefined,
+      })}
+      {aide ? <AideChamp id={`aide-${id}`}>{aide}</AideChamp> : null}
+      <MessageErreur id={`erreur-${id}`}>{erreur}</MessageErreur>
+    </Champ>
+  );
+}

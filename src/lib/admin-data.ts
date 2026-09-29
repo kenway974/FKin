@@ -12,89 +12,75 @@ import type { Article, ChiffreCle, Message, Projet } from "@/types/database";
  * comptes présents dans la table `admins`.
  */
 
-/** Erreur explicite : dans le back-office, un échec doit être visible. */
-function verifier<T>(operation: string, donnees: T | null, erreur: unknown): T {
-  if (erreur) {
-    console.error(`[admin] Échec de ${operation} :`, erreur);
+type ClientServeur = NonNullable<Awaited<ReturnType<typeof creerClientServeur>>>;
+
+/**
+ * Exécute une lecture du back-office. Contrairement au site public, un échec
+ * doit y être visible : il est journalisé puis levé (page d'erreur). Sans
+ * Supabase configuré, renvoie `defaut`.
+ */
+async function lire<T>(
+  operation: string,
+  defaut: T,
+  requete: (supabase: ClientServeur) => PromiseLike<{ data: T | null; error: unknown }>,
+): Promise<T> {
+  const supabase = await creerClientServeur();
+  if (!supabase) return defaut;
+  const { data, error } = await requete(supabase);
+  if (error) {
+    console.error(`[admin] Échec de ${operation} :`, error);
     throw new Error(`Impossible de charger les données (${operation}).`);
   }
-  return donnees as T;
+  return data ?? defaut;
 }
 
-export async function listerTousLesArticles(): Promise<Article[]> {
-  const supabase = await creerClientServeur();
-  if (!supabase) return [];
+export const listerTousLesArticles = (): Promise<Article[]> =>
+  lire("la liste des articles", [], (supabase) =>
+    supabase
+      .from("articles")
+      .select("*")
+      .order("date_publication", { ascending: false, nullsFirst: true })
+      .order("created_at", { ascending: false }),
+  );
 
-  const { data, error } = await supabase
-    .from("articles")
-    .select("*")
-    .order("date_publication", { ascending: false, nullsFirst: true })
-    .order("created_at", { ascending: false });
+export const trouverArticle = (id: string): Promise<Article | null> =>
+  lire("le chargement de l'article", null, (supabase) =>
+    supabase.from("articles").select("*").eq("id", id).maybeSingle(),
+  );
 
-  return verifier("la liste des articles", data ?? [], error);
-}
+export const listerTousLesProjets = (): Promise<Projet[]> =>
+  lire("la liste des projets", [], (supabase) =>
+    supabase
+      .from("projets")
+      .select("*")
+      .order("ordre", { ascending: true })
+      .order("created_at", { ascending: false }),
+  );
 
-export async function trouverArticle(id: string): Promise<Article | null> {
-  const supabase = await creerClientServeur();
-  if (!supabase) return null;
+export const trouverProjet = (id: string): Promise<Projet | null> =>
+  lire("le chargement du projet", null, (supabase) =>
+    supabase.from("projets").select("*").eq("id", id).maybeSingle(),
+  );
 
-  const { data, error } = await supabase.from("articles").select("*").eq("id", id).maybeSingle();
-  return verifier("le chargement de l'article", data, error);
-}
+export const listerMessages = (): Promise<Message[]> =>
+  lire("la liste des messages", [], (supabase) =>
+    supabase.from("messages").select("*").order("created_at", { ascending: false }),
+  );
 
-export async function listerTousLesProjets(): Promise<Projet[]> {
-  const supabase = await creerClientServeur();
-  if (!supabase) return [];
-
-  const { data, error } = await supabase
-    .from("projets")
-    .select("*")
-    .order("ordre", { ascending: true })
-    .order("created_at", { ascending: false });
-
-  return verifier("la liste des projets", data ?? [], error);
-}
-
-export async function trouverProjet(id: string): Promise<Projet | null> {
-  const supabase = await creerClientServeur();
-  if (!supabase) return null;
-
-  const { data, error } = await supabase.from("projets").select("*").eq("id", id).maybeSingle();
-  return verifier("le chargement du projet", data, error);
-}
-
-export async function listerMessages(): Promise<Message[]> {
-  const supabase = await creerClientServeur();
-  if (!supabase) return [];
-
-  const { data, error } = await supabase
-    .from("messages")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  return verifier("la liste des messages", data ?? [], error);
-}
-
-export async function trouverMessage(id: string): Promise<Message | null> {
-  const supabase = await creerClientServeur();
-  if (!supabase) return null;
-
-  const { data, error } = await supabase.from("messages").select("*").eq("id", id).maybeSingle();
-  return verifier("le chargement du message", data, error);
-}
+export const trouverMessage = (id: string): Promise<Message | null> =>
+  lire("le chargement du message", null, (supabase) =>
+    supabase.from("messages").select("*").eq("id", id).maybeSingle(),
+  );
 
 /** Chiffres d'impact de la page d'accueil, dans l'ordre d'affichage. */
-export async function listerChiffres(): Promise<ChiffreCle[]> {
-  const supabase = await creerClientServeur();
-  if (!supabase) return [];
-
-  const { data, error } = await supabase
-    .from("chiffres_cles")
-    .select("*")
-    .order("ordre", { ascending: true })
-    .order("created_at", { ascending: true });
-  return verifier("le chargement des chiffres", data, error) ?? [];
-}
+export const listerChiffres = (): Promise<ChiffreCle[]> =>
+  lire("le chargement des chiffres", [], (supabase) =>
+    supabase
+      .from("chiffres_cles")
+      .select("*")
+      .order("ordre", { ascending: true })
+      .order("created_at", { ascending: true }),
+  );
 
 /**
  * Liens temporaires (une heure) vers les photos jointes à un message. Le

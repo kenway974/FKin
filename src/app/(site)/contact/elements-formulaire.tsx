@@ -3,7 +3,7 @@
 import * as React from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 import { Camera, Check, LoaderCircle, X } from "lucide-react";
-import { Blob } from "@/components/formes";
+import { Blob, formeBlob } from "@/components/formes";
 import { MessageErreur } from "@/components/ui/field";
 import { ErreurPhoto, compresserImage } from "@/lib/compression-image";
 import { PHOTO_POIDS_MAX, PHOTOS_MAX } from "@/lib/validation/contact";
@@ -225,10 +225,7 @@ export function SelecteurPhotos({
             <img
               src={photo.apercu}
               alt={`Photo ${index + 1}`}
-              className={cn(
-                "size-20 object-cover md:size-24",
-                ["forme-blob-1", "forme-blob-2", "forme-blob-3"][index % 3],
-              )}
+              className={cn("size-20 object-cover md:size-24", formeBlob(index))}
             />
             <button
               type="button"

@@ -8,15 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import {
-  AideChamp,
-  Champ,
-  Input,
-  Label,
-  MessageErreur,
-  Select,
-  Textarea,
-} from "@/components/ui/field";
+import { ChampFormulaire, Input, MessageErreur, Select, Textarea } from "@/components/ui/field";
 import { SelecteurPosition } from "@/components/admin/selecteur-position";
 import { TeleversementImage } from "@/components/admin/televersement-image";
 import { schemaProjet, type DonneesProjet } from "@/lib/validation/contenu";
@@ -24,6 +16,7 @@ import { genererSlug } from "@/lib/utils";
 import { creerProjet, modifierProjet } from "./actions";
 import type { ResultatAction } from "@/lib/actions-types";
 import type { Projet } from "@/types/database";
+import { Surtitre } from "@/components/ui/surtitre";
 
 /** Formulaire de création et de modification d'un projet de la galerie. */
 export function FormulaireProjet({ projet }: { projet?: Projet }) {
@@ -112,161 +105,153 @@ export function FormulaireProjet({ projet }: { projet?: Projet }) {
 
       <div className="grid gap-14 lg:grid-cols-[1.6fr_1fr] lg:items-start lg:gap-16">
         <div className="space-y-7">
-          <Champ>
-            <Label htmlFor="titre">
-              Titre du projet <span aria-hidden="true">*</span>
-            </Label>
-            <Input
-              id="titre"
-              placeholder="Ex. : Salle informatique du lycée Bonsomi"
-              aria-required="true"
-              aria-invalid={errors.titre ? true : undefined}
-              {...register("titre")}
-            />
-            <MessageErreur>{errors.titre?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="titre"
+            libelle="Titre du projet"
+            requis
+            erreur={errors.titre?.message}
+          >
+            {(aria) => (
+              <Input
+                {...aria}
+                placeholder="Ex. : Salle informatique du lycée Bonsomi"
+                {...register("titre")}
+              />
+            )}
+          </ChampFormulaire>
 
-          <Champ>
-            <Label htmlFor="slug">
-              Identifiant (slug) <span aria-hidden="true">*</span>
-            </Label>
-            <Input
-              id="slug"
-              aria-required="true"
-              aria-invalid={errors.slug ? true : undefined}
-              aria-describedby="aide-slug-projet"
-              {...register("slug", { onChange: () => setSlugAuto(false) })}
-            />
-            <AideChamp id="aide-slug-projet">
-              Généré automatiquement à partir du titre (modifiable). Identifiant interne unique — il
-              n&apos;apparaît pas dans les URL du site mais évite les doublons.
-            </AideChamp>
-            <MessageErreur>{errors.slug?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="slug"
+            libelle="Identifiant (slug)"
+            requis
+            erreur={errors.slug?.message}
+            aide={
+              <>
+                Généré automatiquement à partir du titre (modifiable). Identifiant interne unique —
+                il n&apos;apparaît pas dans les URL du site mais évite les doublons.
+              </>
+            }
+          >
+            {(aria) => (
+              <Input {...aria} {...register("slug", { onChange: () => setSlugAuto(false) })} />
+            )}
+          </ChampFormulaire>
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <Champ>
-              <Label htmlFor="lieu">
-                Lieu <span aria-hidden="true">*</span>
-              </Label>
-              <Input
-                id="lieu"
-                placeholder="Ex. : Kinshasa, commune de Limete"
-                aria-required="true"
-                aria-invalid={errors.lieu ? true : undefined}
-                {...register("lieu")}
-              />
-              <MessageErreur>{errors.lieu?.message}</MessageErreur>
-            </Champ>
+            <ChampFormulaire id="lieu" libelle="Lieu" requis erreur={errors.lieu?.message}>
+              {(aria) => (
+                <Input
+                  {...aria}
+                  placeholder="Ex. : Kinshasa, commune de Limete"
+                  {...register("lieu")}
+                />
+              )}
+            </ChampFormulaire>
 
-            <Champ>
-              <Label htmlFor="date-projet">Date du projet</Label>
-              <Input id="date-projet" type="date" {...register("dateProjet")} />
-              <AideChamp>Date de la livraison ou de la mise en service.</AideChamp>
-              <MessageErreur>{errors.dateProjet?.message}</MessageErreur>
-            </Champ>
+            <ChampFormulaire
+              id="date-projet"
+              libelle="Date du projet"
+              erreur={errors.dateProjet?.message}
+              aide="Date de la livraison ou de la mise en service."
+            >
+              {(aria) => <Input {...aria} type="date" {...register("dateProjet")} />}
+            </ChampFormulaire>
           </div>
 
-          <Champ>
-            <Label htmlFor="type-materiel">
-              Type de matériel <span aria-hidden="true">*</span>
-            </Label>
-            <Input
-              id="type-materiel"
-              placeholder="Ex. : 24 ordinateurs de bureau, 3 onduleurs, 2 imprimantes"
-              aria-required="true"
-              aria-invalid={errors.typeMateriel ? true : undefined}
-              {...register("typeMateriel")}
-            />
-            <MessageErreur>{errors.typeMateriel?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="type-materiel"
+            libelle="Type de matériel"
+            requis
+            erreur={errors.typeMateriel?.message}
+          >
+            {(aria) => (
+              <Input
+                {...aria}
+                placeholder="Ex. : 24 ordinateurs de bureau, 3 onduleurs, 2 imprimantes"
+                {...register("typeMateriel")}
+              />
+            )}
+          </ChampFormulaire>
 
-          <Champ>
-            <Label htmlFor="description">
-              Description <span aria-hidden="true">*</span>
-            </Label>
-            <Textarea
-              id="description"
-              rows={6}
-              aria-required="true"
-              aria-invalid={errors.description ? true : undefined}
-              aria-describedby="aide-description"
-              {...register("description")}
-            />
-            <AideChamp id="aide-description">
-              Le contexte : quelle structure, quel besoin, comment le projet a été monté.
-            </AideChamp>
-            <MessageErreur>{errors.description?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="description"
+            libelle="Description"
+            requis
+            erreur={errors.description?.message}
+            aide="Le contexte : quelle structure, quel besoin, comment le projet a été monté."
+          >
+            {(aria) => <Textarea {...aria} rows={6} {...register("description")} />}
+          </ChampFormulaire>
 
-          <Champ>
-            <Label htmlFor="resultat">
-              Résultat obtenu <span aria-hidden="true">*</span>
-            </Label>
-            <Textarea
-              id="resultat"
-              rows={3}
-              aria-required="true"
-              aria-invalid={errors.resultat ? true : undefined}
-              aria-describedby="aide-resultat"
-              {...register("resultat")}
-            />
-            <AideChamp id="aide-resultat">
-              La phrase la plus importante de la fiche : ce que le matériel permet concrètement
-              aujourd&apos;hui. Ex. : « 180 élèves suivent désormais deux heures d&apos;informatique
-              par semaine ».
-            </AideChamp>
-            <MessageErreur>{errors.resultat?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="resultat"
+            libelle="Résultat obtenu"
+            requis
+            erreur={errors.resultat?.message}
+            aide={
+              <>
+                La phrase la plus importante de la fiche : ce que le matériel permet concrètement
+                aujourd&apos;hui. Ex. : « 180 élèves suivent désormais deux heures
+                d&apos;informatique par semaine ».
+              </>
+            }
+          >
+            {(aria) => <Textarea {...aria} rows={3} {...register("resultat")} />}
+          </ChampFormulaire>
         </div>
 
         <div className="space-y-12">
           <div className="space-y-5">
-            <h2 className="text-rouge flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
-              Affichage
-            </h2>
+            <Surtitre as="h2">Affichage</Surtitre>
 
-            <Champ>
-              <Label htmlFor="publie">Visibilité</Label>
-              <Select
-                id="publie"
-                aria-describedby="aide-publie"
-                {...register("publie", {
-                  // Un `<select>` ne renvoie que des chaînes : on rétablit le booléen.
-                  setValueAs: (valeur) => valeur === true || valeur === "true",
-                })}
-              >
-                <option value="true">Visible dans la galerie</option>
-                <option value="false">Masqué</option>
-              </Select>
-              <AideChamp id="aide-publie">
-                Un projet masqué reste enregistré mais n&apos;apparaît pas sur le site public.
-              </AideChamp>
-            </Champ>
+            <ChampFormulaire
+              id="publie"
+              libelle="Visibilité"
+              aide={
+                <>Un projet masqué reste enregistré mais n&apos;apparaît pas sur le site public.</>
+              }
+            >
+              {(aria) => (
+                <Select
+                  {...aria}
+                  {...register("publie", {
+                    // Un `<select>` ne renvoie que des chaînes : on rétablit le booléen.
+                    setValueAs: (valeur) => valeur === true || valeur === "true",
+                  })}
+                >
+                  <option value="true">Visible dans la galerie</option>
+                  <option value="false">Masqué</option>
+                </Select>
+              )}
+            </ChampFormulaire>
 
-            <Champ>
-              <Label htmlFor="ordre">Ordre d&apos;affichage</Label>
-              <Input
-                id="ordre"
-                type="number"
-                min={0}
-                max={999}
-                {...register("ordre", { valueAsNumber: true })}
-              />
-              <AideChamp>
-                Les plus petits nombres apparaissent en premier. À valeur égale, le projet le plus
-                récent passe devant.
-              </AideChamp>
-              <MessageErreur>{errors.ordre?.message}</MessageErreur>
-            </Champ>
+            <ChampFormulaire
+              id="ordre"
+              libelle="Ordre d'affichage"
+              erreur={errors.ordre?.message}
+              aide={
+                <>
+                  Les plus petits nombres apparaissent en premier. À valeur égale, le projet le plus
+                  récent passe devant.
+                </>
+              }
+            >
+              {(aria) => (
+                <Input
+                  {...aria}
+                  type="number"
+                  min={0}
+                  max={999}
+                  {...register("ordre", { valueAsNumber: true })}
+                />
+              )}
+            </ChampFormulaire>
           </div>
 
           <div>
-            <h2 className="text-rouge mb-4 flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+            <Surtitre as="h2" className="mb-4">
               Photographie
-            </h2>
+            </Surtitre>
 
             <TeleversementImage
               identifiant="image-projet"
@@ -279,26 +264,26 @@ export function FormulaireProjet({ projet }: { projet?: Projet }) {
               erreur={errors.imageUrl?.message}
             />
 
-            <Champ className="mt-4">
-              <Label htmlFor="image-alt-projet">Description de la photo</Label>
-              <Input
-                id="image-alt-projet"
-                aria-describedby="aide-alt-projet"
-                {...register("imageAlt")}
-              />
-              <AideChamp id="aide-alt-projet">
-                Décrit la photo pour les personnes qui ne la voient pas. Ex. : « Une salle de classe
-                équipée de douze postes, des élèves y travaillent ».
-              </AideChamp>
-              <MessageErreur>{errors.imageAlt?.message}</MessageErreur>
-            </Champ>
+            <ChampFormulaire
+              id="image-alt-projet"
+              libelle="Description de la photo"
+              className="mt-4"
+              erreur={errors.imageAlt?.message}
+              aide={
+                <>
+                  Décrit la photo pour les personnes qui ne la voient pas. Ex. : « Une salle de
+                  classe équipée de douze postes, des élèves y travaillent ».
+                </>
+              }
+            >
+              {(aria) => <Input {...aria} {...register("imageAlt")} />}
+            </ChampFormulaire>
           </div>
 
           <div>
-            <h2 className="text-rouge mb-4 flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+            <Surtitre as="h2" className="mb-4">
               Sur la carte
-            </h2>
+            </Surtitre>
             <SelecteurPosition
               latitude={latitude}
               longitude={longitude}

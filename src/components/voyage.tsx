@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Surtitre } from "@/components/ui/surtitre";
 
 /**
  * « Le voyage d'un don » : le trajet du matériel, raconté au défilement.
@@ -331,13 +332,7 @@ export function Voyage() {
     >
       <div className="contenu">
         <div data-apparition="" className="mx-auto max-w-3xl text-center">
-          <p className="text-rouge mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-            <span
-              className="barre-surtitre bg-rouge-vif inline-block h-2 w-6 rounded-full"
-              aria-hidden="true"
-            />
-            Le voyage d&apos;un don
-          </p>
+          <Surtitre className="mb-3">Le voyage d&apos;un don</Surtitre>
           <h2 id="titre-voyage" className="text-4xl font-bold md:text-6xl">
             De votre bureau à une salle de classe
           </h2>

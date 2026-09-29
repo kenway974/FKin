@@ -2,6 +2,7 @@ import * as React from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Blob, OndeBord } from "@/components/formes";
+import { Surtitre } from "@/components/ui/surtitre";
 
 /**
  * Briques de mise en page réutilisées par les pages publiques.
@@ -52,19 +53,9 @@ export function TitreSection({
     <div data-apparition="" className={cn("max-w-3xl", centre && "mx-auto text-center")}>
       <div className="parallaxe-vue [--parallaxe:1.25rem]">
         {surtitre ? (
-          <p
-            className={cn(
-              "mb-3 inline-flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase",
-              sombre ? "text-rouge-clair" : "text-rouge",
-              centre && "justify-center",
-            )}
-          >
-            <span
-              className="barre-surtitre bg-rouge-vif inline-block h-2 w-6 rounded-full"
-              aria-hidden="true"
-            />
+          <Surtitre sombre={sombre} className={cn("mb-3", centre && "justify-center")}>
             {surtitre}
-          </p>
+          </Surtitre>
         ) : null}
         <Titre
           id={id}

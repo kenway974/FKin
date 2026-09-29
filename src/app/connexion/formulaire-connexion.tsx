@@ -8,7 +8,7 @@ import { z } from "zod";
 import { LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import { Champ, Input, Label, MessageErreur } from "@/components/ui/field";
+import { ChampFormulaire, Input } from "@/components/ui/field";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 
 const schemaConnexion = z.object({
@@ -81,35 +81,34 @@ export function FormulaireConnexion() {
         </Alert>
       ) : null}
 
-      <Champ>
-        <Label htmlFor="email">Adresse e-mail</Label>
-        <Input
-          id="email"
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          autoFocus
-          aria-required="true"
-          aria-invalid={errors.email ? true : undefined}
-          aria-describedby={errors.email ? "erreur-email" : undefined}
-          {...register("email")}
-        />
-        <MessageErreur id="erreur-email">{errors.email?.message}</MessageErreur>
-      </Champ>
+      <ChampFormulaire id="email" libelle="Adresse e-mail" requis erreur={errors.email?.message}>
+        {(aria) => (
+          <Input
+            {...aria}
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            autoFocus
+            {...register("email")}
+          />
+        )}
+      </ChampFormulaire>
 
-      <Champ>
-        <Label htmlFor="mot-de-passe">Mot de passe</Label>
-        <Input
-          id="mot-de-passe"
-          type="password"
-          autoComplete="current-password"
-          aria-required="true"
-          aria-invalid={errors.motDePasse ? true : undefined}
-          aria-describedby={errors.motDePasse ? "erreur-mot-de-passe" : undefined}
-          {...register("motDePasse")}
-        />
-        <MessageErreur id="erreur-mot-de-passe">{errors.motDePasse?.message}</MessageErreur>
-      </Champ>
+      <ChampFormulaire
+        id="mot-de-passe"
+        libelle="Mot de passe"
+        requis
+        erreur={errors.motDePasse?.message}
+      >
+        {(aria) => (
+          <Input
+            {...aria}
+            type="password"
+            autoComplete="current-password"
+            {...register("motDePasse")}
+          />
+        )}
+      </ChampFormulaire>
 
       <Button type="submit" taille="lg" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? "Connexion…" : "Se connecter"}

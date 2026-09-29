@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Building2, GraduationCap, Reply } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Blob } from "@/components/formes";
+import { Blob, formeBlob } from "@/components/formes";
 import { BoutonSuppression } from "@/components/admin/bouton-suppression";
 import { BasculeLecture } from "@/components/admin/bascule-lecture";
 import { lierPhotosMessage, marquerMessageLuAuRendu, trouverMessage } from "@/lib/admin-data";
@@ -11,6 +11,7 @@ import { supprimerMessage } from "../actions";
 import { cn, formaterDateHeure } from "@/lib/utils";
 import { libellesEmetteur } from "@/lib/validation/contact";
 import { decouperParagraphes } from "@/lib/utils";
+import { Surtitre } from "@/components/ui/surtitre";
 
 export const metadata = { title: "Message" };
 
@@ -122,13 +123,9 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
 
         {photos.length ? (
           <section aria-labelledby="titre-photos" className="space-y-3">
-            <h2
-              id="titre-photos"
-              className="text-rouge flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase"
-            >
-              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+            <Surtitre as="h2" id="titre-photos">
               Photos jointes ({photos.length})
-            </h2>
+            </Surtitre>
             <ul className="flex flex-wrap gap-4">
               {photos.map((url, index) => (
                 <li key={url}>
@@ -141,7 +138,7 @@ export default async function PageMessage({ params }: { params: Promise<{ id: st
                       unoptimized
                       className={cn(
                         "size-32 object-cover transition-transform hover:scale-105 md:size-40",
-                        ["forme-blob-1", "forme-blob-2", "forme-blob-3"][index % 3],
+                        formeBlob(index),
                       )}
                     />
                     <span className="sr-only"> (ouvrir en grand, nouvel onglet)</span>

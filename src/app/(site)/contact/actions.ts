@@ -2,7 +2,6 @@
 
 import { headers } from "next/headers";
 import { Resend } from "resend";
-import { z } from "zod";
 import {
   DELAI_MINIMAL_ENVOI_MS,
   PHOTO_POIDS_MAX,
@@ -14,6 +13,7 @@ import type { DetailsDon } from "@/types/database";
 import { creerClientService } from "@/lib/supabase/server";
 import { cleDepuisEntetes, verifierLimite } from "@/lib/rate-limit";
 import { env, resendConfigure } from "@/lib/env";
+import { valider } from "@/lib/actions-serveur";
 import type { ResultatContact } from "@/lib/actions-types";
 
 /**
@@ -41,17 +41,9 @@ export async function envoyerMessageContact(formulaire: FormData): Promise<Resul
     return { statut: "erreur", message: "Formulaire illisible. Merci de réessayer." };
   }
 
-  const analyse = schemaContact.safeParse(donneesBrutes);
-
-  if (!analyse.success) {
-    return {
-      statut: "erreur",
-      message: "Certains champs doivent être corrigés.",
-      erreursChamps: z.flattenError(analyse.error).fieldErrors as Record<string, string[]>,
-    };
-  }
-
-  const donnees = analyse.data;
+  const validation = valider(schemaContact, donneesBrutes);
+  if (validation.erreur) return validation.erreur;
+  const donnees = validation.donnees;
 
   // --- 1. Anti-spam ---------------------------------------------------------
   // Le honeypot est déjà refusé par le schéma ; ce garde-fou couvre le cas où

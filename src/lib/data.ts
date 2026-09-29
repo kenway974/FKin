@@ -3,6 +3,7 @@ import "server-only";
 import { creerClientPublic } from "@/lib/supabase/server";
 import { supabaseConfigure } from "@/lib/env";
 import type { Article, ChiffreCle, Projet } from "@/types/database";
+import { formaterChiffre } from "@/lib/utils";
 
 /**
  * Lectures publiques de la base.
@@ -27,50 +28,47 @@ function signaler(operation: string, erreur: unknown) {
   console.error(`[data] Échec de ${operation} :`, erreur);
 }
 
-/** Articles publiés, du plus récent au plus ancien. */
-export async function listerArticlesPublies(limite?: number): Promise<Article[]> {
+type ClientPublic = NonNullable<ReturnType<typeof creerClientPublic>>;
+
+/**
+ * Exécute une lecture ; renvoie `defaut` (liste vide, `null`…) si Supabase
+ * n'est pas branché ou si la requête échoue, après l'avoir signalé.
+ */
+async function lire<T>(
+  operation: string,
+  defaut: T,
+  requete: (supabase: ClientPublic) => PromiseLike<{ data: T | null; error: unknown }>,
+): Promise<T> {
   const supabase = creerClientPublic();
   if (!supabase) {
-    signaler("listerArticlesPublies", null);
-    return [];
+    signaler(operation, null);
+    return defaut;
   }
-
-  let requete = supabase
-    .from("articles")
-    .select("*")
-    .eq("statut", "publie")
-    .order("date_publication", { ascending: false, nullsFirst: false });
-
-  if (limite) requete = requete.limit(limite);
-
-  const { data, error } = await requete;
+  const { data, error } = await requete(supabase);
   if (error) {
-    signaler("listerArticlesPublies", error);
-    return [];
+    signaler(operation, error);
+    return defaut;
   }
-  return data ?? [];
+  return data ?? defaut;
+}
+
+/** Articles publiés, du plus récent au plus ancien. */
+export function listerArticlesPublies(limite?: number): Promise<Article[]> {
+  return lire("listerArticlesPublies", [], (supabase) => {
+    const requete = supabase
+      .from("articles")
+      .select("*")
+      .eq("statut", "publie")
+      .order("date_publication", { ascending: false, nullsFirst: false });
+    return limite ? requete.limit(limite) : requete;
+  });
 }
 
 /** Un article publié identifié par son slug, ou `null` s'il n'existe pas. */
-export async function trouverArticleParSlug(slug: string): Promise<Article | null> {
-  const supabase = creerClientPublic();
-  if (!supabase) {
-    signaler("trouverArticleParSlug", null);
-    return null;
-  }
-
-  const { data, error } = await supabase
-    .from("articles")
-    .select("*")
-    .eq("slug", slug)
-    .eq("statut", "publie")
-    .maybeSingle();
-
-  if (error) {
-    signaler("trouverArticleParSlug", error);
-    return null;
-  }
-  return data;
+export function trouverArticleParSlug(slug: string): Promise<Article | null> {
+  return lire("trouverArticleParSlug", null, (supabase) =>
+    supabase.from("articles").select("*").eq("slug", slug).eq("statut", "publie").maybeSingle(),
+  );
 }
 
 /**
@@ -83,7 +81,7 @@ export async function trouverArticleParSlug(slug: string): Promise<Article | nul
  * Renvoie des zéros si la base est injoignable ; la page masque alors la
  * section entière au lieu d'annoncer « 0 projet ».
  */
-export async function compterPourAccueil(): Promise<{
+async function compterPourAccueil(): Promise<{
   projets: number;
   articles: number;
   lieux: number;
@@ -119,28 +117,16 @@ export async function compterPourAccueil(): Promise<{
 }
 
 /** Projets visibles dans la galerie, triés par ordre d'affichage puis par date. */
-export async function listerProjetsPublies(limite?: number): Promise<Projet[]> {
-  const supabase = creerClientPublic();
-  if (!supabase) {
-    signaler("listerProjetsPublies", null);
-    return [];
-  }
-
-  let requete = supabase
-    .from("projets")
-    .select("*")
-    .eq("publie", true)
-    .order("ordre", { ascending: true })
-    .order("date_projet", { ascending: false, nullsFirst: false });
-
-  if (limite) requete = requete.limit(limite);
-
-  const { data, error } = await requete;
-  if (error) {
-    signaler("listerProjetsPublies", error);
-    return [];
-  }
-  return data ?? [];
+export function listerProjetsPublies(limite?: number): Promise<Projet[]> {
+  return lire("listerProjetsPublies", [], (supabase) => {
+    const requete = supabase
+      .from("projets")
+      .select("*")
+      .eq("publie", true)
+      .order("ordre", { ascending: true })
+      .order("date_projet", { ascending: false, nullsFirst: false });
+    return limite ? requete.limit(limite) : requete;
+  });
 }
 
 /**
@@ -148,24 +134,14 @@ export async function listerProjetsPublies(limite?: number): Promise<Projet[]> {
  * table n'existe pas encore ou est vide : l'accueil affiche alors les chiffres
  * calculés automatiquement.
  */
-export async function listerChiffresCles(): Promise<ChiffreCle[]> {
-  const supabase = creerClientPublic();
-  if (!supabase) {
-    signaler("listerChiffresCles", null);
-    return [];
-  }
-
-  const { data, error } = await supabase
-    .from("chiffres_cles")
-    .select("id, valeur, suffixe, libelle, precision, ordre, created_at, updated_at")
-    .order("ordre", { ascending: true })
-    .order("created_at", { ascending: true });
-
-  if (error) {
-    signaler("listerChiffresCles", error);
-    return [];
-  }
-  return data ?? [];
+function listerChiffresCles(): Promise<ChiffreCle[]> {
+  return lire("listerChiffresCles", [], (supabase) =>
+    supabase
+      .from("chiffres_cles")
+      .select("*")
+      .order("ordre", { ascending: true })
+      .order("created_at", { ascending: true }),
+  );
 }
 
 /** Un chiffre tel qu'affiché sur la page d'accueil. */
@@ -214,14 +190,4 @@ export async function chiffresAccueil(): Promise<ChiffreAffiche[]> {
       precision: "Lieu, matériel livré et résultat obtenu",
     },
   ];
-}
-
-/**
- * « 1200 » + « % » → « 1 200 % » ; « + » reste collé (« 250+ »). Espaces
- * insécables fines, comme le veut la typographie française.
- */
-function formaterChiffre(valeur: number, suffixe: string) {
-  const nombre = valeur.toLocaleString("fr-FR");
-  if (!suffixe) return nombre;
-  return suffixe.startsWith("+") ? `${nombre}${suffixe}` : `${nombre}\u202f${suffixe}`;
 }

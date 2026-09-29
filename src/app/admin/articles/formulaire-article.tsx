@@ -8,21 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import {
-  AideChamp,
-  Champ,
-  Input,
-  Label,
-  MessageErreur,
-  Select,
-  Textarea,
-} from "@/components/ui/field";
+import { ChampFormulaire, Input, Select, Textarea } from "@/components/ui/field";
 import { TeleversementImage } from "@/components/admin/televersement-image";
 import { schemaArticle, type DonneesArticle } from "@/lib/validation/contenu";
 import { genererSlug } from "@/lib/utils";
 import { creerArticle, modifierArticle } from "./actions";
 import type { ResultatAction } from "@/lib/actions-types";
 import type { Article } from "@/types/database";
+import { Surtitre } from "@/components/ui/surtitre";
 
 /**
  * Formulaire de création et de modification d'un article.
@@ -115,112 +108,98 @@ export function FormulaireArticle({ article }: { article?: Article }) {
       <div className="grid gap-14 lg:grid-cols-[1.6fr_1fr] lg:items-start lg:gap-16">
         {/* ------------------------------------------------------- Contenu */}
         <div className="space-y-7">
-          <Champ>
-            <Label htmlFor="titre">
-              Titre <span aria-hidden="true">*</span>
-            </Label>
-            <Input
-              id="titre"
-              aria-required="true"
-              aria-invalid={errors.titre ? true : undefined}
-              {...register("titre")}
-            />
-            <MessageErreur>{errors.titre?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire id="titre" libelle="Titre" requis erreur={errors.titre?.message}>
+            {(aria) => <Input {...aria} {...register("titre")} />}
+          </ChampFormulaire>
 
-          <Champ>
-            <Label htmlFor="slug">
-              Adresse de la page (slug) <span aria-hidden="true">*</span>
-            </Label>
-            <Input
-              id="slug"
-              aria-required="true"
-              aria-invalid={errors.slug ? true : undefined}
-              aria-describedby="aide-slug"
-              {...register("slug", { onChange: () => setSlugAuto(false) })}
-            />
-            <AideChamp id="aide-slug">
-              Généré automatiquement à partir du titre (modifiable). L&apos;article sera accessible
-              à l&apos;adresse /actualites/<strong>{watch("slug") || "votre-slug"}</strong>. Évitez
-              de le modifier une fois l&apos;article publié : les liens existants cesseraient de
-              fonctionner.
-            </AideChamp>
-            <MessageErreur>{errors.slug?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="slug"
+            libelle="Adresse de la page (slug)"
+            requis
+            erreur={errors.slug?.message}
+            aide={
+              <>
+                Généré automatiquement à partir du titre (modifiable). L&apos;article sera
+                accessible à l&apos;adresse /actualites/
+                <strong>{watch("slug") || "votre-slug"}</strong>. Évitez de le modifier une fois
+                l&apos;article publié : les liens existants cesseraient de fonctionner.
+              </>
+            }
+          >
+            {(aria) => (
+              <Input {...aria} {...register("slug", { onChange: () => setSlugAuto(false) })} />
+            )}
+          </ChampFormulaire>
 
-          <Champ>
-            <Label htmlFor="extrait">Chapô</Label>
-            <Textarea
-              id="extrait"
-              rows={3}
-              aria-describedby="aide-extrait"
-              {...register("extrait")}
-            />
-            <AideChamp id="aide-extrait">
-              Deux ou trois phrases affichées en tête d&apos;article et dans les aperçus. Sert
-              également de description pour les moteurs de recherche (300 caractères maximum).
-            </AideChamp>
-            <MessageErreur>{errors.extrait?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="extrait"
+            libelle="Chapô"
+            erreur={errors.extrait?.message}
+            aide={
+              <>
+                Deux ou trois phrases affichées en tête d&apos;article et dans les aperçus. Sert
+                également de description pour les moteurs de recherche (300 caractères maximum).
+              </>
+            }
+          >
+            {(aria) => <Textarea {...aria} rows={3} {...register("extrait")} />}
+          </ChampFormulaire>
 
-          <Champ>
-            <Label htmlFor="contenu">
-              Contenu <span aria-hidden="true">*</span>
-            </Label>
-            <Textarea
-              id="contenu"
-              rows={18}
-              aria-required="true"
-              aria-invalid={errors.contenu ? true : undefined}
-              aria-describedby="aide-contenu"
-              {...register("contenu")}
-            />
-            <AideChamp id="aide-contenu">
-              Texte simple. Laissez une ligne vide entre deux paragraphes : chaque bloc sera affiché
-              comme un paragraphe distinct. La mise en forme HTML n&apos;est pas interprétée, pour
-              des raisons de sécurité.
-            </AideChamp>
-            <MessageErreur>{errors.contenu?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id="contenu"
+            libelle="Contenu"
+            requis
+            erreur={errors.contenu?.message}
+            aide={
+              <>
+                Texte simple. Laissez une ligne vide entre deux paragraphes : chaque bloc sera
+                affiché comme un paragraphe distinct. La mise en forme HTML n&apos;est pas
+                interprétée, pour des raisons de sécurité.
+              </>
+            }
+          >
+            {(aria) => <Textarea {...aria} rows={18} {...register("contenu")} />}
+          </ChampFormulaire>
         </div>
 
         {/* ----------------------------------------------------- Publication */}
         <div className="space-y-12">
           <div className="space-y-5">
-            <h2 className="text-rouge flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
-              Publication
-            </h2>
+            <Surtitre as="h2">Publication</Surtitre>
 
-            <Champ>
-              <Label htmlFor="statut">Statut</Label>
-              <Select id="statut" aria-describedby="aide-statut" {...register("statut")}>
-                <option value="brouillon">Brouillon (non visible)</option>
-                <option value="publie">Publié (visible sur le site)</option>
-              </Select>
-              <AideChamp id="aide-statut">
-                Un brouillon reste invisible pour les visiteurs, même en connaissant son adresse.
-              </AideChamp>
-            </Champ>
+            <ChampFormulaire
+              id="statut"
+              libelle="Statut"
+              aide="Un brouillon reste invisible pour les visiteurs, même en connaissant son adresse."
+            >
+              {(aria) => (
+                <Select {...aria} aria-describedby="aide-statut" {...register("statut")}>
+                  <option value="brouillon">Brouillon (non visible)</option>
+                  <option value="publie">Publié (visible sur le site)</option>
+                </Select>
+              )}
+            </ChampFormulaire>
 
-            <Champ>
-              <Label htmlFor="date-publication">Date de publication</Label>
-              <Input id="date-publication" type="date" {...register("datePublication")} />
-              <AideChamp>Laissez vide pour utiliser la date du jour à la publication.</AideChamp>
-              <MessageErreur>{errors.datePublication?.message}</MessageErreur>
-            </Champ>
+            <ChampFormulaire
+              id="date-publication"
+              libelle="Date de publication"
+              erreur={errors.datePublication?.message}
+              aide="Laissez vide pour utiliser la date du jour à la publication."
+            >
+              {(aria) => <Input {...aria} type="date" {...register("datePublication")} />}
+            </ChampFormulaire>
 
-            <Champ>
-              <Label htmlFor="auteur">Signature</Label>
-              <Input id="auteur" placeholder="Ex. : L'équipe de collecte" {...register("auteur")} />
-            </Champ>
+            <ChampFormulaire id="auteur" libelle="Signature">
+              {(aria) => (
+                <Input {...aria} placeholder="Ex. : L'équipe de collecte" {...register("auteur")} />
+              )}
+            </ChampFormulaire>
           </div>
 
           <div>
-            <h2 className="text-rouge mb-4 flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-              <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
+            <Surtitre as="h2" className="mb-4">
               Image de couverture
-            </h2>
+            </Surtitre>
 
             <TeleversementImage
               identifiant="image-couverture"
@@ -233,16 +212,21 @@ export function FormulaireArticle({ article }: { article?: Article }) {
               erreur={errors.imageCouverture?.message}
             />
 
-            <Champ className="mt-4">
-              <Label htmlFor="image-alt">Description de l&apos;image</Label>
-              <Input id="image-alt" aria-describedby="aide-alt" {...register("imageAlt")} />
-              <AideChamp id="aide-alt">
-                Décrit l&apos;image pour les personnes utilisant un lecteur d&apos;écran, et
-                s&apos;affiche si l&apos;image ne se charge pas. Ex. : « Des élèves devant les
-                postes de la nouvelle salle informatique ».
-              </AideChamp>
-              <MessageErreur>{errors.imageAlt?.message}</MessageErreur>
-            </Champ>
+            <ChampFormulaire
+              id="image-alt"
+              libelle="Description de l'image"
+              className="mt-4"
+              erreur={errors.imageAlt?.message}
+              aide={
+                <>
+                  Décrit l&apos;image pour les personnes utilisant un lecteur d&apos;écran, et
+                  s&apos;affiche si l&apos;image ne se charge pas. Ex. : « Des élèves devant les
+                  postes de la nouvelle salle informatique ».
+                </>
+              }
+            >
+              {(aria) => <Input {...aria} aria-describedby="aide-alt" {...register("imageAlt")} />}
+            </ChampFormulaire>
           </div>
         </div>
       </div>

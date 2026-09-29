@@ -4,7 +4,7 @@ import * as React from "react";
 import { PANNEAUX, TAILLE_CARTE } from "@/lib/carte-geo";
 import { inverser, projeter, type NomPanneau } from "@/lib/carte";
 import { Button } from "@/components/ui/button";
-import { AideChamp, Champ, Input, Label } from "@/components/ui/field";
+import { AideChamp, ChampFormulaire, Input } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 /**
@@ -80,26 +80,28 @@ export function SelecteurPosition({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Champ>
-          <Label htmlFor="latitude">Latitude</Label>
-          <Input
-            id="latitude"
-            inputMode="decimal"
-            value={latitude ?? ""}
-            onChange={(evenement) => onChange(lire(evenement.target.value), longitude)}
-            placeholder="Ex. : -4.325"
-          />
-        </Champ>
-        <Champ>
-          <Label htmlFor="longitude">Longitude</Label>
-          <Input
-            id="longitude"
-            inputMode="decimal"
-            value={longitude ?? ""}
-            onChange={(evenement) => onChange(latitude, lire(evenement.target.value))}
-            placeholder="Ex. : 15.322"
-          />
-        </Champ>
+        <ChampFormulaire id="latitude" libelle="Latitude">
+          {(aria) => (
+            <Input
+              {...aria}
+              inputMode="decimal"
+              value={latitude ?? ""}
+              onChange={(evenement) => onChange(lire(evenement.target.value), longitude)}
+              placeholder="Ex. : -4.325"
+            />
+          )}
+        </ChampFormulaire>
+        <ChampFormulaire id="longitude" libelle="Longitude">
+          {(aria) => (
+            <Input
+              {...aria}
+              inputMode="decimal"
+              value={longitude ?? ""}
+              onChange={(evenement) => onChange(latitude, lire(evenement.target.value))}
+              placeholder="Ex. : 15.322"
+            />
+          )}
+        </ChampFormulaire>
       </div>
 
       <AideChamp>

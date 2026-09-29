@@ -1,8 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { creerClientServeur } from "@/lib/supabase/server";
-import { recupererAdmin } from "@/lib/auth";
+import { accesAdmin, echec } from "@/lib/actions-serveur";
 import type { ResultatAction } from "@/lib/actions-types";
 
 /**
@@ -14,17 +13,15 @@ import type { ResultatAction } from "@/lib/actions-types";
  */
 
 export async function marquerCommeLu(id: string, lu: boolean): Promise<ResultatAction> {
-  const admin = await recupererAdmin();
-  if (!admin) return { statut: "erreur", message: "Session expirée. Reconnectez-vous." };
-
-  const supabase = await creerClientServeur();
-  if (!supabase) return { statut: "erreur", message: "Supabase n'est pas configuré." };
+  const acces = await accesAdmin();
+  if (acces.erreur) return acces.erreur;
+  const { supabase } = acces;
 
   const { error } = await supabase.from("messages").update({ lu }).eq("id", id);
 
   if (error) {
     console.error("[admin] Changement de statut du message impossible :", error);
-    return { statut: "erreur", message: "La mise à jour a échoué." };
+    return echec("La mise à jour a échoué.");
   }
 
   revalidatePath("/admin");
@@ -35,11 +32,9 @@ export async function marquerCommeLu(id: string, lu: boolean): Promise<ResultatA
 }
 
 export async function supprimerMessage(id: string): Promise<ResultatAction> {
-  const admin = await recupererAdmin();
-  if (!admin) return { statut: "erreur", message: "Session expirée. Reconnectez-vous." };
-
-  const supabase = await creerClientServeur();
-  if (!supabase) return { statut: "erreur", message: "Supabase n'est pas configuré." };
+  const acces = await accesAdmin();
+  if (acces.erreur) return acces.erreur;
+  const { supabase } = acces;
 
   // Les photos jointes sont supprimées avec le message : rien ne reste dans
   // le bucket privé une fois la demande effacée.
@@ -53,7 +48,7 @@ export async function supprimerMessage(id: string): Promise<ResultatAction> {
 
   if (error) {
     console.error("[admin] Suppression du message impossible :", error);
-    return { statut: "erreur", message: "La suppression a échoué." };
+    return echec("La suppression a échoué.");
   }
 
   if (photos?.photos?.length) {

@@ -70,3 +70,13 @@ export function decouperParagraphes(contenu: string): string[] {
     .map((bloc) => bloc.trim())
     .filter(Boolean);
 }
+
+/**
+ * « 1200 » + « % » → « 1 200 % » ; « + » reste collé (« 250+ »). Espaces
+ * insécables fines, comme le veut la typographie française.
+ */
+export function formaterChiffre(valeur: number, suffixe: string) {
+  const nombre = valeur.toLocaleString("fr-FR");
+  if (!suffixe) return nombre;
+  return suffixe.startsWith("+") ? `${nombre}${suffixe}` : `${nombre}\u202f${suffixe}`;
+}

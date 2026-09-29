@@ -3,15 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { schemaProjet } from "@/lib/validation/contenu";
-import { creerClientServeur } from "@/lib/supabase/server";
-import { recupererAdmin } from "@/lib/auth";
+import { accesAdmin, valider, messageErreurBase } from "@/lib/actions-serveur";
 import type { ResultatAction } from "@/lib/actions-types";
 
 /**
  * Écritures sur les projets de la galerie.
  *
- * Même principe que pour les articles : vérification de l'administrateur en
- * tête de chaque action, validation zod, puis RLS côté base.
+ * Contrôle d'accès et validation : voir `lib/actions-serveur.ts`.
  */
 
 /** Invalide les pages publiques où la galerie apparaît. */
@@ -38,41 +36,25 @@ function versLigne(donnees: z.infer<typeof schemaProjet>) {
   };
 }
 
-function messageErreurBase(erreur: { code?: string; message: string }) {
-  if (erreur.code === "23505") {
-    return "Ce slug est déjà utilisé par un autre projet. Choisissez-en un autre.";
-  }
-  if (erreur.code === "42501") {
-    return "Vous n'avez pas les droits nécessaires pour cette opération.";
-  }
-  return "L'enregistrement a échoué. Réessayez dans quelques instants.";
-}
+const DOUBLON = "Ce slug est déjà utilisé par un autre projet. Choisissez-en un autre.";
 
 export async function creerProjet(donneesBrutes: unknown): Promise<ResultatAction> {
-  const admin = await recupererAdmin();
-  if (!admin) return { statut: "erreur", message: "Session expirée. Reconnectez-vous." };
+  const acces = await accesAdmin();
+  if (acces.erreur) return acces.erreur;
+  const { supabase } = acces;
 
-  const analyse = schemaProjet.safeParse(donneesBrutes);
-  if (!analyse.success) {
-    return {
-      statut: "erreur",
-      message: "Certains champs doivent être corrigés.",
-      erreursChamps: z.flattenError(analyse.error).fieldErrors as Record<string, string[]>,
-    };
-  }
-
-  const supabase = await creerClientServeur();
-  if (!supabase) return { statut: "erreur", message: "Supabase n'est pas configuré." };
+  const validation = valider(schemaProjet, donneesBrutes);
+  if (validation.erreur) return validation.erreur;
 
   const { data, error } = await supabase
     .from("projets")
-    .insert(versLigne(analyse.data))
+    .insert(versLigne(validation.donnees))
     .select("id")
     .single();
 
   if (error) {
     console.error("[admin] Création de projet impossible :", error);
-    return { statut: "erreur", message: messageErreurBase(error) };
+    return { statut: "erreur", message: messageErreurBase(error, DOUBLON) };
   }
 
   rafraichirPagesPubliques();
@@ -82,31 +64,23 @@ export async function creerProjet(donneesBrutes: unknown): Promise<ResultatActio
 }
 
 export async function modifierProjet(id: string, donneesBrutes: unknown): Promise<ResultatAction> {
-  const admin = await recupererAdmin();
-  if (!admin) return { statut: "erreur", message: "Session expirée. Reconnectez-vous." };
+  const acces = await accesAdmin();
+  if (acces.erreur) return acces.erreur;
+  const { supabase } = acces;
 
-  const analyse = schemaProjet.safeParse(donneesBrutes);
-  if (!analyse.success) {
-    return {
-      statut: "erreur",
-      message: "Certains champs doivent être corrigés.",
-      erreursChamps: z.flattenError(analyse.error).fieldErrors as Record<string, string[]>,
-    };
-  }
-
-  const supabase = await creerClientServeur();
-  if (!supabase) return { statut: "erreur", message: "Supabase n'est pas configuré." };
+  const validation = valider(schemaProjet, donneesBrutes);
+  if (validation.erreur) return validation.erreur;
 
   const { data, error } = await supabase
     .from("projets")
-    .update({ ...versLigne(analyse.data), updated_at: new Date().toISOString() })
+    .update({ ...versLigne(validation.donnees), updated_at: new Date().toISOString() })
     .eq("id", id)
     .select("id")
     .single();
 
   if (error) {
     console.error("[admin] Modification de projet impossible :", error);
-    return { statut: "erreur", message: messageErreurBase(error) };
+    return { statut: "erreur", message: messageErreurBase(error, DOUBLON) };
   }
 
   rafraichirPagesPubliques();
@@ -116,17 +90,15 @@ export async function modifierProjet(id: string, donneesBrutes: unknown): Promis
 }
 
 export async function supprimerProjet(id: string): Promise<ResultatAction> {
-  const admin = await recupererAdmin();
-  if (!admin) return { statut: "erreur", message: "Session expirée. Reconnectez-vous." };
-
-  const supabase = await creerClientServeur();
-  if (!supabase) return { statut: "erreur", message: "Supabase n'est pas configuré." };
+  const acces = await accesAdmin();
+  if (acces.erreur) return acces.erreur;
+  const { supabase } = acces;
 
   const { error } = await supabase.from("projets").delete().eq("id", id);
 
   if (error) {
     console.error("[admin] Suppression de projet impossible :", error);
-    return { statut: "erreur", message: messageErreurBase(error) };
+    return { statut: "erreur", message: messageErreurBase(error, DOUBLON) };
   }
 
   rafraichirPagesPubliques();

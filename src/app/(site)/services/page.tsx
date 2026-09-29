@@ -18,7 +18,7 @@ import { Alert } from "@/components/ui/alert";
 import { Bande, Point, Section, TitreSection } from "@/components/sections";
 import { DeuxPortes } from "@/components/deux-portes";
 import { BannierePage } from "@/components/bannieres";
-import { Blob } from "@/components/formes";
+import { Blob, varianteBlob } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = {
@@ -96,9 +96,6 @@ const servicesBeneficiaires = [
   },
 ] as const;
 
-/** Alterne les trois silhouettes de forme souple, pour ne jamais répéter la même. */
-const variante = (index: number) => ((index % 3) + 1) as 1 | 2 | 3;
-
 export default function PageServices() {
   return (
     <>
@@ -130,7 +127,7 @@ export default function PageServices() {
                   icone={service.icone}
                   titre={service.titre}
                   ton="rouge"
-                  variante={variante(index)}
+                  variante={varianteBlob(index)}
                 >
                   <p>{service.texte}</p>
                 </Point>
@@ -174,7 +171,7 @@ export default function PageServices() {
                   icone={service.icone}
                   titre={service.titre}
                   ton="bleu"
-                  variante={variante(index)}
+                  variante={varianteBlob(index)}
                 >
                   <p>{service.texte}</p>
                 </Point>
@@ -255,7 +252,7 @@ export default function PageServices() {
                   icone={bloc.icone}
                   titre={bloc.titre}
                   ton={index === 1 ? "rouge" : "bleu"}
-                  variante={variante(index)}
+                  variante={varianteBlob(index)}
                   sombre
                 >
                   <p>{bloc.texte}</p>

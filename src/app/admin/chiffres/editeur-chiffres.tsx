@@ -7,11 +7,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Blob } from "@/components/formes";
-import { Champ, Input, Label, MessageErreur } from "@/components/ui/field";
+import { ChampFormulaire, Input } from "@/components/ui/field";
 import { BoutonSuppression } from "@/components/admin/bouton-suppression";
 import { schemaChiffre, type DonneesChiffre } from "@/lib/validation/contenu";
 import type { ChiffreCle } from "@/types/database";
+import { formaterChiffre } from "@/lib/utils";
 import { enregistrerChiffre, supprimerChiffre } from "./actions";
+import { Surtitre } from "@/components/ui/surtitre";
 
 /**
  * Édition des chiffres d'impact : une ligne par chiffre, modifiable sur place,
@@ -29,10 +31,7 @@ export function EditeurChiffres({ chiffres }: { chiffres: ChiffreCle[] }) {
         ))}
       </ul>
       <div className="pt-6">
-        <p className="text-rouge mb-6 flex items-center gap-2 text-sm font-extrabold tracking-[0.14em] uppercase">
-          <span className="bg-rouge-vif inline-block h-2 w-6 rounded-full" aria-hidden="true" />
-          Ajouter un chiffre
-        </p>
+        <Surtitre className="mb-6">Ajouter un chiffre</Surtitre>
         <LigneChiffre ordreParDefaut={chiffres.length} />
       </div>
     </div>
@@ -99,65 +98,76 @@ function LigneChiffre({
       {/* Aperçu du chiffre tel qu'il apparaîtra sur l'accueil. */}
       <Blob anime={false} teinte="bg-bleu-voile" variante={1} className="h-24 w-32 px-3">
         <span className="font-titre text-bleu truncate text-3xl font-bold">
-          {Number.isFinite(valeur)
-            ? `${valeur.toLocaleString("fr-FR")}${
-                !suffixe ? "" : suffixe.startsWith("+") ? suffixe : `\u202f${suffixe}`
-              }`
-            : "—"}
+          {Number.isFinite(valeur) ? formaterChiffre(valeur, suffixe ?? "") : "—"}
         </span>
       </Blob>
 
       <div className="space-y-5">
         <div className="grid gap-5 sm:grid-cols-[8rem_7rem_1fr]">
-          <Champ>
-            <Label htmlFor={`${prefixe}-valeur`}>Nombre *</Label>
-            <Input
-              id={`${prefixe}-valeur`}
-              type="number"
-              inputMode="numeric"
-              min={0}
-              aria-invalid={errors.valeur ? true : undefined}
-              {...register("valeur", { valueAsNumber: true })}
-            />
-            <MessageErreur>{errors.valeur?.message}</MessageErreur>
-          </Champ>
-          <Champ>
-            <Label htmlFor={`${prefixe}-suffixe`}>Unité</Label>
-            <Input id={`${prefixe}-suffixe`} placeholder="%, t, +…" {...register("suffixe")} />
-            <MessageErreur>{errors.suffixe?.message}</MessageErreur>
-          </Champ>
-          <Champ>
-            <Label htmlFor={`${prefixe}-libelle`}>Ce que compte ce chiffre *</Label>
-            <Input
-              id={`${prefixe}-libelle`}
-              placeholder="Ex. : ordinateurs remis en service"
-              aria-invalid={errors.libelle ? true : undefined}
-              {...register("libelle")}
-            />
-            <MessageErreur>{errors.libelle?.message}</MessageErreur>
-          </Champ>
+          <ChampFormulaire
+            id={`${prefixe}-valeur`}
+            libelle="Nombre"
+            requis
+            erreur={errors.valeur?.message}
+          >
+            {(aria) => (
+              <Input
+                {...aria}
+                type="number"
+                inputMode="numeric"
+                min={0}
+                {...register("valeur", { valueAsNumber: true })}
+              />
+            )}
+          </ChampFormulaire>
+          <ChampFormulaire
+            id={`${prefixe}-suffixe`}
+            libelle="Unité"
+            erreur={errors.suffixe?.message}
+          >
+            {(aria) => <Input {...aria} placeholder="%, t, +…" {...register("suffixe")} />}
+          </ChampFormulaire>
+          <ChampFormulaire
+            id={`${prefixe}-libelle`}
+            libelle="Ce que compte ce chiffre"
+            requis
+            erreur={errors.libelle?.message}
+          >
+            {(aria) => (
+              <Input
+                {...aria}
+                placeholder="Ex. : ordinateurs remis en service"
+                {...register("libelle")}
+              />
+            )}
+          </ChampFormulaire>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-[1fr_7rem]">
-          <Champ>
-            <Label htmlFor={`${prefixe}-precision`}>Précision</Label>
-            <Input
-              id={`${prefixe}-precision`}
-              placeholder="Ex. : depuis 2021, en France et au Congo"
-              {...register("precision")}
-            />
-            <MessageErreur>{errors.precision?.message}</MessageErreur>
-          </Champ>
-          <Champ>
-            <Label htmlFor={`${prefixe}-ordre`}>Position</Label>
-            <Input
-              id={`${prefixe}-ordre`}
-              type="number"
-              inputMode="numeric"
-              min={0}
-              {...register("ordre", { valueAsNumber: true })}
-            />
-          </Champ>
+          <ChampFormulaire
+            id={`${prefixe}-precision`}
+            libelle="Précision"
+            erreur={errors.precision?.message}
+          >
+            {(aria) => (
+              <Input
+                {...aria}
+                placeholder="Ex. : depuis 2021, en France et au Congo"
+                {...register("precision")}
+              />
+            )}
+          </ChampFormulaire>
+          <ChampFormulaire id={`${prefixe}-ordre`} libelle="Position">
+            {(aria) => (
+              <Input
+                {...aria}
+                type="number"
+                inputMode="numeric"
+                min={0}
+                {...register("ordre", { valueAsNumber: true })}
+              />
+            )}
+          </ChampFormulaire>
         </div>
 
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
