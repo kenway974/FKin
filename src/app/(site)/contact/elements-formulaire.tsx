@@ -123,7 +123,10 @@ export function ChoixPastilles({
                 className="peer sr-only"
                 {...enregistrement}
               />
-              <span className="bg-nuage text-encre hover:bg-nuage-fonce peer-checked:bg-bleu peer-checked:hover:bg-bleu-fonce peer-focus-visible:ring-bleu inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ring-offset-2 transition-colors duration-200 peer-checked:text-white peer-focus-visible:ring-3 md:text-base [&>.coche]:hidden peer-checked:[&>.coche]:block peer-checked:[&>.icone]:hidden">
+              <span
+                data-clic=""
+                className="bg-nuage text-encre hover:bg-nuage-fonce peer-checked:bg-bleu peer-checked:hover:bg-bleu-fonce peer-focus-visible:ring-bleu relative inline-flex min-h-11 items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-sm font-semibold ring-offset-2 transition-colors duration-200 peer-checked:text-white peer-focus-visible:ring-3 md:text-base [&>.coche]:hidden peer-checked:[&>.coche]:block peer-checked:[&>.icone]:hidden"
+              >
                 {Icone ? <Icone className="icone size-4 shrink-0" /> : null}
                 <Check className="coche size-4 shrink-0" strokeWidth={3} aria-hidden="true" />
                 {libelle}

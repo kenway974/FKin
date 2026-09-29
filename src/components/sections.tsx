@@ -251,7 +251,7 @@ export function Bande({
   return (
     <section
       className={cn(
-        "relative isolate overflow-hidden py-24 md:py-36",
+        "relative isolate overflow-clip py-24 md:py-36",
         fond === "marine" ? "bg-marine text-white" : "bg-nuage",
         className,
       )}

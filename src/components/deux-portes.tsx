@@ -16,12 +16,12 @@ export function DeuxPortes() {
     <>
       <section
         aria-label="Nous contacter"
-        className="relative isolate mt-10 overflow-hidden text-white"
+        className="relative isolate mt-10 overflow-clip text-white"
       >
         <OndeBord className="text-fond" position="haut" />
         <OndeBord className="text-fond" position="bas" />
         <div className="grid md:grid-cols-2">
-          <div className="bg-rouge-vif relative isolate overflow-hidden px-6 pt-24 pb-20 md:px-12 md:pt-36 md:pb-36 lg:pl-[max(3rem,calc((100vw-72rem)/2+2rem))]">
+          <div className="bg-rouge-vif relative isolate overflow-clip px-6 pt-24 pb-20 md:px-12 md:pt-36 md:pb-36 lg:pl-[max(3rem,calc((100vw-72rem)/2+2rem))]">
             <span
               aria-hidden="true"
               className="blob-derive forme-blob-1 absolute -right-20 -bottom-24 -z-10 size-72 bg-white/10 md:size-96"
@@ -55,7 +55,7 @@ export function DeuxPortes() {
             <OndeBord className="text-rouge-vif md:hidden" position="haut" />
             <div
               aria-hidden="true"
-              className="absolute inset-y-0 left-0 hidden w-16 -translate-x-1/2 overflow-hidden md:block"
+              className="absolute inset-y-0 left-0 hidden w-16 -translate-x-1/2 overflow-clip md:block"
             >
               <svg
                 viewBox="0 0 60 1200"

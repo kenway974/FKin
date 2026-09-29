@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
  * la navigation au clavier).
  */
 const pilule =
-  "max-w-full rounded-full text-left leading-tight font-semibold sm:whitespace-nowrap shadow-[0_10px_24px_-12px_rgba(22,35,63,0.55)] transition-[background-color,box-shadow,transform] hover:-translate-y-0.5 active:translate-y-0 [&>svg]:shrink-0 [&>svg]:rounded-full [&>svg]:transition-transform [&>svg]:duration-300 hover:[&>svg]:-rotate-45";
+  "pilule relative isolate overflow-hidden max-w-full rounded-full text-left leading-tight font-semibold sm:whitespace-nowrap shadow-[0_10px_24px_-12px_rgba(22,35,63,0.55)] transition-[background-color,box-shadow,transform,translate,scale] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] [&>svg]:shrink-0 [&>svg]:rounded-full [&>svg]:transition-transform [&>svg]:duration-300 hover:[&>svg]:-rotate-45";
 
 const trait =
   "trait-courbe h-auto px-0 font-semibold [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:transition-transform hover:[&>svg]:translate-x-1";

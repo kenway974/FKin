@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <footer className="relative isolate mt-10 text-white">
       <Vague className="text-marine" retourne />
-      <div className="bg-marine relative overflow-hidden">
+      <div className="bg-marine relative overflow-clip">
         <Coeur className="text-rouge-vif -right-16 -bottom-20 -z-10 w-72 opacity-15 md:w-96" />
         <div
           data-apparition-cascade=""

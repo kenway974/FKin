@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Apparitions } from "@/components/apparitions";
 import { BoutonWhatsApp } from "@/components/whatsapp";
+import { EffetsClic } from "@/components/effets-clic";
 import { Intro, SCRIPT_INTRO } from "@/components/intro";
 import { site } from "@/lib/site";
 import { urlSite } from "@/lib/env";
@@ -65,6 +66,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         <Footer />
       </div>
       <BoutonWhatsApp />
+      <EffetsClic />
       <Apparitions />
     </>
   );

@@ -140,7 +140,7 @@ export default async function PageAccueil() {
           cartes : chaque volet est posé sur une forme souple animée. */}
       <section
         aria-labelledby="titre-congo"
-        className="bg-marine relative isolate overflow-hidden py-24 text-white md:py-36"
+        className="bg-marine relative isolate overflow-clip py-24 text-white md:py-36"
       >
         <OndeBord className="text-fond" position="haut" />
         <OndeBord className="text-fond" position="bas" />
@@ -256,7 +256,7 @@ export default async function PageAccueil() {
       {articles.length > 0 ? (
         <section
           aria-labelledby="titre-actualites"
-          className="bg-nuage relative isolate overflow-hidden py-24 md:py-36"
+          className="bg-nuage relative isolate overflow-clip py-24 md:py-36"
         >
           <OndeBord className="text-fond" position="haut" />
           <OndeBord className="text-fond" position="bas" />

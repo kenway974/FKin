@@ -100,8 +100,13 @@ export function Header() {
                 <Link
                   href={lien.href}
                   aria-current={estActif(lien.href) ? "page" : undefined}
+                  // `key` : la bulle de la page en cours rejoue son éclosion à
+                  // chaque changement de page.
+                  key={estActif(lien.href) ? `actif-${chemin}` : lien.href}
+                  data-clic=""
                   className={cn(
-                    "rounded-full px-3.5 py-2 text-[0.95rem] font-semibold transition-colors",
+                    "lien-nav inline-block overflow-hidden rounded-full px-3.5 py-2 text-[0.95rem] font-semibold transition-[color,background-color,scale] active:scale-95",
+                    estActif(lien.href) && "bulle-active",
                     estActif(lien.href)
                       ? transparent
                         ? "bg-white/15 text-white"
@@ -131,16 +136,20 @@ export function Header() {
             onClick={() => setOuvert((v) => !v)}
             aria-expanded={ouvert}
             aria-controls="menu-mobile"
+            data-clic=""
             className={cn(
-              "-mr-1 inline-flex size-11 items-center justify-center rounded-full transition-colors xl:hidden",
+              "relative -mr-1 inline-flex size-11 items-center justify-center overflow-hidden rounded-full transition-[color,background-color,scale] active:scale-90 xl:hidden",
               transparent ? "bg-white/15 text-white" : "bg-nuage text-marine",
             )}
           >
-            {ouvert ? (
-              <X className="size-6" aria-hidden="true" />
-            ) : (
-              <Menu className="size-6" aria-hidden="true" />
-            )}
+            {/* `key` : l'icône pivote à chaque bascule. */}
+            <span key={ouvert ? "fermer" : "ouvrir"} className="icone-menu inline-flex">
+              {ouvert ? (
+                <X className="size-6" aria-hidden="true" />
+              ) : (
+                <Menu className="size-6" aria-hidden="true" />
+              )}
+            </span>
             <span className="sr-only">{ouvert ? "Fermer le menu" : "Ouvrir le menu"}</span>
           </button>
         </div>
@@ -151,11 +160,15 @@ export function Header() {
         <nav
           id="menu-mobile"
           aria-label="Navigation principale (mobile)"
-          className="bg-marine relative xl:hidden"
+          className="menu-ouverture bg-marine relative xl:hidden"
         >
           <ul className="contenu flex flex-col py-4">
-            {navigation.map((lien) => (
-              <li key={lien.href}>
+            {navigation.map((lien, index) => (
+              <li
+                key={lien.href}
+                className="menu-lien"
+                style={{ animationDelay: `${60 + index * 50}ms` }}
+              >
                 <Link
                   href={lien.href}
                   aria-current={estActif(lien.href) ? "page" : undefined}
@@ -170,7 +183,10 @@ export function Header() {
                 </Link>
               </li>
             ))}
-            <li className="pt-4 pb-1 sm:hidden">
+            <li
+              className="menu-lien pt-4 pb-1 sm:hidden"
+              style={{ animationDelay: `${60 + navigation.length * 50}ms` }}
+            >
               <Button asChild variante="clair" className="w-full justify-between">
                 <Link href="/contact?profil=entreprise">
                   Proposer un don

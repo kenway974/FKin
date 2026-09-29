@@ -80,27 +80,34 @@ export function OndeBord({
     <div
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute inset-x-0 z-10 h-12 overflow-hidden md:h-20",
+        "pointer-events-none absolute inset-x-0 z-10 h-12 overflow-clip md:h-20",
         position === "haut" ? "-top-px" : "-bottom-px rotate-180",
         className,
       )}
     >
-      <svg
-        viewBox="0 0 2880 70"
-        preserveAspectRatio="none"
-        className="onde onde-lente absolute inset-y-0 left-0 h-full opacity-35"
-        focusable="false"
-      >
-        <path d={trace} fill="currentColor" transform="translate(0 10)" />
-      </svg>
-      <svg
-        viewBox="0 0 2880 70"
-        preserveAspectRatio="none"
-        className="onde absolute inset-y-0 left-0 h-full"
-        focusable="false"
-      >
-        <path d={trace} fill="currentColor" />
-      </svg>
+      {/* Deux couches de houle : au défilement, elles glissent en sens
+          opposés et se creusent (plus large que l'écran, pour que le
+          glissement ne découvre jamais de bord). */}
+      <div className="onde-houle onde-houle-arriere absolute -inset-x-24 inset-y-0">
+        <svg
+          viewBox="0 0 2880 70"
+          preserveAspectRatio="none"
+          className="onde onde-lente absolute inset-y-0 left-0 h-full opacity-35"
+          focusable="false"
+        >
+          <path d={trace} fill="currentColor" transform="translate(0 10)" />
+        </svg>
+      </div>
+      <div className="onde-houle absolute -inset-x-24 inset-y-0">
+        <svg
+          viewBox="0 0 2880 70"
+          preserveAspectRatio="none"
+          className="onde absolute inset-y-0 left-0 h-full"
+          focusable="false"
+        >
+          <path d={trace} fill="currentColor" />
+        </svg>
+      </div>
     </div>
   );
 }

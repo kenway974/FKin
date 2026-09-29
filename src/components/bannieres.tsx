@@ -43,7 +43,7 @@ export function BanniereAccueil({
     // l'accueil, l'en-tête est translucide et se fond dans le marine.
     <section
       data-banniere-sombre=""
-      className="bg-marine relative isolate -mt-16 flex min-h-svh flex-col overflow-hidden pt-16 md:-mt-20 md:pt-20 lg:block"
+      className="bg-marine relative isolate -mt-16 flex min-h-svh flex-col overflow-clip pt-16 md:-mt-20 md:pt-20 lg:block"
     >
       <div
         className="from-marine-fonce via-marine to-marine-clair absolute inset-0 -z-20 bg-linear-to-br"
@@ -228,7 +228,7 @@ export function BannierePage({
     <section
       data-banniere-sombre=""
       className={cn(
-        "bg-marine relative isolate -mt-16 overflow-hidden pt-16 md:-mt-20 md:pt-20",
+        "bg-marine relative isolate -mt-16 overflow-clip pt-16 md:-mt-20 md:pt-20",
         className,
       )}
     >
