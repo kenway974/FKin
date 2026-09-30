@@ -490,39 +490,16 @@ create policy "Les admins gèrent les chiffres"
 alter table public.projets add column if not exists latitude  double precision;
 alter table public.projets add column if not exists longitude double precision;
 
-do $$
-begin
-  if not exists (select 1 from pg_constraint where conname = 'projets_position_valide') then
-    alter table public.projets
-      add constraint projets_position_valide check (
-        (latitude is null and longitude is null)
-        or (latitude between -90 and 90 and longitude between -180 and 180)
-      );
-  end if;
-end $$;
-
-
--- =============================================================================
---  ÉTAPE SUIVANTE — déclarer votre compte administrateur
--- =============================================================================
---
---  1. Créez d'abord l'utilisateur : dashboard Supabase > Authentication >
---     Users > « Add user » > « Create new user ». Cochez « Auto Confirm User ».
---
---  2. Puis exécutez la requête ci-dessous en remplaçant l'adresse e-mail.
---     Elle retrouve l'identifiant du compte et l'inscrit comme administrateur.
---
---     insert into public.admins (user_id, email, nom_affichage)
---     select id, email, 'Votre prénom'
---     from auth.users
---     where email = 'vous@votre-domaine.fr'
---     on conflict (user_id) do nothing;
---
---  3. Vérifiez :  select * from public.admins;
---
---  Pour ajouter un second administrateur plus tard, répétez ces deux étapes.
---  Pour en retirer un :  delete from public.admins where email = '…';
--- =============================================================================
+-- Les deux coordonnées ensemble, ou aucune. `num_nulls` plutôt qu'un
+-- `between` : une comparaison avec NULL n'est jamais fausse, elle aurait
+-- laissé passer une latitude sans longitude.
+alter table public.projets drop constraint if exists projets_position_valide;
+alter table public.projets
+  add constraint projets_position_valide check (
+    num_nulls(latitude, longitude) in (0, 2)
+    and coalesce(latitude between -90 and 90, true)
+    and coalesce(longitude between -180 and 180, true)
+  );
 
 
 -- -----------------------------------------------------------------------------
@@ -573,3 +550,26 @@ $$;
 
 revoke execute on function public.consommer_envoi(text, integer, integer) from public, anon, authenticated;
 grant execute on function public.consommer_envoi(text, integer, integer) to service_role;
+
+
+-- =============================================================================
+--  ÉTAPE SUIVANTE — déclarer votre compte administrateur
+-- =============================================================================
+--
+--  1. Créez d'abord l'utilisateur : dashboard Supabase > Authentication >
+--     Users > « Add user » > « Create new user ». Cochez « Auto Confirm User ».
+--
+--  2. Puis exécutez la requête ci-dessous en remplaçant l'adresse e-mail.
+--     Elle retrouve l'identifiant du compte et l'inscrit comme administrateur.
+--
+--     insert into public.admins (user_id, email, nom_affichage)
+--     select id, email, 'Votre prénom'
+--     from auth.users
+--     where email = 'vous@votre-domaine.fr'
+--     on conflict (user_id) do nothing;
+--
+--  3. Vérifiez :  select * from public.admins;
+--
+--  Pour ajouter un second administrateur plus tard, répétez ces deux étapes.
+--  Pour en retirer un :  delete from public.admins where email = '…';
+-- =============================================================================
