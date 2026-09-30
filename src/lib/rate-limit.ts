@@ -1,80 +1,48 @@
+import "server-only";
+
+import { createHash } from "node:crypto";
+import { env } from "@/lib/env";
+import type { creerClientService } from "@/lib/supabase/server";
+
 /**
- * Limitation de débit minimaliste, en mémoire.
+ * Limitation de débit partagée, stockée dans Supabase (table `limites_envoi`,
+ * voir `supabase/schema.sql`, section 12) : le compteur est le même pour toutes
+ * les instances du serveur, contrairement à un compteur en mémoire.
  *
- * Limite volontairement simple, conforme à la consigne « rate-limit basique » :
- * une `Map` en mémoire de processus, sans dépendance externe ni service payant.
+ * L'adresse IP n'est jamais enregistrée : seule son empreinte, salée avec un
+ * secret du serveur, sert de clé.
  *
- * Limite connue : sur Vercel, chaque instance serverless a sa propre mémoire et
- * les instances sont recyclées. Le compteur n'est donc pas partagé — c'est un
- * ralentisseur contre les envois répétés, pas un rempart absolu. Combiné au
- * honeypot et au piège temporel, cela suffit largement au volume attendu.
- * Pour durcir : brancher Upstash Ratelimit (Redis) sans changer cette interface.
+ * En cas de panne de la base, l'envoi est accepté : mieux vaut laisser passer
+ * un spam que perdre une vraie demande. Le honeypot et le piège temporel du
+ * formulaire restent actifs.
+ *
+ * @returns 0 si l'envoi est accepté, sinon le nombre de secondes à attendre.
  */
-
-type Fenetre = { compte: number; expireA: number };
-
-const compteurs = new Map<string, Fenetre>();
-
-/** Purge les fenêtres expirées pour éviter que la Map ne grossisse sans fin. */
-function purger(maintenant: number) {
-  for (const [cle, fenetre] of compteurs) {
-    if (fenetre.expireA <= maintenant) compteurs.delete(cle);
+export async function consommerEnvoi(
+  supabase: NonNullable<ReturnType<typeof creerClientService>>,
+  entetes: Headers,
+  maxEnvois: number,
+  fenetreSecondes: number,
+): Promise<number> {
+  const { data, error } = await supabase.rpc("consommer_envoi", {
+    p_cle: empreinte(adresseIp(entetes)),
+    p_max: maxEnvois,
+    p_fenetre_s: fenetreSecondes,
+  });
+  if (error) {
+    console.error("[limite] Vérification impossible, envoi accepté :", error);
+    return 0;
   }
+  return data ?? 0;
 }
 
-export type ResultatLimite = {
-  autorise: boolean;
-  /** Nombre de tentatives restantes dans la fenêtre courante. */
-  restant: number;
-  /** Secondes à attendre avant de pouvoir réessayer (0 si autorisé). */
-  attenteSecondes: number;
-};
-
-/**
- * @param cle          identifiant du demandeur (IP hachée, e-mail, …)
- * @param maxTentatives nombre d'appels autorisés par fenêtre
- * @param fenetreMs    durée de la fenêtre glissante, en millisecondes
- */
-export function verifierLimite(
-  cle: string,
-  maxTentatives = 5,
-  fenetreMs = 60 * 60 * 1000,
-): ResultatLimite {
-  const maintenant = Date.now();
-  purger(maintenant);
-
-  const existante = compteurs.get(cle);
-
-  if (!existante || existante.expireA <= maintenant) {
-    compteurs.set(cle, { compte: 1, expireA: maintenant + fenetreMs });
-    return { autorise: true, restant: maxTentatives - 1, attenteSecondes: 0 };
-  }
-
-  if (existante.compte >= maxTentatives) {
-    return {
-      autorise: false,
-      restant: 0,
-      attenteSecondes: Math.ceil((existante.expireA - maintenant) / 1000),
-    };
-  }
-
-  existante.compte += 1;
-  return {
-    autorise: true,
-    restant: maxTentatives - existante.compte,
-    attenteSecondes: 0,
-  };
+function adresseIp(entetes: Headers): string {
+  const premiere = entetes.get("x-forwarded-for")?.split(",")[0]?.trim();
+  return premiere || entetes.get("x-real-ip") || "inconnu";
 }
 
-/**
- * Déduit une clé d'identification à partir des en-têtes de la requête.
- * On ne conserve jamais l'IP en base : elle sert uniquement de clé volatile.
- */
-export function cleDepuisEntetes(entetes: Headers): string {
-  const transmise = entetes.get("x-forwarded-for");
-  if (transmise) {
-    const premiere = transmise.split(",")[0]?.trim();
-    if (premiere) return premiere;
-  }
-  return entetes.get("x-real-ip") ?? "inconnu";
+function empreinte(valeur: string): string {
+  return createHash("sha256")
+    .update(`${env.SUPABASE_SERVICE_ROLE_KEY ?? ""}:${valeur}`)
+    .digest("hex");
 }

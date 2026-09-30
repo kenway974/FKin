@@ -11,7 +11,7 @@ import {
 } from "@/lib/validation/contact";
 import type { DetailsDon } from "@/types/database";
 import { creerClientService } from "@/lib/supabase/server";
-import { cleDepuisEntetes, verifierLimite } from "@/lib/rate-limit";
+import { consommerEnvoi } from "@/lib/rate-limit";
 import { env, resendConfigure } from "@/lib/env";
 import { valider } from "@/lib/actions-serveur";
 import type { ResultatContact } from "@/lib/actions-types";
@@ -23,7 +23,7 @@ import type { ResultatContact } from "@/lib/actions-types";
  *   0. validation zod (le schéma partagé avec le client) ;
  *   1. honeypot et piège temporel — écartent les robots sans toucher au réseau ;
  *   2. photos : nombre, poids et format réel (signature des fichiers) ;
- *   3. limitation de débit par IP ;
+ *   3. limitation de débit par IP (compteur partagé, en base) ;
  *   4. enregistrement : photos dans le bucket privé, puis message en base ;
  *   5. notification par e-mail.
  *
@@ -68,18 +68,6 @@ export async function envoyerMessageContact(formulaire: FormData): Promise<Resul
   if (!controle.ok) return { statut: "erreur", message: controle.message };
 
   // --- 3. Limitation de débit ----------------------------------------------
-  const entetes = await headers();
-  const limite = verifierLimite(`contact:${cleDepuisEntetes(entetes)}`, 5, 60 * 60 * 1000);
-
-  if (!limite.autorise) {
-    const minutes = Math.ceil(limite.attenteSecondes / 60);
-    return {
-      statut: "erreur",
-      message: `Vous avez déjà envoyé plusieurs messages. Merci de réessayer dans ${minutes} minute${minutes > 1 ? "s" : ""}, ou de nous écrire directement par e-mail.`,
-    };
-  }
-
-  // --- 4. Enregistrement ----------------------------------------------------
   // Client « service_role » : le rôle anonyme n'a aucun droit d'écriture sur la
   // table `messages` ni sur le bucket des photos ; un visiteur ne peut donc rien
   // déposer en dehors de cette action.
@@ -94,6 +82,16 @@ export async function envoyerMessageContact(formulaire: FormData): Promise<Resul
     };
   }
 
+  const attente = await consommerEnvoi(supabase, await headers(), 5, 60 * 60);
+  if (attente > 0) {
+    const minutes = Math.ceil(attente / 60);
+    return {
+      statut: "erreur",
+      message: `Vous avez déjà envoyé plusieurs messages. Merci de réessayer dans ${minutes} minute${minutes > 1 ? "s" : ""}, ou de nous écrire directement par e-mail.`,
+    };
+  }
+
+  // --- 4. Enregistrement ----------------------------------------------------
   // Photos d'abord, dans le bucket privé ; en cas d'échec de l'enregistrement
   // du message, elles sont supprimées pour ne rien laisser d'orphelin.
   const chemins: string[] = [];

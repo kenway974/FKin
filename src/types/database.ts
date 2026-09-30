@@ -161,6 +161,11 @@ export type Database = {
         Args: Record<string, never>;
         Returns: boolean;
       };
+      // Limite d'envois du formulaire de contact : 0 = accepté, sinon secondes à attendre.
+      consommer_envoi: {
+        Args: { p_cle: string; p_max: number; p_fenetre_s: number };
+        Returns: number;
+      };
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };
