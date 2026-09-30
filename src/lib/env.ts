@@ -26,7 +26,9 @@ const schemaServeur = z.object({
 });
 
 const brut = {
-  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  // Variante d'aperçu : voir lib/env-public.ts.
+  SUPABASE_SERVICE_ROLE_KEY:
+    process.env.APERCU_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
   CONTACT_NOTIFICATION_EMAIL: process.env.CONTACT_NOTIFICATION_EMAIL,

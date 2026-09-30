@@ -24,10 +24,14 @@ const schemaPublic = z.object({
 
 // Chaque variable est nommée littéralement : Next.js ne substitue
 // `process.env.NEXT_PUBLIC_*` à la compilation que sous cette forme exacte.
+// Les variantes `*_APERCU_*`, si elles existent, remplacent la base Supabase
+// sur les déploiements d'aperçu sans toucher aux variables de production.
 const brut = {
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL:
+    process.env.NEXT_PUBLIC_APERCU_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY:
+    process.env.NEXT_PUBLIC_APERCU_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   NEXT_PUBLIC_SUPABASE_BUCKET: process.env.NEXT_PUBLIC_SUPABASE_BUCKET,
 };
 
