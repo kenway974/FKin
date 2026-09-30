@@ -11,6 +11,9 @@
 --    3. Collez l'intégralité de ce fichier, puis cliquez sur « Run »
 --
 --  Le script est idempotent : vous pouvez le rejouer sans casser l'existant.
+--  Pour mettre à jour une base déjà en service (nouvelle version du site),
+--  il suffit donc de relancer le fichier entier : seules les nouveautés
+--  (colonnes, tables, règles) sont ajoutées, les données restent intactes.
 --
 --  Ordre du fichier :
 --    1. Extensions
@@ -24,6 +27,7 @@
 --    9. Formulaire de don en étapes (détails, photos, bucket privé)
 --   10. Table `chiffres_cles`
 --   11. Position des projets sur la carte
+--   12. Limite d'envois du formulaire de contact (anti-spam)
 -- =============================================================================
 
 
@@ -519,3 +523,53 @@ end $$;
 --  Pour ajouter un second administrateur plus tard, répétez ces deux étapes.
 --  Pour en retirer un :  delete from public.admins where email = '…';
 -- =============================================================================
+
+
+-- -----------------------------------------------------------------------------
+--  12. Limite d'envois du formulaire de contact (anti-spam)
+-- -----------------------------------------------------------------------------
+--  Un envoi = une ligne, avec une clé anonyme (empreinte de l'adresse IP, jamais
+--  l'IP elle-même). Partagé par toutes les instances du serveur, contrairement
+--  à un compteur en mémoire. Aucune politique RLS : seul le serveur
+--  (service_role) y accède, via la fonction ci-dessous.
+
+create table if not exists public.limites_envoi (
+  cle    text not null,
+  cree_a timestamptz not null default now()
+);
+
+create index if not exists limites_envoi_cle_date on public.limites_envoi (cle, cree_a);
+
+alter table public.limites_envoi enable row level security;
+
+-- Enregistre un envoi s'il reste de la place dans la fenêtre glissante.
+-- Renvoie 0 si l'envoi est accepté, sinon le nombre de secondes à attendre.
+create or replace function public.consommer_envoi(p_cle text, p_max integer, p_fenetre_s integer)
+returns integer
+language plpgsql
+set search_path = ''
+as $$
+declare
+  v_fenetre interval := make_interval(secs => p_fenetre_s);
+  v_nombre  integer;
+  v_premier timestamptz;
+begin
+  -- Deux envois simultanés de la même personne ne peuvent pas passer ensemble.
+  perform pg_advisory_xact_lock(hashtext(p_cle));
+
+  delete from public.limites_envoi where cree_a < now() - v_fenetre;
+
+  select count(*), min(cree_a) into v_nombre, v_premier
+  from public.limites_envoi where cle = p_cle;
+
+  if v_nombre >= p_max then
+    return greatest(1, ceil(extract(epoch from v_premier + v_fenetre - now())))::integer;
+  end if;
+
+  insert into public.limites_envoi (cle) values (p_cle);
+  return 0;
+end;
+$$;
+
+revoke execute on function public.consommer_envoi(text, integer, integer) from public, anon, authenticated;
+grant execute on function public.consommer_envoi(text, integer, integer) to service_role;
