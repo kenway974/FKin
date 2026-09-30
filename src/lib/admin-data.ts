@@ -1,6 +1,6 @@
 import "server-only";
 
-import { creerClientServeur } from "@/lib/supabase/server";
+import { creerClientServeur, type ClientServeur } from "@/lib/supabase/server";
 import type { Article, ChiffreCle, Message, Projet } from "@/types/database";
 
 /**
@@ -11,8 +11,6 @@ import type { Article, ChiffreCle, Message, Projet } from "@/types/database";
  * est assurée par les politiques RLS, qui n'autorisent ces lectures qu'aux
  * comptes présents dans la table `admins`.
  */
-
-type ClientServeur = NonNullable<Awaited<ReturnType<typeof creerClientServeur>>>;
 
 /**
  * Exécute une lecture du back-office. Contrairement au site public, un échec

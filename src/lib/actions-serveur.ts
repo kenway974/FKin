@@ -1,7 +1,7 @@
 import "server-only";
 
 import { z } from "zod";
-import { creerClientServeur } from "@/lib/supabase/server";
+import { creerClientServeur, type ClientServeur } from "@/lib/supabase/server";
 import { recupererAdmin } from "@/lib/auth";
 import type { ResultatAction } from "@/lib/actions-types";
 
@@ -13,8 +13,6 @@ import type { ResultatAction } from "@/lib/actions-types";
  * jamais se fier au fait que le formulaire n'était affiché qu'aux admins. Les
  * politiques RLS restent la seconde barrière, côté base.
  */
-
-type ClientServeur = NonNullable<Awaited<ReturnType<typeof creerClientServeur>>>;
 
 export const echec = (message: string): ResultatAction => ({ statut: "erreur", message });
 

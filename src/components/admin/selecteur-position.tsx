@@ -35,11 +35,6 @@ export function SelecteurPosition({
     onChange(coordonnees.latitude, coordonnees.longitude);
   }
 
-  const lire = (valeur: string) => {
-    const nombre = Number(valeur.replace(",", "."));
-    return valeur.trim() === "" || !Number.isFinite(nombre) ? null : nombre;
-  };
-
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
@@ -80,28 +75,20 @@ export function SelecteurPosition({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <ChampFormulaire id="latitude" libelle="Latitude">
-          {(aria) => (
-            <Input
-              {...aria}
-              inputMode="decimal"
-              value={latitude ?? ""}
-              onChange={(evenement) => onChange(lire(evenement.target.value), longitude)}
-              placeholder="Ex. : -4.325"
-            />
-          )}
-        </ChampFormulaire>
-        <ChampFormulaire id="longitude" libelle="Longitude">
-          {(aria) => (
-            <Input
-              {...aria}
-              inputMode="decimal"
-              value={longitude ?? ""}
-              onChange={(evenement) => onChange(latitude, lire(evenement.target.value))}
-              placeholder="Ex. : 15.322"
-            />
-          )}
-        </ChampFormulaire>
+        <ChampCoordonnee
+          id="latitude"
+          libelle="Latitude"
+          valeur={latitude}
+          onValeur={(valeur) => onChange(valeur, longitude)}
+          exemple="-4.325"
+        />
+        <ChampCoordonnee
+          id="longitude"
+          libelle="Longitude"
+          valeur={longitude}
+          onValeur={(valeur) => onChange(latitude, valeur)}
+          exemple="15.322"
+        />
       </div>
 
       <AideChamp>
@@ -116,5 +103,52 @@ export function SelecteurPosition({
         </Button>
       ) : null}
     </div>
+  );
+}
+
+const lire = (texte: string) => {
+  const nombre = Number(texte.replace(",", "."));
+  return texte.trim() === "" || !Number.isFinite(nombre) ? null : nombre;
+};
+
+/**
+ * Champ de coordonnée : garde le texte saisi tel quel (« - », « 4. »…) pour
+ * permettre d'écrire un nombre négatif ou décimal, et ne transmet que les
+ * valeurs lisibles. Un clic sur la carte remplace le texte.
+ */
+function ChampCoordonnee({
+  id,
+  libelle,
+  valeur,
+  onValeur,
+  exemple,
+}: {
+  id: string;
+  libelle: string;
+  valeur: number | null;
+  onValeur: (valeur: number | null) => void;
+  exemple: string;
+}) {
+  const [texte, setTexte] = React.useState(valeur === null ? "" : String(valeur));
+  // Valeur changée de l'extérieur (clic sur la carte, « Retirer ») : on suit.
+  if (lire(texte) !== valeur) {
+    setTexte(valeur === null ? "" : String(valeur));
+  }
+
+  return (
+    <ChampFormulaire id={id} libelle={libelle}>
+      {(aria) => (
+        <Input
+          {...aria}
+          inputMode="decimal"
+          value={texte}
+          onChange={(evenement) => {
+            setTexte(evenement.target.value);
+            onValeur(lire(evenement.target.value));
+          }}
+          placeholder={`Ex. : ${exemple}`}
+        />
+      )}
+    </ChampFormulaire>
   );
 }

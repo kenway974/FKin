@@ -52,36 +52,41 @@ export const schemaArticle = z.object({
 
 export type DonneesArticle = z.infer<typeof schemaArticle>;
 
-export const schemaProjet = z.object({
-  titre: z.string().trim().min(3, "Le titre est trop court.").max(180, "Le titre est trop long."),
-  slug,
-  description: z.string().trim().min(30, "La description doit faire au moins 30 caractères."),
-  lieu: z.string().trim().min(2, "Merci d'indiquer le lieu.").max(160),
-  dateProjet: z
-    .string()
-    .trim()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Format attendu : AAAA-MM-JJ.")
-    .optional()
-    .or(z.literal("")),
-  typeMateriel: z
-    .string()
-    .trim()
-    .min(2, "Merci d'indiquer le type de matériel.")
-    .max(200, "Ce champ est trop long."),
-  resultat: z.string().trim().min(10, "Merci de décrire le résultat obtenu.").max(600),
-  imageUrl: urlImage,
-  imageAlt: z
-    .string()
-    .trim()
-    .max(200, "La description de l'image est trop longue.")
-    .optional()
-    .or(z.literal("")),
-  publie: z.boolean(),
-  ordre: z.number().int().min(0).max(999),
-  /** Position sur la carte des structures équipées (facultative). */
-  latitude: z.number().min(-90).max(90).nullable(),
-  longitude: z.number().min(-180).max(180).nullable(),
-});
+export const schemaProjet = z
+  .object({
+    titre: z.string().trim().min(3, "Le titre est trop court.").max(180, "Le titre est trop long."),
+    slug,
+    description: z.string().trim().min(30, "La description doit faire au moins 30 caractères."),
+    lieu: z.string().trim().min(2, "Merci d'indiquer le lieu.").max(160),
+    dateProjet: z
+      .string()
+      .trim()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Format attendu : AAAA-MM-JJ.")
+      .optional()
+      .or(z.literal("")),
+    typeMateriel: z
+      .string()
+      .trim()
+      .min(2, "Merci d'indiquer le type de matériel.")
+      .max(200, "Ce champ est trop long."),
+    resultat: z.string().trim().min(10, "Merci de décrire le résultat obtenu.").max(600),
+    imageUrl: urlImage,
+    imageAlt: z
+      .string()
+      .trim()
+      .max(200, "La description de l'image est trop longue.")
+      .optional()
+      .or(z.literal("")),
+    publie: z.boolean(),
+    ordre: z.number().int().min(0).max(999),
+    /** Position sur la carte des structures équipées (facultative). */
+    latitude: z.number().min(-90).max(90).nullable(),
+    longitude: z.number().min(-180).max(180).nullable(),
+  })
+  .refine((projet) => (projet.latitude === null) === (projet.longitude === null), {
+    message: "Renseignez la latitude et la longitude, ou aucune des deux.",
+    path: ["longitude"],
+  });
 
 export type DonneesProjet = z.infer<typeof schemaProjet>;
 

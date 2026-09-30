@@ -95,3 +95,6 @@ export function creerClientService() {
     },
   );
 }
+
+/** Client Supabase de l'utilisateur connecté (session lue dans les cookies). */
+export type ClientServeur = NonNullable<Awaited<ReturnType<typeof creerClientServeur>>>;

@@ -159,7 +159,7 @@ export function EtapeBesoins({
 }: {
   profil: Profil;
   photos: PhotoJointe[];
-  onPhotos: (photos: PhotoJointe[]) => void;
+  onPhotos: React.Dispatch<React.SetStateAction<PhotoJointe[]>>;
 }) {
   const textes = TEXTES[profil];
   return (

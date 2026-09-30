@@ -158,7 +158,7 @@ export function SelecteurPhotos({
   aide,
 }: {
   photos: PhotoJointe[];
-  onChange: (photos: PhotoJointe[]) => void;
+  onChange: React.Dispatch<React.SetStateAction<PhotoJointe[]>>;
   legende: string;
   aide: string;
 }) {
@@ -198,7 +198,9 @@ export function SelecteurPhotos({
     } else if (lourdes) {
       setErreur("Une photo est trop détaillée pour être envoyée. Essayez-en une autre.");
     }
-    onChange([...photos, ...nouvelles]);
+    // Liste à jour au moment de l'ajout : une photo retirée pendant la
+    // compression ne doit pas revenir.
+    onChange((actuelles) => [...actuelles, ...nouvelles].slice(0, PHOTOS_MAX));
     setEnCours(false);
     if (champ.current) champ.current.value = "";
   }
@@ -206,7 +208,7 @@ export function SelecteurPhotos({
   function retirer(id: string) {
     const photo = photos.find((element) => element.id === id);
     if (photo) URL.revokeObjectURL(photo.apercu);
-    onChange(photos.filter((element) => element.id !== id));
+    onChange((actuelles) => actuelles.filter((element) => element.id !== id));
   }
 
   return (

@@ -34,7 +34,10 @@ export function Intro() {
   React.useEffect(() => {
     const racine = document.documentElement;
     const rideau = reference.current;
-    if (!rideau || racine.classList.contains("intro-vue")) {
+    // Sans `intro-en-cours`, le script d'ouverture n'a pas tourné : on arrive
+    // par une navigation interne (depuis l'admin, par exemple). Pas d'intro.
+    if (!rideau || !racine.classList.contains("intro-en-cours")) {
+      racine.classList.add("intro-vue");
       setTerminee(true);
       return;
     }

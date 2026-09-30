@@ -53,7 +53,9 @@ export async function envoyerMessageContact(formulaire: FormData): Promise<Resul
     return { statut: "succes", message: "Merci, votre message a bien été transmis." };
   }
 
-  if (donnees.charge && Date.now() - donnees.charge < DELAI_MINIMAL_ENVOI_MS) {
+  // Le formulaire envoie toujours son heure d'affichage : sans elle, c'est un
+  // envoi direct, hors du site.
+  if (!donnees.charge || Date.now() - donnees.charge < DELAI_MINIMAL_ENVOI_MS) {
     return {
       statut: "erreur",
       message: "Envoi trop rapide. Merci de patienter quelques secondes puis de réessayer.",

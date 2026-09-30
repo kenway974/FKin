@@ -20,7 +20,10 @@ function hostnameDepuisUrl(url) {
   }
 }
 
-const hoteSupabase = hostnameDepuisUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
+// Même priorité que lib/env-public.ts : la base d'aperçu, si elle est définie.
+const hoteSupabase = hostnameDepuisUrl(
+  process.env.NEXT_PUBLIC_APERCU_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL,
+);
 
 // Origines externes que la page doit pouvoir contacter (API Supabase + Storage).
 const originesSupabase = hoteSupabase ? [`https://${hoteSupabase}`, `wss://${hoteSupabase}`] : [];
