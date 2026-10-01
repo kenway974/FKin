@@ -22,6 +22,14 @@ import { usePathname } from "next/navigation";
  * n'est masqué : tout le contenu reste affiché d'emblée. Les éléments déjà à
  * l'écran au chargement sont affichés tout de suite, sans clignotement.
  */
+/**
+ * Tout ce que le CSS masque avant son entrée en scène : les éléments marqués
+ * `data-apparition`, mais aussi les listes `.anim-defilement` (articles,
+ * projets). Si l'un de ces sélecteurs manquait ici, l'élément resterait
+ * invisible pour toujours une fois `.js-apparitions` posé.
+ */
+const CIBLES_A_REVELER = ":is([data-apparition], .anim-defilement):not([data-visible])";
+
 export function Apparitions() {
   const chemin = usePathname();
 
@@ -41,7 +49,7 @@ export function Apparitions() {
     });
 
     const elements = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-apparition]:not([data-visible])"),
+      document.querySelectorAll<HTMLElement>(CIBLES_A_REVELER),
     );
 
     // Ce qui est déjà à l'écran s'affiche immédiatement.
@@ -92,7 +100,7 @@ export function Apparitions() {
     const rattraper = () => {
       enAttente = false;
       const restants = document.querySelectorAll<HTMLElement>(
-        "[data-apparition]:not([data-visible])",
+        CIBLES_A_REVELER,
       );
       if (!restants.length) {
         window.removeEventListener("scroll", programmer);
