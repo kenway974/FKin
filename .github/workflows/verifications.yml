@@ -1,0 +1,40 @@
+# Vérifications automatiques : lancées à chaque pull request et à chaque push
+# sur main. Une pull request ne peut être fusionnée que si ce contrôle est vert
+# (règle de protection de la branche main, réglée sur GitHub).
+name: Vérifications
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Un nouveau push sur la même branche annule le contrôle précédent, devenu inutile.
+concurrency:
+  group: verifications-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verifications:
+    name: Lint, typage, tests et build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      # Ne fait rien tant que le projet n'a pas de script « test » ; s'active
+      # tout seul dès que les tests sont installés.
+      - run: npm test --if-present
+      # Sans variables Supabase, le site se construit avec ses contenus de
+      # secours : le build vérifie la compilation, pas les données.
+      - run: npm run build
