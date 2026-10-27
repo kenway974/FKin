@@ -76,4 +76,10 @@ export const FAQ: QuestionFaq[] = [
       "Oui : chaque équipement est testé avant de partir. Il est ensuite installé et testé avec la personne référente, et nous revenons quelques mois plus tard constater l'usage et recenser les éventuelles pannes.",
     public: "beneficiaires",
   },
+  {
+    question: "Certains matériels sont-ils mis en vente ?",
+    reponse:
+      "Seul le matériel qu'aucune structure n'a demandé est revendu, pour financer le transport, l'acheminement et le fonctionnement de l'association. En 2025, il s'agissait d'accessoires réseau et informatiques (switchs, onduleurs…), vendus à des particuliers. L'association ne reçoit aucun financement public : elle vit des cotisations des écoles adhérentes et des adhérents privés, et de ces ventes.",
+    public: "tous",
+  },
 ];
