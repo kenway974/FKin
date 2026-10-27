@@ -85,14 +85,16 @@ quoi que ce soit chez Supabase.
 
 ### Scripts disponibles
 
-| Commande            | Effet                                 |
-| ------------------- | ------------------------------------- |
-| `npm run dev`       | Serveur de développement              |
-| `npm run build`     | Build de production                   |
-| `npm run start`     | Sert le build de production           |
-| `npm run lint`      | ESLint                                |
-| `npm run typecheck` | Vérification TypeScript sans émission |
-| `npm run format`    | Formatage Prettier                    |
+| Commande             | Effet                                 |
+| -------------------- | ------------------------------------- |
+| `npm run dev`        | Serveur de développement              |
+| `npm run build`      | Build de production                   |
+| `npm run start`      | Sert le build de production           |
+| `npm run lint`       | ESLint                                |
+| `npm run typecheck`  | Vérification TypeScript sans émission |
+| `npm run format`     | Formatage Prettier                    |
+| `npm test`           | Tests Vitest (une passe)              |
+| `npm run test:watch` | Tests Vitest en continu               |
 
 ## 4. Brancher Supabase
 
