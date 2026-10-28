@@ -82,7 +82,8 @@ coordonnées avec les valeurs actuelles de `src/lib/site.ts`
 (`on conflict do nothing`). Relancer le script ne doit jamais écraser les
 modifications du propriétaire. Le WhatsApp de départ est vide : la valeur
 réelle se trouve dans Vercel et doit être recopiée à la main une fois (voir
-« Mise en service »).
+« Mise en service »). Le téléphone de départ est vide aussi : le numéro
+provisoire de `site.ts` n'est pas recopié, pour qu'il ne s'affiche jamais.
 
 ### Site public
 
@@ -96,6 +97,17 @@ réelle se trouve dans Vercel et doit être recopiée à la main une fois (voir
   `src/lib/site.ts` si la ligne est absente ou illisible, **champ par
   champ** (un champ vidé en base repasse à la valeur du code, sauf le
   téléphone et la rue qui peuvent rester vides).
+- **Téléphone** (décidé par Kenny) : affiché dès que l'admin en a saisi un,
+  en lien `tel:`, dans le pied de page et sur la page contact, et ajouté au
+  JSON-LD (`telephone`). Champ vide → rien ne s'affiche. Le numéro
+  provisoire du code n'est jamais utilisé comme repli.
+- **E-mail de réception des messages** (décidé par Kenny) : les
+  notifications du formulaire de contact partent vers l'e-mail des
+  coordonnées. Repli : `CONTACT_NOTIFICATION_EMAIL` si la base est
+  illisible. La condition « Resend configuré » (`resendConfigure` dans
+  `lib/env.ts`) ne doit plus exiger `CONTACT_NOTIFICATION_EMAIL` quand un
+  e-mail est en base. Le texte d'aide de la page Coordonnées le dit :
+  « C'est aussi l'adresse qui reçoit les messages du formulaire. »
 - **WhatsApp** : ordre de priorité : numéro en base, sinon variable
   `WHATSAPP_NUMERO`, sinon le numéro d'exemple hors production (comportement
   actuel conservé). Le numéro reste lu côté serveur.
@@ -163,15 +175,8 @@ du code (repli), sans erreur.
 
 - Les **zones d'intervention** (`site.zones`) ne sont affichées nulle part
   sur le site : elles sortent du périmètre.
-- Le **téléphone** n'est actuellement affiché nulle part : il devient
-  modifiable, mais son affichage sur le site est à décider (voir questions).
 - Repli sur le contenu du code plutôt que page vide.
 - Réponses de la FAQ en texte simple.
-
-## Questions ouvertes (réponses de Kenny attendues)
-
-1. Afficher le téléphone sur le site (pied de page, page contact, JSON-LD) une
-   fois le vrai numéro saisi ? Le numéro provisoire ne doit jamais s'afficher.
-2. L'e-mail des coordonnées doit-il aussi recevoir les messages du formulaire
-   (aujourd'hui réglé par `CONTACT_NOTIFICATION_EMAIL` dans Vercel), ou rester
-   un e-mail d'affichage seulement ?
+- Vider le champ WhatsApp fait revenir au numéro de la variable Vercel s'il
+  existe ; pour masquer complètement le bouton, il faut aussi supprimer la
+  variable. Pas de case « pas de WhatsApp » à ce stade.
