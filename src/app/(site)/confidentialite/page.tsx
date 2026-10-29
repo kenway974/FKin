@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
+import { lireCoordonnees } from "@/lib/data";
 import { BannierePage } from "@/components/bannieres";
 
 export const metadata: Metadata = {
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
  * envoyés depuis le formulaire de contact. Le site public n'utilise aucun
  * cookie de mesure d'audience ni traceur publicitaire.
  */
-export default function PageConfidentialite() {
+export default async function PageConfidentialite() {
+  const coordonnees = await lireCoordonnees();
   return (
     <article className="pb-16">
       <BannierePage
@@ -31,10 +33,13 @@ export default function PageConfidentialite() {
             <h2 className="font-titre text-encre text-xl font-bold">Responsable du traitement</h2>
             <p>
               Les données transmises via ce site sont traitées par <strong>{site.nom}</strong>, dont
-              le siège est situé à {site.adresse.ville} ({site.adresse.codePostal}). Pour toute
+              le siège est situé à {coordonnees.ville} ({coordonnees.codePostal}). Pour toute
               question relative à vos données, écrivez à{" "}
-              <a href={`mailto:${site.email}`} className="text-rouge underline underline-offset-4">
-                {site.email}
+              <a
+                href={`mailto:${coordonnees.email}`}
+                className="text-rouge underline underline-offset-4"
+              >
+                {coordonnees.email}
               </a>
               .
             </p>
@@ -84,8 +89,11 @@ export default function PageConfidentialite() {
               Conformément au Règlement général sur la protection des données (RGPD), vous disposez
               d&apos;un droit d&apos;accès, de rectification, d&apos;effacement, de limitation, de
               portabilité et d&apos;opposition sur vos données. Pour les exercer, écrivez-nous à{" "}
-              <a href={`mailto:${site.email}`} className="text-rouge underline underline-offset-4">
-                {site.email}
+              <a
+                href={`mailto:${coordonnees.email}`}
+                className="text-rouge underline underline-offset-4"
+              >
+                {coordonnees.email}
               </a>
               . Vous pouvez également introduire une réclamation auprès de la CNIL (
               <a

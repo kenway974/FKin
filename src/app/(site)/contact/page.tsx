@@ -1,16 +1,16 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, Zap } from "lucide-react";
+import { Clock, Mail, MapPin, Phone, Zap } from "lucide-react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Bande, Point, Section, TitreSection } from "@/components/sections";
 import { Button } from "@/components/ui/button";
 import { Faq } from "@/components/faq";
-import { FAQ } from "@/lib/faq";
 import { BannierePage } from "@/components/bannieres";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { FormulaireContact } from "./formulaire-contact";
-import { site } from "@/lib/site";
+import { lireCoordonnees, lireFaq } from "@/lib/data";
+import { lienTelephone } from "@/lib/coordonnees";
 import { LienWhatsApp } from "@/components/whatsapp";
 
 export const metadata: Metadata = {
@@ -20,7 +20,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default function PageContact() {
+export default async function PageContact() {
+  const [coordonnees, faq] = await Promise.all([lireCoordonnees(), lireFaq()]);
+  const lienTel = lienTelephone(coordonnees.telephone);
+  const essentielles = faq.filter((question) => question.essentielle);
   return (
     <>
       <BannierePage
@@ -66,12 +69,23 @@ export default function PageContact() {
             <Point icone={Mail} titre="Nous joindre autrement" ton="bleu" variante={2}>
               <p>
                 <a
-                  href={`mailto:${site.email}`}
+                  href={`mailto:${coordonnees.email}`}
                   className="text-encre hover:text-rouge decoration-rouge-vif font-semibold underline decoration-2 underline-offset-4"
                 >
-                  {site.email}
+                  {coordonnees.email}
                 </a>
               </p>
+              {lienTel ? (
+                <p className="flex gap-2">
+                  <Phone className="text-rouge mt-1 size-4 shrink-0" aria-hidden="true" />
+                  <a
+                    href={lienTel}
+                    className="text-encre hover:text-rouge font-semibold underline-offset-4 hover:underline"
+                  >
+                    {coordonnees.telephone}
+                  </a>
+                </p>
+              ) : null}
               <p>
                 <LienWhatsApp className="text-encre hover:text-rouge" />
               </p>
@@ -102,23 +116,26 @@ export default function PageContact() {
         </div>
       </Section>
 
-      {/* Les questions qui freinent le plus souvent un premier message. */}
-      <Bande fond="nuage" aria-labelledby="titre-faq-contact">
-        <div className="contenu max-w-4xl space-y-10">
-          <TitreSection
-            id="titre-faq-contact"
-            surtitre="Avant d'écrire"
-            titre="Vos questions, nos réponses"
-          />
-          <Faq nom="faq-contact" questions={FAQ.filter((question) => question.essentielle)} />
-          <Button asChild variante="courbe">
-            <Link href="/comment-ca-marche#titre-faq">
-              Toutes les questions fréquentes
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </Button>
-        </div>
-      </Bande>
+      {/* Les questions qui freinent le plus souvent un premier message.
+          Masqué si aucune question n'est cochée pour la page contact. */}
+      {essentielles.length ? (
+        <Bande fond="nuage" aria-labelledby="titre-faq-contact">
+          <div className="contenu max-w-4xl space-y-10">
+            <TitreSection
+              id="titre-faq-contact"
+              surtitre="Avant d'écrire"
+              titre="Vos questions, nos réponses"
+            />
+            <Faq nom="faq-contact" questions={essentielles} />
+            <Button asChild variante="courbe">
+              <Link href="/comment-ca-marche#titre-faq">
+                Toutes les questions fréquentes
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
+        </Bande>
+      ) : null}
     </>
   );
 }

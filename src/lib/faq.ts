@@ -1,3 +1,5 @@
+import type { LigneFaq } from "@/types/database";
+
 /**
  * Questions fréquentes. Chaque réponse reprend un engagement déjà présent
  * sur le site (services, parcours d'un don) : la FAQ ne promet rien de plus.
@@ -76,4 +78,24 @@ export const FAQ: QuestionFaq[] = [
       "Oui : chaque équipement est testé avant de partir. Il est ensuite installé et testé avec la personne référente, et nous revenons quelques mois plus tard constater l'usage et recenser les éventuelles pannes.",
     public: "beneficiaires",
   },
+  {
+    question: "Certains matériels sont-ils mis en vente ?",
+    reponse:
+      "Seul le matériel qu'aucune structure n'a demandé est revendu, pour financer le transport, l'acheminement et le fonctionnement de l'association. En 2025, il s'agissait d'accessoires réseau et informatiques (switchs, onduleurs…), vendus à des particuliers. L'association ne reçoit aucun financement public : elle vit des cotisations des écoles adhérentes et des adhérents privés, et de ces ventes.",
+    public: "tous",
+  },
 ];
+
+/**
+ * Questions saisies dans le back-office, ou la FAQ ci-dessus tant que la
+ * table est vide (base pas encore mise à jour ou injoignable).
+ */
+export function questionsFaq(lignes: LigneFaq[]): QuestionFaq[] {
+  if (!lignes.length) return FAQ;
+  return lignes.map(({ question, reponse, public: cible, essentielle }) => ({
+    question,
+    reponse,
+    public: cible,
+    essentielle,
+  }));
+}

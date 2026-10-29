@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { listerArticlesPublies, trouverArticleParSlug } from "@/lib/data";
-import { decouperParagraphes, extraireResume, formaterDate } from "@/lib/utils";
+import { decouperParagraphes, extraireResume, formaterDate, jsonLdSur } from "@/lib/utils";
 import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 import { BannierePage } from "@/components/bannieres";
@@ -86,7 +86,7 @@ export default async function PageArticle({ params }: Proprietes) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesStructurees) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesStructurees) }}
       />
 
       <article className="pb-16">

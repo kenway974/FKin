@@ -5,6 +5,8 @@ import { BoutonWhatsApp } from "@/components/whatsapp";
 import { EffetsClic } from "@/components/effets-clic";
 import { Intro, SCRIPT_INTRO } from "@/components/intro";
 import { site } from "@/lib/site";
+import { lireCoordonnees } from "@/lib/data";
+import { jsonLdSur } from "@/lib/utils";
 import { urlSite } from "@/lib/env";
 
 /**
@@ -16,7 +18,8 @@ import { urlSite } from "@/lib/env";
  * Le JSON-LD `Organization` est posé ici pour être présent sur toutes les
  * pages publiques du site, sans duplication.
  */
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const coordonnees = await lireCoordonnees();
   const donneesStructurees = {
     "@context": "https://schema.org",
     "@type": "NGO",
@@ -24,12 +27,14 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     alternateName: site.nomLong,
     url: urlSite,
     description: site.description,
-    email: site.email,
+    email: coordonnees.email,
+    ...(coordonnees.telephone ? { telephone: coordonnees.telephone } : {}),
     address: {
       "@type": "PostalAddress",
-      addressLocality: site.adresse.ville,
-      postalCode: site.adresse.codePostal,
-      addressCountry: site.adresse.pays,
+      ...(coordonnees.rue ? { streetAddress: coordonnees.rue } : {}),
+      addressLocality: coordonnees.ville,
+      postalCode: coordonnees.codePostal,
+      addressCountry: coordonnees.pays,
     },
     areaServed: [
       { "@type": "Country", name: "France" },
@@ -40,7 +45,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Contact général",
-      email: site.email,
+      email: coordonnees.email,
       availableLanguage: ["fr"],
     },
   };
@@ -49,9 +54,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <>
       <script
         type="application/ld+json"
-        // Contenu statique issu de `lib/site.ts` : aucune donnée utilisateur
-        // n'est injectée ici, il n'y a donc pas de surface XSS.
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesStructurees) }}
+        // Coordonnées saisies dans le back-office : `jsonLdSur` échappe les
+        // `<` pour qu'un texte ne puisse pas fermer la balise.
+        dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesStructurees) }}
       />
       {/* Doit précéder l'écran d'ouverture : décide, avant le premier
           affichage, s'il se joue (première page de la visite). Contenu

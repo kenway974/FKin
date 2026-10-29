@@ -28,6 +28,8 @@
 --   10. Table `chiffres_cles`
 --   11. Position des projets sur la carte
 --   12. Limite d'envois du formulaire de contact (anti-spam)
+--   13. Table `faq` (questions fréquentes)
+--   14. Table `coordonnees` (coordonnées du site)
 -- =============================================================================
 
 
@@ -550,6 +552,149 @@ $$;
 
 revoke execute on function public.consommer_envoi(text, integer, integer) from public, anon, authenticated;
 grant execute on function public.consommer_envoi(text, integer, integer) to service_role;
+
+
+-- -----------------------------------------------------------------------------
+--  13. Table `faq` — questions fréquentes, modifiables depuis le back-office
+-- -----------------------------------------------------------------------------
+--  Tant que la table est vide ou absente, le site affiche la FAQ écrite dans
+--  le code (`src/lib/faq.ts`). `essentielle` : question reprise sous le
+--  formulaire de contact.
+
+create table if not exists public.faq (
+  id          uuid primary key default gen_random_uuid(),
+  question    text not null,
+  reponse     text not null,
+  public      text not null default 'tous',
+  essentielle boolean not null default false,
+  ordre       integer not null default 0,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now(),
+
+  constraint faq_public_valide   check (public in ('donateurs', 'beneficiaires', 'tous')),
+  constraint faq_question_valide check (length(trim(question)) between 3 and 200),
+  constraint faq_reponse_valide  check (length(trim(reponse)) between 3 and 2000)
+);
+
+drop trigger if exists faq_maj_updated_at on public.faq;
+create trigger faq_maj_updated_at
+  before update on public.faq
+  for each row execute function public.maj_updated_at();
+
+alter table public.faq enable row level security;
+
+drop policy if exists "FAQ visible par tous" on public.faq;
+create policy "FAQ visible par tous"
+  on public.faq for select
+  to anon, authenticated
+  using (true);
+
+drop policy if exists "Les admins gèrent la FAQ" on public.faq;
+create policy "Les admins gèrent la FAQ"
+  on public.faq for all
+  to authenticated
+  using (public.est_admin())
+  with check (public.est_admin());
+
+-- Contenu de départ : la FAQ actuelle du site. Uniquement si la table est
+-- vide, pour ne jamais écraser les questions saisies dans le back-office.
+insert into public.faq (question, reponse, public, essentielle, ordre)
+select * from (values
+  ('Est-ce que donner du matériel coûte quelque chose à mon entreprise ?',
+   'Non. L''enlèvement, la manutention (étage compris), le tri, l''effacement des données et l''acheminement sont pris en charge. Votre seule action est le premier message.',
+   'donateurs', true, 0),
+  ('Que deviennent les données de nos ordinateurs ?',
+   'Chaque équipement est testé et ses données effacées par un effacement multi-passes, ou le support est détruit physiquement si vous le demandez. Un certificat est joint à l''inventaire.',
+   'donateurs', true, 1),
+  ('Quel matériel acceptez-vous ?',
+   'Ordinateurs portables et fixes, écrans, imprimantes, tablettes, matériel réseau, onduleurs, mobilier scolaire et fournitures. Envoyez une liste, même approximative : sous 72 heures, nous vous disons ce qui est réemployable et ce qui part au recyclage.',
+   'donateurs', true, 2),
+  ('Et le matériel en panne ou trop ancien ?',
+   'Ce qui se répare part en atelier : au Congo, des jeunes apprennent le métier en le remettant en état. Nous ne prenons pas le matériel hors d''usage, les écrans cathodiques, les batteries gonflées ni ce qui est irréparable à coût raisonnable ; nous vous orientons alors vers une filière de recyclage agréée.',
+   'donateurs', false, 3),
+  ('Recevons-nous un document pour notre rapport RSE ?',
+   'Oui : un inventaire détaillé signé à l''enlèvement et une attestation de don. Quelques mois plus tard, vous recevez aussi un compte rendu avec photos : qui a reçu votre matériel et à quoi il sert.',
+   'donateurs', false, 4),
+  ('Où intervenez-vous ?',
+   'Nous collectons partout en France. Nous équipons des écoles, mairies et associations en France, et au Congo, à Kinshasa et dans les provinces desservies par nos partenaires.',
+   'tous', true, 5),
+  ('Combien de temps entre l''enlèvement et l''installation ?',
+   'En France, quelques semaines. Pour le Congo, comptez trois à quatre mois : la traversée maritime jusqu''à Matadi dure environ cinq semaines, puis viennent le dédouanement et la route jusqu''à la structure.',
+   'tous', false, 6),
+  ('Notre école peut-elle être équipée ?',
+   'Les demandes sont examinées au fil des collectes et des arrivages. La priorité va aux structures accueillant un public scolaire et disposant d''un local qui ferme et d''une alimentation électrique stable.',
+   'beneficiaires', true, 7),
+  ('Que faut-il nous transmettre pour une demande ?',
+   'Le nom et le statut de la structure, le nombre de personnes concernées, le matériel souhaité par ordre de priorité, l''état du local et le contact d''une personne référente sur place. Le formulaire de contact vous guide pas à pas.',
+   'beneficiaires', false, 8),
+  ('Le matériel livré fonctionne-t-il ?',
+   'Oui : chaque équipement est testé avant de partir. Il est ensuite installé et testé avec la personne référente, et nous revenons quelques mois plus tard constater l''usage et recenser les éventuelles pannes.',
+   'beneficiaires', false, 9),
+  ('Certains matériels sont-ils mis en vente ?',
+   'Seul le matériel qu''aucune structure n''a demandé est revendu, pour financer le transport, l''acheminement et le fonctionnement de l''association. En 2025, il s''agissait d''accessoires réseau et informatiques (switchs, onduleurs…), vendus à des particuliers. L''association ne reçoit aucun financement public : elle vit des cotisations des écoles adhérentes et des adhérents privés, et de ces ventes.',
+   'tous', false, 10)
+) as depart (question, reponse, public, essentielle, ordre)
+where not exists (select 1 from public.faq);
+
+
+-- -----------------------------------------------------------------------------
+--  14. Table `coordonnees` — coordonnées affichées sur le site
+-- -----------------------------------------------------------------------------
+--  Une seule ligne (clé forcée à `true`). L'e-mail reçoit aussi les messages
+--  du formulaire de contact. Un champ vide retombe sur la valeur du code
+--  (`src/lib/site.ts`), sauf le téléphone, la rue et l'adresse de Kinshasa,
+--  qui sont alors simplement masqués.
+
+create table if not exists public.coordonnees (
+  id          boolean primary key default true,
+  email       text,
+  telephone   text,
+  rue         text,
+  code_postal text,
+  ville       text,
+  adresse_rdc text,
+  whatsapp    text,
+  updated_at  timestamptz not null default now(),
+
+  constraint coordonnees_ligne_unique check (id)
+);
+
+drop trigger if exists coordonnees_maj_updated_at on public.coordonnees;
+create trigger coordonnees_maj_updated_at
+  before update on public.coordonnees
+  for each row execute function public.maj_updated_at();
+
+alter table public.coordonnees enable row level security;
+
+drop policy if exists "Coordonnées visibles par tous" on public.coordonnees;
+create policy "Coordonnées visibles par tous"
+  on public.coordonnees for select
+  to anon, authenticated
+  using (true);
+
+-- Pas de politique de suppression : la ligne ne disparaît jamais.
+drop policy if exists "Les admins créent les coordonnées" on public.coordonnees;
+create policy "Les admins créent les coordonnées"
+  on public.coordonnees for insert
+  to authenticated
+  with check (public.est_admin());
+
+drop policy if exists "Les admins modifient les coordonnées" on public.coordonnees;
+create policy "Les admins modifient les coordonnées"
+  on public.coordonnees for update
+  to authenticated
+  using (public.est_admin())
+  with check (public.est_admin());
+
+-- Valeurs de départ. L'e-mail reste vide : le site affiche celui du code, et
+-- les notifications continuent de partir vers `CONTACT_NOTIFICATION_EMAIL`
+-- jusqu'au premier enregistrement dans le back-office. Le téléphone
+-- provisoire du code n'est pas recopié ; le numéro WhatsApp, réglé jusqu'ici
+-- dans Vercel, est à saisir dans le back-office.
+insert into public.coordonnees (id, email, telephone, rue, code_postal, ville, adresse_rdc, whatsapp)
+values (true, null, null, null, '94240', 'L''Haÿ-les-Roses',
+        'Avenue Soki n° 20, commune de Mont-Ngafula, Kinshasa', null)
+on conflict (id) do nothing;
 
 
 -- =============================================================================

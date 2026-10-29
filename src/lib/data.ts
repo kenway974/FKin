@@ -1,9 +1,17 @@
 import "server-only";
 
+import { cache } from "react";
 import { creerClientPublic } from "@/lib/supabase/server";
 import { supabaseConfigure } from "@/lib/env";
-import type { Article, ChiffreCle, Projet } from "@/types/database";
+import type { Article, ChiffreCle, LigneCoordonnees, LigneFaq, Projet } from "@/types/database";
 import { formaterChiffre } from "@/lib/utils";
+import {
+  fusionnerCoordonnees,
+  lienWhatsApp,
+  resoudreWhatsApp,
+  type Coordonnees,
+} from "@/lib/coordonnees";
+import { questionsFaq, type QuestionFaq } from "@/lib/faq";
 
 /**
  * Lectures publiques de la base.
@@ -191,3 +199,49 @@ export async function chiffresAccueil(): Promise<ChiffreAffiche[]> {
     },
   ];
 }
+
+/**
+ * Questions de la FAQ saisies dans le back-office, ou celles du code tant
+ * que la table est vide ou injoignable.
+ */
+export async function lireFaq(): Promise<QuestionFaq[]> {
+  const lignes = await lire<LigneFaq[]>("lireFaq", [], (supabase) =>
+    supabase
+      .from("faq")
+      .select("*")
+      .order("ordre", { ascending: true })
+      .order("created_at", { ascending: true }),
+  );
+  return questionsFaq(lignes);
+}
+
+/** Ligne brute des coordonnées, `null` si la table est vide ou injoignable. */
+export function lireLigneCoordonnees(): Promise<LigneCoordonnees | null> {
+  return lire<LigneCoordonnees | null>("lireLigneCoordonnees", null, (supabase) =>
+    supabase.from("coordonnees").select("*").maybeSingle(),
+  );
+}
+
+const horsProduction =
+  process.env.NODE_ENV === "development" || process.env.VERCEL_ENV === "preview";
+
+export type CoordonneesAffichees = Coordonnees & {
+  /** Lien de conversation WhatsApp, `null` si aucun numéro n'est configuré. */
+  lienWhatsApp: string | null;
+  /** Vrai quand le numéro WhatsApp est l'exemple factice (hors production). */
+  whatsAppExemple: boolean;
+};
+
+/**
+ * Coordonnées affichées sur le site. Mises en cache le temps d'un rendu :
+ * pied de page, page et bouton WhatsApp ne lisent la base qu'une fois.
+ */
+export const lireCoordonnees = cache(async (): Promise<CoordonneesAffichees> => {
+  const coordonnees = fusionnerCoordonnees(await lireLigneCoordonnees());
+  const { numero, exemple } = resoudreWhatsApp(
+    coordonnees.whatsapp,
+    process.env.WHATSAPP_NUMERO ?? "",
+    horsProduction,
+  );
+  return { ...coordonnees, lienWhatsApp: lienWhatsApp(numero), whatsAppExemple: exemple };
+});

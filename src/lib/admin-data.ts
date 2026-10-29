@@ -1,7 +1,15 @@
 import "server-only";
 
 import { creerClientServeur, type ClientServeur } from "@/lib/supabase/server";
-import type { Article, ChiffreCle, Message, Projet } from "@/types/database";
+import { estTableAbsente } from "@/lib/erreurs-base";
+import type {
+  Article,
+  ChiffreCle,
+  LigneCoordonnees,
+  LigneFaq,
+  Message,
+  Projet,
+} from "@/types/database";
 
 /**
  * Lectures du back-office.
@@ -79,6 +87,46 @@ export const listerChiffres = (): Promise<ChiffreCle[]> =>
       .order("ordre", { ascending: true })
       .order("created_at", { ascending: true }),
   );
+
+/**
+ * Questions de la FAQ, ou `null` si la table n'existe pas encore
+ * (`supabase/schema.sql` pas relancé). Toute autre erreur remonte.
+ */
+export async function listerQuestionsFaq(): Promise<LigneFaq[] | null> {
+  const supabase = await creerClientServeur();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("faq")
+    .select("*")
+    .order("ordre", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) return siTableAbsente(error, "le chargement de la FAQ", null);
+  return data ?? [];
+}
+
+/** Coordonnées en base ; `tableAbsente` si la table n'existe pas encore. */
+export async function lireCoordonneesAdmin(): Promise<{
+  ligne: LigneCoordonnees | null;
+  tableAbsente: boolean;
+}> {
+  const supabase = await creerClientServeur();
+  if (!supabase) return { ligne: null, tableAbsente: false };
+  const { data, error } = await supabase.from("coordonnees").select("*").maybeSingle();
+  if (error) {
+    return siTableAbsente(error, "le chargement des coordonnées", {
+      ligne: null,
+      tableAbsente: true,
+    });
+  }
+  return { ligne: data, tableAbsente: false };
+}
+
+/** Renvoie `siAbsente` pour une table pas encore créée ; lève sinon. */
+function siTableAbsente<T>(erreur: unknown, operation: string, siAbsente: T): T {
+  if (estTableAbsente(erreur)) return siAbsente;
+  console.error(`[admin] Échec de ${operation} :`, erreur);
+  throw new Error(`Impossible de charger les données (${operation}).`);
+}
 
 /**
  * Liens temporaires (une heure) vers les photos jointes à un message. Le

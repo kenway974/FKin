@@ -1,12 +1,17 @@
 import Link from "next/link";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { navigation, site } from "@/lib/site";
+import { lireCoordonnees } from "@/lib/data";
+import { lienTelephone } from "@/lib/coordonnees";
 import { LienWhatsApp } from "@/components/whatsapp";
 import { Logo } from "@/components/layout/logo";
 import { Coeur, Vague } from "@/components/formes";
 
 /** Pied de page : rappel de la mission, navigation secondaire et contact. */
-export function Footer() {
+export async function Footer() {
+  const coordonnees = await lireCoordonnees();
+  const lienTel = lienTelephone(coordonnees.telephone);
+
   return (
     <footer className="relative isolate mt-10 text-white">
       <Vague className="text-marine" retourne />
@@ -48,22 +53,41 @@ export function Footer() {
               <li className="flex items-start gap-2">
                 <Mail className="text-rouge-clair mt-0.5 size-4 shrink-0" aria-hidden="true" />
                 <a
-                  href={`mailto:${site.email}`}
+                  href={`mailto:${coordonnees.email}`}
                   className="hover:text-rouge-clair underline-offset-4 hover:underline"
                 >
-                  {site.email}
+                  {coordonnees.email}
                 </a>
               </li>
+              {lienTel ? (
+                <li className="flex items-start gap-2">
+                  <Phone className="text-rouge-clair mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <a
+                    href={lienTel}
+                    className="hover:text-rouge-clair underline-offset-4 hover:underline"
+                  >
+                    {coordonnees.telephone}
+                  </a>
+                </li>
+              ) : null}
               <li>
                 <LienWhatsApp className="hover:text-rouge-clair" />
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="text-rouge-clair mt-0.5 size-4 shrink-0" aria-hidden="true" />
                 <span>
-                  {site.adresse.ville} ({site.adresse.codePostal})
-                  <br />
-                  Collecte partout en France · Distribution en France et au Congo
+                  {coordonnees.rue ? `${coordonnees.rue}, ` : ""}
+                  {coordonnees.ville} ({coordonnees.codePostal})
                 </span>
+              </li>
+              {coordonnees.adresseRdc ? (
+                <li className="flex items-start gap-2">
+                  <MapPin className="text-rouge-clair mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <span>{coordonnees.adresseRdc} (RD Congo)</span>
+                </li>
+              ) : null}
+              <li className="pl-6">
+                Collecte partout en France · Distribution en France et au Congo
               </li>
             </ul>
           </div>

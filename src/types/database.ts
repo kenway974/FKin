@@ -89,6 +89,30 @@ export type ChiffreCle = {
   updated_at: string;
 };
 
+export type LigneFaq = {
+  id: string;
+  question: string;
+  reponse: string;
+  public: "donateurs" | "beneficiaires" | "tous";
+  essentielle: boolean;
+  ordre: number;
+  created_at: string;
+  updated_at: string;
+};
+
+/** Ligne unique des coordonnées du site (clé `id` toujours `true`). */
+export type LigneCoordonnees = {
+  id: boolean;
+  email: string | null;
+  telephone: string | null;
+  rue: string | null;
+  code_postal: string | null;
+  ville: string | null;
+  adresse_rdc: string | null;
+  whatsapp: string | null;
+  updated_at: string;
+};
+
 export type Admin = {
   user_id: string;
   email: string | null;
@@ -145,6 +169,26 @@ export type Database = {
           precision?: string | null;
         };
         Update: Partial<Omit<ChiffreCle, "id" | "created_at">>;
+        Relationships: [];
+      };
+      faq: {
+        Row: LigneFaq;
+        Insert: Omit<
+          LigneFaq,
+          "id" | "created_at" | "updated_at" | "public" | "essentielle" | "ordre"
+        > & {
+          id?: string;
+          public?: LigneFaq["public"];
+          essentielle?: boolean;
+          ordre?: number;
+        };
+        Update: Partial<Omit<LigneFaq, "id" | "created_at">>;
+        Relationships: [];
+      };
+      coordonnees: {
+        Row: LigneCoordonnees;
+        Insert: Partial<Omit<LigneCoordonnees, "updated_at">>;
+        Update: Partial<Omit<LigneCoordonnees, "id" | "updated_at">>;
         Relationships: [];
       };
       admins: {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { jsonLdSur } from "@/lib/utils";
 import { EtatVide, Section } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
 import { DeuxPortes } from "@/components/deux-portes";
@@ -45,7 +46,7 @@ export default async function PageActualites() {
       {articles.length > 0 ? (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesStructurees) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesStructurees) }}
         />
       ) : null}
 

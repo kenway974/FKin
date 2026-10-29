@@ -2,8 +2,10 @@
  * Métadonnées éditoriales du site, centralisées ici pour éviter de les
  * dupliquer entre le header, le footer, le JSON-LD et les balises SEO.
  *
- * Le propriétaire du site peut modifier ce seul fichier pour changer le nom de
- * la structure, ses coordonnées ou ses réseaux sociaux.
+ * Le nom et la description se modifient ici. Les coordonnées (e-mail,
+ * téléphone, adresses) se modifient dans le back-office, onglet
+ * « Coordonnées » : les valeurs ci-dessous ne servent plus que de repli tant
+ * que la base est vide ou injoignable (voir `lib/coordonnees.ts`).
  */
 
 export const site = {
@@ -21,6 +23,8 @@ export const site = {
     ville: "L'Haÿ-les-Roses",
     pays: "FR",
   },
+  /** Adresse postale de l'association à Kinshasa. */
+  adresseRdc: "Avenue Soki n° 20, commune de Mont-Ngafula, Kinshasa",
   zones: [
     "France entière (collecte et distribution)",
     "Kinshasa et République du Congo (distribution)",

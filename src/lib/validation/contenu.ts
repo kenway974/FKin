@@ -94,6 +94,13 @@ export type DonneesProjet = z.infer<typeof schemaProjet>;
 export const IMAGE_TYPES_ACCEPTES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 export const IMAGE_TAILLE_MAX_OCTETS = 5 * 1024 * 1024; // 5 Mo
 
+/** Position d'affichage dans une liste du back-office (0 = en premier). */
+const position = z
+  .number({ message: "Indiquez une position (nombre entier)." })
+  .int("Indiquez une position (nombre entier).")
+  .min(0, "La position doit être positive.")
+  .max(99, "99 au maximum.");
+
 /** Chiffre d'impact affiché sur la page d'accueil. */
 export const schemaChiffre = z.object({
   valeur: z
@@ -108,7 +115,52 @@ export const schemaChiffre = z.object({
     .min(3, "Décrivez ce que compte ce chiffre.")
     .max(80, "80 caractères au maximum."),
   precision: z.string().trim().max(120, "120 caractères au maximum.").optional().or(z.literal("")),
-  ordre: z.number().int().min(0).max(99),
+  ordre: position,
 });
 
 export type DonneesChiffre = z.infer<typeof schemaChiffre>;
+
+/** Question de la FAQ, éditée dans le back-office. */
+export const schemaQuestionFaq = z.object({
+  question: z
+    .string()
+    .trim()
+    .min(3, "Écrivez la question (3 caractères minimum).")
+    .max(200, "200 caractères au maximum."),
+  reponse: z
+    .string()
+    .trim()
+    .min(3, "Écrivez la réponse (3 caractères minimum).")
+    .max(2000, "2 000 caractères au maximum."),
+  public: z.enum(["donateurs", "beneficiaires", "tous"], { message: "Choisissez un public." }),
+  essentielle: z.boolean(),
+  ordre: position,
+});
+
+export type DonneesQuestionFaq = z.infer<typeof schemaQuestionFaq>;
+
+const facultatif = (max: number) => z.string().trim().max(max, `${max} caractères au maximum.`);
+
+/** Numéro facultatif : vide, ou 8 à 15 chiffres au format international. */
+const numeroFacultatif = facultatif(30)
+  .regex(/^[+\d\s().-]*$/, "Chiffres, espaces et « + » uniquement.")
+  .refine((valeur) => {
+    const chiffres = valeur.replace(/\D/g, "").length;
+    return valeur === "" || (chiffres >= 8 && chiffres <= 15);
+  }, "Numéro au format international, par exemple +33 6 12 34 56 78.");
+
+/** Coordonnées du site, éditées dans le back-office. */
+export const schemaCoordonnees = z.object({
+  email: z.email("Cette adresse e-mail ne semble pas valide.").max(180),
+  telephone: numeroFacultatif,
+  rue: facultatif(160),
+  codePostal: z
+    .string()
+    .trim()
+    .regex(/^\d{5}$/, "Le code postal compte 5 chiffres."),
+  ville: z.string().trim().min(2, "Indiquez la ville.").max(120, "120 caractères au maximum."),
+  adresseRdc: facultatif(200),
+  whatsapp: numeroFacultatif,
+});
+
+export type DonneesCoordonnees = z.infer<typeof schemaCoordonnees>;
