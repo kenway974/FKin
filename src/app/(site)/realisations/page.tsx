@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { jsonLdSur } from "@/lib/utils";
 import { Bande, EtatVide, Section, TitreSection } from "@/components/sections";
 import { CarteStructures } from "@/components/carte-structures";
 import { BannierePage } from "@/components/bannieres";
@@ -52,7 +53,7 @@ export default async function PageRealisations() {
       {projets.length > 0 ? (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesStructurees) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesStructurees) }}
         />
       ) : null}
 

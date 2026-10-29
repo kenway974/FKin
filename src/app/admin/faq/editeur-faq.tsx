@@ -142,13 +142,14 @@ function LigneQuestion({
             </Select>
           )}
         </ChampFormulaire>
-        <ChampFormulaire id={`${prefixe}-ordre`} libelle="Position">
+        <ChampFormulaire id={`${prefixe}-ordre`} libelle="Position" erreur={errors.ordre?.message}>
           {(aria) => (
             <Input
               {...aria}
               type="number"
               inputMode="numeric"
               min={0}
+              max={99}
               {...register("ordre", { valueAsNumber: true })}
             />
           )}

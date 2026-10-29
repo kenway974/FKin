@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 export default async function PageContact() {
   const [coordonnees, faq] = await Promise.all([lireCoordonnees(), lireFaq()]);
   const lienTel = lienTelephone(coordonnees.telephone);
+  const essentielles = faq.filter((question) => question.essentielle);
   return (
     <>
       <BannierePage
@@ -115,23 +116,26 @@ export default async function PageContact() {
         </div>
       </Section>
 
-      {/* Les questions qui freinent le plus souvent un premier message. */}
-      <Bande fond="nuage" aria-labelledby="titre-faq-contact">
-        <div className="contenu max-w-4xl space-y-10">
-          <TitreSection
-            id="titre-faq-contact"
-            surtitre="Avant d'écrire"
-            titre="Vos questions, nos réponses"
-          />
-          <Faq nom="faq-contact" questions={faq.filter((question) => question.essentielle)} />
-          <Button asChild variante="courbe">
-            <Link href="/comment-ca-marche#titre-faq">
-              Toutes les questions fréquentes
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </Button>
-        </div>
-      </Bande>
+      {/* Les questions qui freinent le plus souvent un premier message.
+          Masqué si aucune question n'est cochée pour la page contact. */}
+      {essentielles.length ? (
+        <Bande fond="nuage" aria-labelledby="titre-faq-contact">
+          <div className="contenu max-w-4xl space-y-10">
+            <TitreSection
+              id="titre-faq-contact"
+              surtitre="Avant d'écrire"
+              titre="Vos questions, nos réponses"
+            />
+            <Faq nom="faq-contact" questions={essentielles} />
+            <Button asChild variante="courbe">
+              <Link href="/comment-ca-marche#titre-faq">
+                Toutes les questions fréquentes
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
+        </Bande>
+      ) : null}
     </>
   );
 }

@@ -226,7 +226,9 @@ repassez-le en **Brouillon** (article) ou en **Masqué** (projet) : il disparaî
 du site public mais reste enregistré.
 
 **Combien de temps avant qu'une modification soit visible ?**
-Immédiatement. Le site se met à jour à chaque enregistrement.
+Immédiatement. Le site se met à jour à chaque enregistrement. Une modification faite directement dans Supabase, sans passer par le
+back-office, n'apparaît qu'au prochain enregistrement dans le back-office ou au
+prochain déploiement.
 
 **Puis-je travailler depuis mon téléphone ?**
 Oui, le back-office s'adapte aux petits écrans. La rédaction d'un long article

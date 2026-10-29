@@ -2,22 +2,14 @@ import { EnteteAdmin } from "@/components/admin/entete-admin";
 import { Alert } from "@/components/ui/alert";
 import { lireCoordonneesAdmin } from "@/lib/admin-data";
 import { fusionnerCoordonnees } from "@/lib/coordonnees";
-import type { LigneCoordonnees } from "@/types/database";
 import { FormulaireCoordonnees } from "./formulaire-coordonnees";
 
 export const metadata = { title: "Coordonnées" };
 
 /** Coordonnées affichées sur le site public. */
 export default async function PageAdminCoordonnees() {
-  let ligne: LigneCoordonnees | null;
-  let tableAbsente = false;
-  try {
-    ligne = await lireCoordonneesAdmin();
-  } catch {
-    // Table absente : le script `supabase/schema.sql` n'a pas été relancé.
-    ligne = null;
-    tableAbsente = true;
-  }
+  // Table absente : le script `supabase/schema.sql` n'a pas été relancé.
+  const { ligne, tableAbsente } = await lireCoordonneesAdmin();
   const coordonnees = fusionnerCoordonnees(ligne);
 
   return (

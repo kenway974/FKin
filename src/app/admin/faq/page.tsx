@@ -1,20 +1,14 @@
 import { EnteteAdmin } from "@/components/admin/entete-admin";
 import { Alert } from "@/components/ui/alert";
 import { listerQuestionsFaq } from "@/lib/admin-data";
-import type { LigneFaq } from "@/types/database";
 import { EditeurFaq } from "./editeur-faq";
 
 export const metadata = { title: "FAQ" };
 
 /** Questions fréquentes de la page « Comment ça marche » et de la page contact. */
 export default async function PageAdminFaq() {
-  let questions: LigneFaq[] | null;
-  try {
-    questions = await listerQuestionsFaq();
-  } catch {
-    // Table absente : le script `supabase/schema.sql` n'a pas été relancé.
-    questions = null;
-  }
+  // `null` : table absente, le script `supabase/schema.sql` n'a pas été relancé.
+  const questions = await listerQuestionsFaq();
 
   return (
     <div className="space-y-10">

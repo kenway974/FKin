@@ -22,6 +22,13 @@ describe("schemaQuestionFaq", () => {
     expect(schemaQuestionFaq.safeParse({ ...questionValide, public: "autre" }).success).toBe(false);
   });
 
+  it("explique en français une position vide ou trop grande", () => {
+    const message = (ordre: number) =>
+      schemaQuestionFaq.safeParse({ ...questionValide, ordre }).error?.issues[0]?.message;
+    expect(message(Number.NaN)).toBe("Indiquez une position (nombre entier).");
+    expect(message(100)).toBe("99 au maximum.");
+  });
+
   it("refuse une réponse de plus de 2 000 caractères", () => {
     expect(
       schemaQuestionFaq.safeParse({ ...questionValide, reponse: "a".repeat(2001) }).success,
@@ -60,6 +67,8 @@ describe("schemaCoordonnees", () => {
     expect(coordonneesAcceptees({ telephone: "" })).toBe(true);
     expect(coordonneesAcceptees({ telephone: "+33 6 12 34 56 78" })).toBe(true);
     expect(coordonneesAcceptees({ telephone: "abc" })).toBe(false);
+    expect(coordonneesAcceptees({ telephone: "+" })).toBe(false);
+    expect(coordonneesAcceptees({ telephone: "()" })).toBe(false);
   });
 
   it("accepte un WhatsApp vide ou d'au moins 8 chiffres", () => {
