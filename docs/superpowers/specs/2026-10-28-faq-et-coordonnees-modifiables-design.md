@@ -20,7 +20,10 @@ back-office, et le site public se met à jour sans redéploiement.
    supprimer et réordonner les questions.
 2. **Coordonnées** : une page « Coordonnées » dans le back-office, sous la
    forme d'un formulaire unique : e-mail, téléphone, adresse (rue, code
-   postal, ville), numéro WhatsApp.
+   postal, ville), adresse postale à Kinshasa, numéro WhatsApp.
+   L'adresse de Kinshasa (demande du propriétaire, 29/10) s'affiche dans le
+   pied de page sous celle de France : « Avenue Soki n° 20, commune de
+   Mont-Ngafula, Kinshasa (RD Congo) ».
 3. Le jour de la bascule, le site affiche exactement le même contenu
    qu'avant : les 11 questions actuelles (dont celle sur la revente) et les
    coordonnées actuelles sont recopiées en base.

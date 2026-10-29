@@ -41,7 +41,7 @@
 
 - [ ] **Step 1 : section 13 `faq`** : colonnes `id uuid pk default gen_random_uuid()`, `question text not null`, `reponse text not null`, `public text not null default 'tous'` (`check (public in ('donateurs','beneficiaires','tous'))`), `essentielle boolean not null default false`, `ordre integer not null default 0`, `created_at`, `updated_at`. Contraintes : question 3–200 caractères, réponse 3–2000 (après `trim`). Trigger `maj_updated_at`, RLS et politiques recopiées de `chiffres_cles` (lecture `anon, authenticated` ; insert/update/delete via `est_admin()`).
 - [ ] **Step 2 : contenu de départ FAQ** : `insert into public.faq (question, reponse, public, essentielle, ordre) select … where not exists (select 1 from public.faq)` avec les 11 questions de `src/lib/faq.ts`, `ordre` 0 à 10 dans l'ordre du fichier (apostrophes doublées).
-- [ ] **Step 3 : section 14 `coordonnees`** : `id boolean primary key default true check (id)`, `email text`, `telephone text`, `rue text`, `code_postal text`, `ville text`, `whatsapp text`, `updated_at`. Trigger `maj_updated_at`. RLS : `select` pour `anon, authenticated` ; `update` et `insert` pour les admins ; pas de `delete`. Ligne de départ : `insert … values (true, 'respusse@gmail.com', null, null, '94240', 'L''Haÿ-les-Roses', null) on conflict (id) do nothing`.
+- [ ] **Step 3 : section 14 `coordonnees`** : `id boolean primary key default true check (id)`, `email text`, `telephone text`, `rue text`, `code_postal text`, `ville text`, `adresse_rdc text`, `whatsapp text`, `updated_at`. Trigger `maj_updated_at`. RLS : `select` pour `anon, authenticated` ; `update` et `insert` pour les admins ; pas de `delete`. Ligne de départ : `insert into public.coordonnees (id, email, telephone, rue, code_postal, ville, adresse_rdc, whatsapp) values (true, 'respusse@gmail.com', null, null, '94240', 'L''Haÿ-les-Roses', 'Avenue Soki n° 20, commune de Mont-Ngafula, Kinshasa', null) on conflict (id) do nothing`.
 - [ ] **Step 4 : types** : `LigneFaq` (`public: "donateurs" | "beneficiaires" | "tous"`) et `LigneCoordonnees` (toutes colonnes texte `string | null`), entrées `Row/Insert/Update/Relationships` sur le modèle de `chiffres_cles`.
 - [ ] **Step 5 : vérifier** : `npm run typecheck` passe ; relire le SQL : chaque `create` est précédé de `if not exists` ou d'un `drop … if exists`.
 - [ ] **Step 6 : commit** `Base : tables faq et coordonnees, avec le contenu actuel du site`
@@ -57,7 +57,7 @@
 **Interfaces :**
 - Consumes : `LigneFaq`, `LigneCoordonnees` (tâche 1), `site` (`src/lib/site.ts`).
 - Produces :
-  - `type Coordonnees = { email: string; telephone: string; rue: string; codePostal: string; ville: string; pays: string; whatsapp: string }`
+  - `type Coordonnees = { email: string; telephone: string; rue: string; codePostal: string; ville: string; pays: string; adresseRdc: string; whatsapp: string }`
   - `fusionnerCoordonnees(ligne: LigneCoordonnees | null): Coordonnees`
   - `lienTelephone(telephone: string): string | null`
   - `destinatairesNotification(emailBase: string | null | undefined, variable: string | undefined): string[]`
@@ -67,7 +67,8 @@
   - `jsonLdSur(donnees: unknown): string`
 
 - [ ] **Step 1 : tests qui échouent**
-  - `fusionnerCoordonnees(null)` → `{ email: "respusse@gmail.com", telephone: "", rue: "", codePostal: "94240", ville: "L'Haÿ-les-Roses", pays: "FR", whatsapp: "" }` ;
+  - `fusionnerCoordonnees(null)` → `{ email: "respusse@gmail.com", telephone: "", rue: "", codePostal: "94240", ville: "L'Haÿ-les-Roses", pays: "FR", adresseRdc: "Avenue Soki n° 20, commune de Mont-Ngafula, Kinshasa", whatsapp: "" }` ;
+  - ligne présente avec `adresse_rdc: null` → `adresseRdc: ""` (l'admin l'a vidée : on ne l'affiche plus) ;
   - ligne avec `ville: null`, `email: "  "`, `telephone: "06 12"` → ville et e-mail du code, téléphone `"06 12"` ;
   - `lienTelephone("+33 (0)6 12.34-56 78")` → `"tel:+330612345678"` ; `lienTelephone("")` → `null` ;
   - `destinatairesNotification("a@b.fr", "x@y.fr")` → `["a@b.fr"]` ; `(null, "x@y.fr, z@y.fr")` → `["x@y.fr", "z@y.fr"]` ; `(" ", undefined)` → `[]` ;
@@ -96,7 +97,7 @@
   - `lireFaq(): Promise<QuestionFaq[]>` (ordre `ordre` puis `created_at`, passe par `questionsFaq`)
 
 - [ ] **Step 1 : lectures** dans `data.ts` sur le modèle de `listerChiffresCles`. `lireCoordonnees` calcule le WhatsApp avec `resoudreWhatsApp(ligne?.whatsapp ?? "", process.env.WHATSAPP_NUMERO ?? "", horsProduction)` (même définition de `horsProduction` qu'aujourd'hui).
-- [ ] **Step 2 : composants** : `Footer`, `DeuxPortes`, `BoutonWhatsApp`, `LienWhatsApp` deviennent des composants serveur `async` qui appellent `lireCoordonnees()`. Pied de page et page contact : ligne téléphone (icône `Phone` de lucide, lien `lienTelephone`) seulement si `telephone` non vide ; la rue précède la ville quand elle est renseignée (pied de page et mentions légales).
+- [ ] **Step 2 : composants** : `Footer`, `DeuxPortes`, `BoutonWhatsApp`, `LienWhatsApp` deviennent des composants serveur `async` qui appellent `lireCoordonnees()`. Pied de page et page contact : ligne téléphone (icône `Phone` de lucide, lien `lienTelephone`) seulement si `telephone` non vide ; la rue précède la ville quand elle est renseignée (pied de page et mentions légales). Pied de page : sous l'adresse de France, une seconde ligne `MapPin` « {adresseRdc} (RD Congo) » si `adresseRdc` est non vide, puis la phrase « Collecte partout en France · Distribution en France et au Congo ».
 - [ ] **Step 3 : pages** : remplacer `site.email` / `site.adresse.*` par les coordonnées lues dans `contact`, `mentions-legales`, `confidentialite` et le JSON-LD de `(site)/layout.tsx` (ajouter `telephone` au JSON-LD s'il est renseigné, et `streetAddress` si la rue l'est). `comment-ca-marche` et la FAQ courte de `contact` utilisent `await lireFaq()` ; le JSON-LD FAQ passe par `jsonLdSur` et le commentaire « aucune donnée utilisateur » est corrigé. Le JSON-LD du layout passe aussi par `jsonLdSur`.
 - [ ] **Step 4 : notifications** : `resendConfigure` n'exige plus `CONTACT_NOTIFICATION_EMAIL` (seulement clé et expéditeur). Dans `contact/actions.ts`, les destinataires viennent de `destinatairesNotification((await lireLigneCoordonnees())?.email, env.CONTACT_NOTIFICATION_EMAIL)` ; liste vide → `console.warn` et pas d'envoi.
 - [ ] **Step 5 : vérifier** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build` (sans Supabase configuré : le build passe et les pages rendent le contenu du code).
@@ -129,10 +130,10 @@
 - Consumes : `lireLigneCoordonnees` (tâche 3), `fusionnerCoordonnees` (tâche 2) pour préremplir le formulaire.
 - Produces : `schemaCoordonnees` ; action `enregistrerCoordonnees(donneesBrutes: unknown): Promise<ResultatAction>`.
 
-- [ ] **Step 1 : tests qui échouent** pour `schemaCoordonnees` : e-mail invalide refusé ; code postal `"9424"` refusé, `"94240"` accepté ; téléphone vide accepté, `"+33 6 12 34 56 78"` accepté, `"abc"` refusé ; WhatsApp vide accepté, `"+243 81 234 5678"` accepté, `"12"` refusé (moins de 8 chiffres) ; ville d'un caractère refusée ; rue vide acceptée.
+- [ ] **Step 1 : tests qui échouent** pour `schemaCoordonnees` : e-mail invalide refusé ; code postal `"9424"` refusé, `"94240"` accepté ; téléphone vide accepté, `"+33 6 12 34 56 78"` accepté, `"abc"` refusé ; WhatsApp vide accepté, `"+243 81 234 5678"` accepté, `"12"` refusé (moins de 8 chiffres) ; ville d'un caractère refusée ; rue vide acceptée ; adresse RDC vide acceptée, 201 caractères refusée.
 - [ ] **Step 2 : `npm test`** échoue, puis implémenter (téléphone : `^[+\d\s().-]{0,30}$` ; WhatsApp : vide ou 8 à 15 chiffres une fois les non-chiffres retirés) ; `npm test` passe.
 - [ ] **Step 3 : action** : `upsert({ id: true, … }, { onConflict: "id" })` ; chaînes vides enregistrées en `null` ; `revalidatePath("/", "layout")` et `revalidatePath("/admin/coordonnees")`.
-- [ ] **Step 4 : page** : formulaire unique prérempli, bouton « Enregistrer », erreurs sous chaque champ. Textes d'aide : « Ces coordonnées s'affichent dans le pied de page, la page contact et les mentions légales. » ; sous l'e-mail : « C'est aussi l'adresse qui reçoit les messages du formulaire de contact. » ; sous le téléphone : « Laissez vide pour ne pas afficher de téléphone. » ; sous WhatsApp : « Format international, par exemple +33 6 12 34 56 78. »
+- [ ] **Step 4 : page** : formulaire unique prérempli, bouton « Enregistrer », erreurs sous chaque champ. Textes d'aide : « Ces coordonnées s'affichent dans le pied de page, la page contact et les mentions légales. » ; sous l'e-mail : « C'est aussi l'adresse qui reçoit les messages du formulaire de contact. » ; sous le téléphone : « Laissez vide pour ne pas afficher de téléphone. » ; sous l'adresse RDC : « Adresse postale de l'association à Kinshasa, affichée dans le pied de page. Laissez vide pour la masquer. » ; sous WhatsApp : « Format international, par exemple +33 6 12 34 56 78. »
 - [ ] **Step 5 : navigation** : entrée « Coordonnées » (icône `Contact`) après « FAQ ».
 - [ ] **Step 6 : vérifier** `npm test`, `npm run typecheck`, `npm run lint`.
 - [ ] **Step 7 : commit** `Back-office : édition des coordonnées`
