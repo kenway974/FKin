@@ -16,6 +16,8 @@ Pour l'installation et le branchement de la base, voir plutôt le
 - [Ajouter un projet à la galerie](#ajouter-un-projet-à-la-galerie)
 - [Lire les messages reçus](#lire-les-messages-reçus)
 - [Ajouter les photos](#ajouter-les-photos)
+- [Modifier la FAQ](#modifier-la-faq)
+- [Modifier les coordonnées](#modifier-les-coordonnées)
 - [Supprimer le contenu de démonstration](#supprimer-le-contenu-de-démonstration)
 - [Questions fréquentes](#questions-fréquentes)
 
@@ -176,6 +178,36 @@ informatique », et non « photo1 ».
 
 > Vous pouvez aussi coller directement l'adresse d'une image hébergée ailleurs
 > dans le champ prévu à cet effet, sous le bouton de téléversement.
+
+## Modifier la FAQ
+
+L'onglet **FAQ** liste les questions fréquentes dans l'ordre où elles
+s'affichent sur la page « Comment ça marche ».
+
+- Modifiez une question ou sa réponse directement dans sa fiche, puis
+  **Enregistrer**.
+- **Pour qui** indique le public visé : tout le monde, les entreprises
+  donatrices ou les structures bénéficiaires.
+- **Page contact** : choisissez « Aussi sous le formulaire de contact » pour
+  qu'une question apparaisse également sous le formulaire.
+- **Position** fixe l'ordre : les plus petits nombres passent en premier.
+- La dernière fiche, vide, sert à **ajouter** une question.
+
+Les réponses sont en texte simple, sans mise en forme. Si vous supprimez toutes
+les questions, le site affiche à nouveau la FAQ d'origine.
+
+## Modifier les coordonnées
+
+L'onglet **Coordonnées** regroupe l'e-mail, le téléphone, le numéro WhatsApp,
+l'adresse en France et l'adresse postale à Kinshasa. Elles s'affichent dans le
+pied de page de toutes les pages, sur la page contact et dans les mentions
+légales.
+
+- **L'e-mail** reçoit aussi les messages du formulaire de contact : vérifiez-le
+  bien avant d'enregistrer.
+- **Téléphone** et **adresse à Kinshasa** : laissez vide pour ne rien afficher.
+- **WhatsApp** : numéro au format international (+33…, +243…). Le bouton
+  WhatsApp du site utilise ce numéro.
 
 ## Contenu de départ
 

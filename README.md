@@ -203,8 +203,10 @@ RESEND_FROM_EMAIL="Respusse <contact@votre-domaine.fr>"
 CONTACT_NOTIFICATION_EMAIL=vous@votre-domaine.fr
 ```
 
-`CONTACT_NOTIFICATION_EMAIL` accepte plusieurs adresses séparées par des
-virgules.
+Les notifications partent vers l'**e-mail saisi dans le back-office**
+(onglet « Coordonnées »). `CONTACT_NOTIFICATION_EMAIL` ne sert que de secours,
+tant que la table `coordonnees` n'existe pas ou est vide ; elle accepte
+plusieurs adresses séparées par des virgules.
 
 > **Pour tester sans domaine vérifié**, utilisez
 > `RESEND_FROM_EMAIL=onboarding@resend.dev`. Resend n'acceptera alors d'envoyer
@@ -224,7 +226,7 @@ Toutes les variables sont listées et commentées une par une dans
 | `NEXT_PUBLIC_SUPABASE_BUCKET`   | non (défaut `medias`) | Bucket des images                                 |
 | `RESEND_API_KEY`                | non                   | **Secrète.** Notification e-mail                  |
 | `RESEND_FROM_EMAIL`             | non                   | Expéditeur des notifications                      |
-| `CONTACT_NOTIFICATION_EMAIL`    | non                   | Destinataire(s) des notifications                 |
+| `CONTACT_NOTIFICATION_EMAIL`    | non                   | Secours si aucun e-mail n'est saisi en base       |
 
 Règle à ne jamais enfreindre : **une variable préfixée `NEXT_PUBLIC_` est
 envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
@@ -352,8 +354,20 @@ permet de cloner, installer et déployer avant même d'avoir créé la base.
 
 ## 10. Personnalisation
 
-**Nom, coordonnées, navigation** → `src/lib/site.ts`. Un seul fichier alimente
-le header, le footer, les balises SEO et le JSON-LD.
+**Nom, navigation** → `src/lib/site.ts`. Un seul fichier alimente le header, le
+footer, les balises SEO et le JSON-LD.
+
+**Coordonnées et FAQ** → modifiables depuis le back-office (onglets
+« Coordonnées » et « FAQ »). Les valeurs de `src/lib/site.ts` et
+`src/lib/faq.ts` ne servent plus que de repli, tant que les tables `faq` et
+`coordonnees` n'existent pas ou sont vides.
+
+**Mettre à jour une base déjà en service** (après une nouvelle version du site)
+→ relancez `supabase/schema.sql` en entier dans le SQL Editor : il ajoute les
+nouvelles tables et recopie le contenu de départ sans toucher à vos données.
+Puis, dans le back-office, saisissez une fois le numéro WhatsApp (jusqu'ici
+dans la variable Vercel `WHATSAPP_NUMERO`, gardée en secours) et le vrai
+numéro de téléphone.
 
 **Couleurs** → bloc `@theme` de `src/styles/globals.css`. Les ratios de
 contraste actuels y sont commentés ; si vous modifiez une couleur de texte,
