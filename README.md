@@ -365,6 +365,9 @@ footer, les balises SEO et le JSON-LD.
 **Mettre à jour une base déjà en service** (après une nouvelle version du site)
 → relancez `supabase/schema.sql` en entier dans le SQL Editor : il ajoute les
 nouvelles tables et recopie le contenu de départ sans toucher à vos données.
+**Attention :** dès le premier enregistrement de la page « Coordonnées », les
+messages du formulaire partent vers l'e-mail qui y est saisi, et non plus vers
+`CONTACT_NOTIFICATION_EMAIL`.
 Puis, dans le back-office, saisissez une fois le numéro WhatsApp (jusqu'ici
 dans la variable Vercel `WHATSAPP_NUMERO`, gardée en secours) et le vrai
 numéro de téléphone.

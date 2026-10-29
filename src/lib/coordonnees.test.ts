@@ -55,7 +55,11 @@ describe("fusionnerCoordonnees", () => {
 
 describe("lienTelephone", () => {
   it("retire les séparateurs du lien tel:", () => {
-    expect(lienTelephone("+33 (0)6 12.34-56 78")).toBe("tel:+330612345678");
+    expect(lienTelephone("+33 6 12.34-56 78")).toBe("tel:+33612345678");
+  });
+
+  it("retire le « (0) » des numéros écrits à la française", () => {
+    expect(lienTelephone("+33 (0)6 12 34 56 78")).toBe("tel:+33612345678");
   });
 
   it("ne produit aucun lien sans numéro", () => {

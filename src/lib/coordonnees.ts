@@ -43,7 +43,8 @@ export function fusionnerCoordonnees(ligne: LigneCoordonnees | null): Coordonnee
 
 /** Lien `tel:` sans espaces ni séparateurs, ou `null` sans numéro. */
 export function lienTelephone(telephone: string): string | null {
-  const numero = telephone.replace(/[^\d+]/g, "");
+  // « +33 (0)6 … » : le 0 entre parenthèses ne se compose pas depuis l'étranger.
+  const numero = telephone.replace(/\(0\)/g, "").replace(/[^\d+]/g, "");
   return numero ? `tel:${numero}` : null;
 }
 

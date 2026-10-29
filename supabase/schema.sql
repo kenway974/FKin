@@ -686,11 +686,13 @@ create policy "Les admins modifient les coordonnées"
   using (public.est_admin())
   with check (public.est_admin());
 
--- Valeurs de départ. Le téléphone provisoire du code n'est pas recopié ; le
--- numéro WhatsApp, réglé jusqu'ici dans Vercel, est à saisir dans le
--- back-office.
+-- Valeurs de départ. L'e-mail reste vide : le site affiche celui du code, et
+-- les notifications continuent de partir vers `CONTACT_NOTIFICATION_EMAIL`
+-- jusqu'au premier enregistrement dans le back-office. Le téléphone
+-- provisoire du code n'est pas recopié ; le numéro WhatsApp, réglé jusqu'ici
+-- dans Vercel, est à saisir dans le back-office.
 insert into public.coordonnees (id, email, telephone, rue, code_postal, ville, adresse_rdc, whatsapp)
-values (true, 'respusse@gmail.com', null, null, '94240', 'L''Haÿ-les-Roses',
+values (true, null, null, null, '94240', 'L''Haÿ-les-Roses',
         'Avenue Soki n° 20, commune de Mont-Ngafula, Kinshasa', null)
 on conflict (id) do nothing;
 
