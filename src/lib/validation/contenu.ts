@@ -112,3 +112,22 @@ export const schemaChiffre = z.object({
 });
 
 export type DonneesChiffre = z.infer<typeof schemaChiffre>;
+
+/** Question de la FAQ, éditée dans le back-office. */
+export const schemaQuestionFaq = z.object({
+  question: z
+    .string()
+    .trim()
+    .min(3, "Écrivez la question (3 caractères minimum).")
+    .max(200, "200 caractères au maximum."),
+  reponse: z
+    .string()
+    .trim()
+    .min(3, "Écrivez la réponse (3 caractères minimum).")
+    .max(2000, "2 000 caractères au maximum."),
+  public: z.enum(["donateurs", "beneficiaires", "tous"], { message: "Choisissez un public." }),
+  essentielle: z.boolean(),
+  ordre: z.number().int().min(0).max(99),
+});
+
+export type DonneesQuestionFaq = z.infer<typeof schemaQuestionFaq>;

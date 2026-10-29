@@ -1,7 +1,14 @@
 import "server-only";
 
 import { creerClientServeur, type ClientServeur } from "@/lib/supabase/server";
-import type { Article, ChiffreCle, Message, Projet } from "@/types/database";
+import type {
+  Article,
+  ChiffreCle,
+  LigneCoordonnees,
+  LigneFaq,
+  Message,
+  Projet,
+} from "@/types/database";
 
 /**
  * Lectures du back-office.
@@ -78,6 +85,20 @@ export const listerChiffres = (): Promise<ChiffreCle[]> =>
       .select("*")
       .order("ordre", { ascending: true })
       .order("created_at", { ascending: true }),
+  );
+
+export const listerQuestionsFaq = (): Promise<LigneFaq[]> =>
+  lire("le chargement de la FAQ", [], (supabase) =>
+    supabase
+      .from("faq")
+      .select("*")
+      .order("ordre", { ascending: true })
+      .order("created_at", { ascending: true }),
+  );
+
+export const lireCoordonneesAdmin = (): Promise<LigneCoordonnees | null> =>
+  lire("le chargement des coordonnées", null, (supabase) =>
+    supabase.from("coordonnees").select("*").maybeSingle(),
   );
 
 /**
