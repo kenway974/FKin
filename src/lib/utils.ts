@@ -80,3 +80,12 @@ export function formaterChiffre(valeur: number, suffixe: string) {
   if (!suffixe) return nombre;
   return suffixe.startsWith("+") ? `${nombre}${suffixe}` : `${nombre}\u202f${suffixe}`;
 }
+
+/**
+ * Données structurées JSON-LD à poser dans une balise `<script>`. Les `<`
+ * sont échappés : un texte saisi dans le back-office contenant
+ * `</script>` ne peut pas fermer la balise et injecter du HTML.
+ */
+export function jsonLdSur(donnees: unknown): string {
+  return JSON.stringify(donnees).replace(/</g, "\\u003c");
+}

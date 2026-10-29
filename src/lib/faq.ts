@@ -1,3 +1,5 @@
+import type { LigneFaq } from "@/types/database";
+
 /**
  * Questions fréquentes. Chaque réponse reprend un engagement déjà présent
  * sur le site (services, parcours d'un don) : la FAQ ne promet rien de plus.
@@ -83,3 +85,17 @@ export const FAQ: QuestionFaq[] = [
     public: "tous",
   },
 ];
+
+/**
+ * Questions saisies dans le back-office, ou la FAQ ci-dessus tant que la
+ * table est vide (base pas encore mise à jour ou injoignable).
+ */
+export function questionsFaq(lignes: LigneFaq[]): QuestionFaq[] {
+  if (!lignes.length) return FAQ;
+  return lignes.map(({ question, reponse, public: cible, essentielle }) => ({
+    question,
+    reponse,
+    public: cible,
+    essentielle,
+  }));
+}

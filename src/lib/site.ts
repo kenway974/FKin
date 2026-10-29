@@ -21,6 +21,8 @@ export const site = {
     ville: "L'Haÿ-les-Roses",
     pays: "FR",
   },
+  /** Adresse postale de l'association à Kinshasa. */
+  adresseRdc: "Avenue Soki n° 20, commune de Mont-Ngafula, Kinshasa",
   zones: [
     "France entière (collecte et distribution)",
     "Kinshasa et République du Congo (distribution)",

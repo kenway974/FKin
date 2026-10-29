@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { decouperParagraphes, extraireResume, formaterDate, genererSlug } from "@/lib/utils";
+import {
+  decouperParagraphes,
+  extraireResume,
+  formaterDate,
+  genererSlug,
+  jsonLdSur,
+} from "@/lib/utils";
 
 describe("genererSlug", () => {
   it("retire les accents, met en minuscules et remplace les espaces", () => {
@@ -39,5 +45,13 @@ describe("formaterDate", () => {
 describe("decouperParagraphes", () => {
   it("sépare sur les lignes vides et ignore les blocs vides", () => {
     expect(decouperParagraphes("Premier.\n\n\n  Second.  \n\n")).toEqual(["Premier.", "Second."]);
+  });
+});
+
+describe("jsonLdSur", () => {
+  it("empêche un texte saisi de fermer la balise <script>", () => {
+    const sortie = jsonLdSur({ texte: "</script><b>" });
+    expect(sortie).not.toContain("<");
+    expect(JSON.parse(sortie)).toEqual({ texte: "</script><b>" });
   });
 });
