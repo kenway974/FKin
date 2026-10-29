@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OndeBord } from "@/components/formes";
-import { site } from "@/lib/site";
+import { lireCoordonnees } from "@/lib/data";
 
 /**
  * Les deux portes d'entrée du site, en fin de page : les deux publics se
@@ -11,7 +11,8 @@ import { site } from "@/lib/site";
  * Posé en bas de chaque page publique, c'est la dernière chose vue avant le
  * pied de page.
  */
-export function DeuxPortes() {
+export async function DeuxPortes() {
+  const { email } = await lireCoordonnees();
   return (
     <>
       <section
@@ -97,8 +98,8 @@ export function DeuxPortes() {
       </section>
       <p className="contenu text-doux mt-4 text-center text-sm">
         Ou écrivez-nous directement à{" "}
-        <a href={`mailto:${site.email}`} className="text-encre font-bold underline">
-          {site.email}
+        <a href={`mailto:${email}`} className="text-encre font-bold underline">
+          {email}
         </a>
       </p>
     </>

@@ -14,6 +14,8 @@ import { creerClientService } from "@/lib/supabase/server";
 import { consommerEnvoi } from "@/lib/rate-limit";
 import { env, resendConfigure } from "@/lib/env";
 import { valider } from "@/lib/actions-serveur";
+import { lireLigneCoordonnees } from "@/lib/data";
+import { destinatairesNotification } from "@/lib/coordonnees";
 import type { ResultatContact } from "@/lib/actions-types";
 
 /**
@@ -257,12 +259,17 @@ async function notifierParEmail(donnees: {
     .filter((ligne) => ligne !== null)
     .join("\n");
 
+  const destinataires = destinatairesNotification(
+    (await lireLigneCoordonnees())?.email,
+    env.CONTACT_NOTIFICATION_EMAIL,
+  );
+  if (!destinataires.length) {
+    console.warn("[contact] Aucun destinataire configuré : notification e-mail ignorée.");
+    return;
+  }
+
   try {
     const resend = new Resend(env.RESEND_API_KEY);
-    const destinataires = (env.CONTACT_NOTIFICATION_EMAIL as string)
-      .split(",")
-      .map((adresse) => adresse.trim())
-      .filter(Boolean);
 
     const { error } = await resend.emails.send({
       from: env.RESEND_FROM_EMAIL as string,

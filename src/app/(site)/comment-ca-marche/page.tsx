@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { cn } from "@/lib/utils";
+import { cn, jsonLdSur } from "@/lib/utils";
 import { Alert } from "@/components/ui/alert";
 import { Section, TitreSection } from "@/components/sections";
 import { Faq, donneesFaq } from "@/components/faq";
-import { FAQ } from "@/lib/faq";
+import { lireFaq } from "@/lib/data";
 import { DeuxPortes } from "@/components/deux-portes";
 import { BannierePage } from "@/components/bannieres";
 import { trouverPhotoBanniere } from "@/lib/visuels";
@@ -81,7 +81,8 @@ const etapes = [
   },
 ] as const;
 
-export default function PageCommentCaMarche() {
+export default async function PageCommentCaMarche() {
+  const faq = await lireFaq();
   const donneesStructurees = {
     "@context": "https://schema.org",
     "@type": "HowTo",
@@ -101,7 +102,7 @@ export default function PageCommentCaMarche() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesStructurees) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesStructurees) }}
       />
 
       <BannierePage
@@ -166,13 +167,14 @@ export default function PageCommentCaMarche() {
             surtitre="Questions fréquentes"
             titre="Ce qu'on nous demande le plus souvent"
           />
-          <Faq questions={FAQ} />
+          <Faq questions={faq} />
         </div>
       </Section>
       <script
         type="application/ld+json"
-        // Contenu statique issu de `lib/faq.ts` : aucune donnée utilisateur.
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesFaq(FAQ)) }}
+        // Questions saisies dans le back-office : `jsonLdSur` échappe les `<`
+        // pour qu'un texte ne puisse pas fermer la balise.
+        dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesFaq(faq)) }}
       />
 
       <DeuxPortes />

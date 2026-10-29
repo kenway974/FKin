@@ -61,10 +61,11 @@ export const supabaseServiceConfigure = Boolean(
   env.NEXT_PUBLIC_SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY,
 );
 
-/** Vrai si la notification e-mail du formulaire de contact peut partir. */
-export const resendConfigure = Boolean(
-  env.RESEND_API_KEY && env.RESEND_FROM_EMAIL && env.CONTACT_NOTIFICATION_EMAIL,
-);
+/**
+ * Vrai si Resend peut envoyer. Les destinataires (e-mail des coordonnées,
+ * sinon `CONTACT_NOTIFICATION_EMAIL`) sont résolus au moment de l'envoi.
+ */
+export const resendConfigure = Boolean(env.RESEND_API_KEY && env.RESEND_FROM_EMAIL);
 
 // Réexportés pour que le code serveur n'ait pas à jongler entre deux modules.
 export { supabaseConfigure, urlSite } from "@/lib/env-public";

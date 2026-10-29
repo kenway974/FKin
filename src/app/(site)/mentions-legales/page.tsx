@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
+import { lireCoordonnees } from "@/lib/data";
 import { BannierePage } from "@/components/bannieres";
 
 export const metadata: Metadata = {
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
  * elles sont signalées par « [à compléter] » et doivent être renseignées avant
  * la mise en ligne définitive.
  */
-export default function PageMentionsLegales() {
+export default async function PageMentionsLegales() {
+  const coordonnees = await lireCoordonnees();
   return (
     <article className="pb-16">
       <BannierePage
@@ -32,13 +34,17 @@ export default function PageMentionsLegales() {
             <h2 className="font-titre text-encre text-xl font-bold">Éditeur du site</h2>
             <p>
               Le présent site est édité par <strong>{site.nom}</strong>, association régie par la
-              loi du 1<sup>er</sup> juillet 1901, dont le siège est situé à {site.adresse.ville} (
-              {site.adresse.codePostal}), France.
+              loi du 1<sup>er</sup> juillet 1901, dont le siège est situé à{" "}
+              {coordonnees.rue ? `${coordonnees.rue}, ` : ""}
+              {coordonnees.ville} ({coordonnees.codePostal}), France.
             </p>
             <p>
               Adresse e-mail :{" "}
-              <a href={`mailto:${site.email}`} className="text-rouge underline underline-offset-4">
-                {site.email}
+              <a
+                href={`mailto:${coordonnees.email}`}
+                className="text-rouge underline underline-offset-4"
+              >
+                {coordonnees.email}
               </a>
               .
             </p>

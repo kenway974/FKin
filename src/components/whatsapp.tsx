@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import { lienWhatsApp, whatsAppExemple } from "@/lib/whatsapp";
+import { lireCoordonnees } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 /**
@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
  * reconnu d'un coup d'œil) ; sur téléphone, la pastille seule. N'apparaît
  * pas si aucun numéro n'est configuré. Aucun JavaScript.
  */
-export function BoutonWhatsApp() {
-  const lien = lienWhatsApp();
+export async function BoutonWhatsApp() {
+  const { lienWhatsApp: lien, whatsAppExemple } = await lireCoordonnees();
   if (!lien) return null;
 
   return (
@@ -31,8 +31,8 @@ export function BoutonWhatsApp() {
 }
 
 /** Lien WhatsApp en ligne, pour les blocs de contact. */
-export function LienWhatsApp({ className }: { className?: string }) {
-  const lien = lienWhatsApp();
+export async function LienWhatsApp({ className }: { className?: string }) {
+  const { lienWhatsApp: lien, whatsAppExemple } = await lireCoordonnees();
   if (!lien) return null;
   return (
     <a
