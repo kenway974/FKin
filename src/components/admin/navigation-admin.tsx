@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   ChartColumnIncreasing,
   CircleHelp,
+  Contact,
   FileText,
   Images,
   LayoutDashboard,
@@ -19,6 +20,7 @@ const onglets = [
   { href: "/admin/messages", libelle: "Messages", icone: Mail, exact: false },
   { href: "/admin/chiffres", libelle: "Chiffres", icone: ChartColumnIncreasing, exact: false },
   { href: "/admin/faq", libelle: "FAQ", icone: CircleHelp, exact: false },
+  { href: "/admin/coordonnees", libelle: "Coordonnées", icone: Contact, exact: false },
 ] as const;
 
 /** Barre d'onglets du back-office. Le seul composant client de cette section. */

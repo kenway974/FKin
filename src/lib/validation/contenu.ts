@@ -131,3 +131,26 @@ export const schemaQuestionFaq = z.object({
 });
 
 export type DonneesQuestionFaq = z.infer<typeof schemaQuestionFaq>;
+
+const facultatif = (max: number) => z.string().trim().max(max, `${max} caractères au maximum.`);
+
+/** Coordonnées du site, éditées dans le back-office. */
+export const schemaCoordonnees = z.object({
+  email: z.email("Cette adresse e-mail ne semble pas valide.").max(180),
+  telephone: facultatif(30).regex(/^[+\d\s().-]*$/, "Chiffres, espaces et « + » uniquement."),
+  rue: facultatif(160),
+  codePostal: z
+    .string()
+    .trim()
+    .regex(/^\d{5}$/, "Le code postal compte 5 chiffres."),
+  ville: z.string().trim().min(2, "Indiquez la ville.").max(120, "120 caractères au maximum."),
+  adresseRdc: facultatif(200),
+  whatsapp: facultatif(30)
+    .regex(/^[+\d\s().-]*$/, "Chiffres, espaces et « + » uniquement.")
+    .refine((valeur) => {
+      const chiffres = valeur.replace(/\D/g, "").length;
+      return chiffres === 0 || (chiffres >= 8 && chiffres <= 15);
+    }, "Numéro au format international, par exemple +33 6 12 34 56 78."),
+});
+
+export type DonneesCoordonnees = z.infer<typeof schemaCoordonnees>;
