@@ -14,10 +14,10 @@ Le site poursuit deux objectifs :
 - **présenter les services aux structures bénéficiaires**, souvent consultés
   depuis un smartphone sur une connexion lente.
 
-> ⚠️ **Le code est livré non branché.** Aucun projet Supabase n'a été créé,
-> aucune migration n'a été appliquée, aucun compte Resend ni déploiement Vercel
-> n'a été réalisé. Le schéma et le seed SQL sont fournis en fichiers, à exécuter
-> vous-même. Tout est détaillé plus bas.
+Le projet est livré et en production. Les sections « Brancher Supabase »,
+« Configurer Resend » et « Déploiement sur Vercel » ci-dessous décrivent la
+marche à suivre pour reproduire l'installation de zéro (nouvel environnement,
+reprise par un autre prestataire, recette).
 
 ---
 
@@ -93,6 +93,8 @@ quoi que ce soit chez Supabase.
 | `npm run start`     | Sert le build de production           |
 | `npm run lint`      | ESLint                                |
 | `npm run typecheck` | Vérification TypeScript sans émission |
+| `npm run test`      | Tests unitaires Vitest (mode watch)   |
+| `npm run test:ci`   | Tests unitaires, exécution unique     |
 | `npm run format`    | Formatage Prettier                    |
 
 ## 4. Brancher Supabase
@@ -259,13 +261,15 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
 
 ```
 .
+├── .github/workflows/ci.yml     CI : lint, types, tests, audit, build
 ├── cahier-des-charges.md        Document de référence du projet
 ├── docs/admin.md                Guide d'utilisation du back-office
 ├── middleware.ts                Session Supabase + protection de /admin
 ├── next.config.mjs              En-têtes de sécurité, CSP, images distantes
 ├── supabase/
-│   ├── schema.sql               Tables, contraintes, RLS, bucket — NON APPLIQUÉ
-│   └── seed.sql                 Contenu de démonstration — NON APPLIQUÉ
+│   ├── schema.sql               Tables, contraintes, RLS, bucket
+│   └── seed.sql                 Contenu de démonstration
+├── tests/                       Utilitaires de test (faux client Supabase)
 └── src/
     ├── app/
     │   ├── (site)/              Pages publiques (header + footer communs)
@@ -422,6 +426,19 @@ Mesures en place :
 - Téléversements : type MIME et poids contrôlés côté client, nom de fichier
   reconstruit de zéro, écriture réservée aux administrateurs par politique
   Storage.
+- Tests et CI : à chaque push et pull request, GitHub Actions exécute le lint,
+  le typecheck, les tests unitaires (validation, limitation de débit,
+  redirection post-connexion, contrôle d'accès admin), `npm audit` (échec dès
+  la gravité « high ») et le build de production.
+
+Limite connue :
+
+- La limitation de débit du formulaire de contact est en mémoire de processus :
+  sur Vercel, chaque instance serverless a son propre compteur, qui n'est donc
+  ni partagé ni persistant. C'est un ralentisseur, pas un rempart. Piste
+  d'évolution, sans changer l'interface de `lib/rate-limit.ts` : un compteur
+  partagé via Upstash Ratelimit (Redis) ou une table Postgres dédiée dans
+  Supabase.
 
 Bonnes pratiques à votre charge :
 
