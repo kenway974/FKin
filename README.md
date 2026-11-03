@@ -1,5 +1,7 @@
 # Dons solidaires — Île-de-France ↔ Congo
 
+[![CI](https://github.com/kenway974/FKin/actions/workflows/ci.yml/badge.svg)](https://github.com/kenway974/FKin/actions/workflows/ci.yml)
+
 Site vitrine, blog et back-office d'une structure qui collecte du matériel
 (informatique, électrique, scolaire) auprès d'entreprises d'Île-de-France et
 l'achemine vers des écoles, mairies et associations au Congo.

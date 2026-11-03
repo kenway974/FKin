@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Une nouvelle exécution sur la même branche annule la précédente.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Le workflow ne fait que lire le dépôt.
+permissions:
+  contents: read
+
+jobs:
+  verifications:
+    name: Lint, types, tests et build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Aucune variable d'environnement n'est nécessaire au build : `lib/env.ts`
+      # rend tout optionnel et le site compile sans Supabase ni Resend (les
+      # fonctionnalités concernées se désactivent). Aucun secret n'est donc
+      # injecté ici, pas même factice : une fausse URL Supabase ferait tenter
+      # des appels réseau pendant le build.
+    steps:
+      # Actions épinglées par SHA de commit (v7.0.1 / v7.1.0) : un tag peut être
+      # déplacé, un SHA non.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:ci
+      - run: npm run build
+
+  audit:
+    name: Audit des dépendances
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Échoue sur toute vulnérabilité de gravité « high » ou « critical ».
+      - run: npm audit --audit-level=high
