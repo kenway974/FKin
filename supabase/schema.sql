@@ -322,6 +322,21 @@ create policy "Les admins suppriment les messages"
   to authenticated
   using (public.est_admin());
 
+-- Défense en profondeur : privilèges de table alignés sur les politiques.
+--
+-- Supabase accorde par défaut tous les droits sur les tables de `public` aux
+-- rôles `anon` et `authenticated` ; seule la RLS les filtre. On retire ici
+-- tout ce dont l'application n'a pas besoin, pour que la table reste fermée
+-- même si la RLS venait à être désactivée par erreur :
+--   - `anon` : aucun droit (le formulaire écrit via la clé service_role) ;
+--   - `authenticated` : lecture, suppression, et mise à jour de la seule
+--     colonne `lu` (le contenu d'un message reçu n'est jamais modifiable).
+-- `service_role` n'est pas concerné.
+revoke all on public.messages from anon;
+revoke insert, update, truncate, references, trigger on public.messages from authenticated;
+grant  select, delete on public.messages to authenticated;
+grant  update (lu) on public.messages to authenticated;
+
 -- --- admins ------------------------------------------------------------------
 
 drop policy if exists "Chacun voit sa propre fiche admin" on public.admins;
