@@ -115,9 +115,24 @@ describe("schemaProjet", () => {
     expect(champsEnErreur(schemaProjet, { ...projet, ...surcharge })).toContain(champ);
   });
 
-  // Limite connue, NON corrigée ici (aucun changement de comportement) :
-  // `z.url()` accepte tout schéma (`javascript:`, `data:`…), alors que le
-  // commentaire de `urlImage` annonce « URL http(s) ». Champ réservé aux
-  // administrateurs ; voir le récapitulatif de sécurité.
-  it.todo("refuse une URL d'image qui n'est pas en http(s)");
+  it.each([
+    "javascript:alert(1)",
+    "JavaScript:alert(1)",
+    "data:image/svg+xml;base64,PHN2Zz4=",
+    "file:///etc/passwd",
+    "ftp://example.org/image.jpg",
+    "vbscript:msgbox(1)",
+  ])("refuse l'URL d'image hors http(s) « %s »", (url) => {
+    expect(champsEnErreur(schemaProjet, { ...projet, imageUrl: url })).toContain("imageUrl");
+    expect(champsEnErreur(schemaArticle, { ...article, imageCouverture: url })).toContain(
+      "imageCouverture",
+    );
+  });
+
+  it.each([
+    "https://abc.supabase.co/storage/v1/object/public/medias/a.webp",
+    "http://example.org/image.jpg",
+  ])("accepte l'URL d'image « %s »", (url) => {
+    expect(champsEnErreur(schemaProjet, { ...projet, imageUrl: url })).toEqual([]);
+  });
 });
