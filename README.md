@@ -99,19 +99,9 @@ quoi que ce soit chez Supabase.
 
 ## 4. Brancher Supabase
 
-> ✅ **Déjà fait pour ce déploiement.** Le projet `dons-solidaires`
-> (ref `ujvfqlriwylxrkjwamjc`, région eu-west-3 / Paris) a été provisionné : le
-> schéma, les politiques RLS, le bucket `medias` et le contenu de démonstration
-> sont en place. Les étapes 4.1 à 4.4 sont donc terminées.
->
-> Restent à votre charge, parce qu'elles exigent des accès que l'automatisation
-> n'a pas : **créer le compte administrateur** (4.5) et **récupérer la clé
-> `service_role`** (4.6), qui n'est jamais exposée hors du dashboard.
->
-> Les étapes ci-dessous restent la marche à suivre complète si vous devez un
-> jour recréer le projet de zéro.
-
-Ces six étapes sont à réaliser une seule fois. Comptez une vingtaine de minutes.
+Ces étapes décrivent l'installation complète d'un projet Supabase, de zéro.
+Elles sont à réaliser une seule fois par environnement. Comptez une vingtaine
+de minutes.
 
 ### 4.1 Créer le projet
 
@@ -132,6 +122,10 @@ Ces six étapes sont à réaliser une seule fois. Comptez une vingtaine de minut
 Le script crée les tables `articles`, `projets`, `messages` et `admins`, la
 fonction `est_admin()`, toutes les politiques RLS ainsi que le bucket de
 stockage `medias`. Il est idempotent : vous pouvez le rejouer sans risque.
+
+Sur une base déjà installée, les évolutions ultérieures du schéma sont aussi
+fournies séparément dans [`supabase/migrations/`](supabase/migrations/), à
+exécuter de la même façon, dans l'ordre de leur nom. Chacune est idempotente.
 
 ### 4.3 Charger le contenu de démonstration (facultatif mais conseillé)
 
@@ -268,7 +262,8 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
 ├── next.config.mjs              En-têtes de sécurité, CSP, images distantes
 ├── supabase/
 │   ├── schema.sql               Tables, contraintes, RLS, bucket
-│   └── seed.sql                 Contenu de démonstration
+│   ├── seed.sql                 Contenu de démonstration
+│   └── migrations/              Évolutions à appliquer sur une base existante
 ├── tests/                       Utilitaires de test (faux client Supabase)
 └── src/
     ├── app/
@@ -332,7 +327,10 @@ Ratelimit dans `lib/rate-limit.ts` sans changer l'interface.
 **Les messages sont insérés avec la clé `service_role`.** Cela permet de
 n'accorder _aucun_ droit d'écriture au rôle anonyme sur la table `messages` : un
 visiteur ne peut pas y insérer de lignes en dehors du formulaire. La clé ne
-quitte jamais le serveur.
+quitte jamais le serveur. Les privilèges de table sont en outre alignés sur ces
+règles (aucun droit pour `anon`, et seule la colonne `lu` est modifiable par
+les administrateurs) : la table reste fermée même si la RLS était désactivée
+par erreur.
 
 **La CSP autorise `'unsafe-inline'` pour les scripts et les styles.** Next.js
 injecte des styles inline (notamment pour `next/image`) et du JSON-LD. Passer à
@@ -413,23 +411,25 @@ Mesures en place :
 - Chaque Server Action revérifie les droits de l'appelant. Une Server Action est
   une route HTTP : elle ne fait jamais confiance au contexte d'affichage.
 - Validation zod côté serveur sur toutes les entrées, avec les mêmes schémas que
-  le client.
+  le client. Les URL d'image n'acceptent que `http` et `https` (pas de
+  `javascript:` ni de `data:`).
 - Formulaire de contact : honeypot, piège temporel (3 secondes minimum) et
   limitation à 5 envois par heure et par IP. Aucune IP n'est stockée en base.
 - Déconnexion en POST uniquement, pour qu'un simple lien ou un préchargement ne
   puisse pas la déclencher.
 - Redirection après connexion restreinte aux chemins internes (pas de
-  redirection ouverte via `?suite=`).
+  redirection ouverte via `?suite=`), y compris contre les variantes que les
+  navigateurs normalisent en URL externe (`/\evil.com`, tabulations…).
 - Message de connexion générique, qui ne permet pas d'énumérer les comptes.
 - `poweredByHeader` désactivé ; `/admin` et `/connexion` exclus de
   l'indexation.
 - Téléversements : type MIME et poids contrôlés côté client, nom de fichier
   reconstruit de zéro, écriture réservée aux administrateurs par politique
   Storage.
-- Tests et CI : à chaque push et pull request, GitHub Actions exécute le lint,
-  le typecheck, les tests unitaires (validation, limitation de débit,
-  redirection post-connexion, contrôle d'accès admin), `npm audit` (échec dès
-  la gravité « high ») et le build de production.
+- Tests et CI : à chaque push, à chaque pull request et chaque lundi, GitHub
+  Actions exécute le lint, le typecheck, les tests unitaires (validation,
+  limitation de débit, redirection post-connexion, contrôle d'accès admin),
+  `npm audit` (échec dès la gravité « high ») et le build de production.
 
 Limite connue :
 
@@ -446,7 +446,12 @@ Bonnes pratiques à votre charge :
 - Faites tourner la clé `service_role` si vous soupçonnez une fuite
   (**Project Settings** → **API** → **Reset**).
 - Activez les sauvegardes automatiques de la base dans Supabase.
-- Lancez `npm audit` régulièrement.
+- Surveillez le badge CI : le job « Audit des dépendances » tourne à chaque
+  push et chaque lundi, et échoue dès qu'une vulnérabilité de gravité « high »
+  ou « critical » touche une dépendance. Il est vert à la date de livraison ; restent seulement des
+  vulnérabilités modérées dans l'outillage ESLint (dépendances de
+  développement, jamais déployées), en attente d'un correctif compatible
+  ESLint 9.
 
 ## 12. Dépannage
 

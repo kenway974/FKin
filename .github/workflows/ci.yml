@@ -3,6 +3,11 @@ name: CI
 on:
   push:
   pull_request:
+  # Chaque lundi : une vulnérabilité publiée entre deux push fait passer le
+  # job d'audit (et le badge) au rouge, sans attendre le prochain commit.
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
 
 # Une nouvelle exécution sur la même branche annule la précédente.
 concurrency:
