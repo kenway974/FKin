@@ -1,5 +1,7 @@
 # Respusse — France & Congo
 
+[![Vérifications](https://github.com/kenway974/FKin/actions/workflows/verifications.yml/badge.svg?branch=main)](https://github.com/kenway974/FKin/actions/workflows/verifications.yml)
+
 Site vitrine, blog et back-office de **Respusse**, association qui collecte du
 matériel (informatique, électrique, scolaire) auprès d'entreprises partout en
 France et le redistribue à des écoles, mairies et associations, en France
@@ -13,10 +15,10 @@ Le site poursuit deux objectifs :
 - **présenter les services aux structures bénéficiaires**, souvent consultés
   depuis un smartphone sur une connexion lente.
 
-> ⚠️ **Le code est livré non branché.** Aucun projet Supabase n'a été créé,
-> aucune migration n'a été appliquée, aucun compte Resend ni déploiement Vercel
-> n'a été réalisé. Le schéma et le seed SQL sont fournis en fichiers, à exécuter
-> vous-même. Tout est détaillé plus bas.
+Le projet est livré et en production. Les sections « Brancher Supabase »,
+« Configurer Resend » et « Déploiement sur Vercel » ci-dessous décrivent la
+marche à suivre pour reproduire l'installation de zéro (nouvel environnement,
+reprise par un autre prestataire, recette).
 
 ---
 
@@ -259,13 +261,15 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
 
 ```
 .
+├── .github/workflows/           CI : lint, typage, tests, build, audit
 ├── cahier-des-charges.md        Document de référence du projet
 ├── docs/admin.md                Guide d'utilisation du back-office
 ├── middleware.ts                Session Supabase + protection de /admin
 ├── next.config.mjs              En-têtes de sécurité, CSP, images distantes
 ├── supabase/
-│   ├── schema.sql               Tables, contraintes, RLS, bucket — NON APPLIQUÉ
-│   └── seed.sql                 Administrateurs + articles de départ — NON APPLIQUÉ
+│   ├── schema.sql               Tables, contraintes, RLS, buckets (idempotent)
+│   └── seed.sql                 Administrateurs + articles de départ
+├── tests/                       Utilitaires de test (faux client Supabase)
 └── src/
     ├── app/
     │   ├── (site)/              Pages publiques (header + footer communs)
@@ -319,16 +323,21 @@ Conséquence : pas de gras ni de liens dans le corps d'un article, mais aucune
 surface d'injection XSS depuis le back-office. Le compromis penche
 volontairement du côté de la sécurité et de la simplicité d'usage.
 
-**La limitation de débit est en mémoire de processus.** Cinq envois par heure
-et par IP, sans dépendance externe. Sur Vercel, chaque instance serverless a sa
-propre mémoire : le compteur n'est donc pas partagé. Combiné au honeypot et au
-piège temporel, cela suffit au volume attendu. Pour durcir, branchez Upstash
-Ratelimit dans `lib/rate-limit.ts` sans changer l'interface.
+**La limitation de débit est stockée dans Supabase.** Cinq envois par heure et
+par visiteur, comptés dans la table `limites_envoi` (section 12 du schéma) :
+le compteur est partagé par toutes les instances serverless, sans service
+externe. La clé est une empreinte salée de l'adresse IP, jamais l'IP elle-même.
+Seul le serveur y accède (`service_role`). Choix assumé : si la base ne répond
+pas, l'envoi est accepté plutôt que perdu ; le honeypot et le piège temporel
+restent actifs.
 
 **Les messages sont insérés avec la clé `service_role`.** Cela permet de
 n'accorder _aucun_ droit d'écriture au rôle anonyme sur la table `messages` : un
 visiteur ne peut pas y insérer de lignes en dehors du formulaire. La clé ne
-quitte jamais le serveur.
+quitte jamais le serveur. Les privilèges de table sont en outre alignés sur ces
+règles (section 15 du schéma : aucun droit pour `anon`, seule la colonne `lu`
+modifiable par les administrateurs) : la table reste fermée même si la RLS
+était désactivée par erreur.
 
 **La CSP autorise `'unsafe-inline'` pour les scripts et les styles.** Next.js
 injecte des styles inline (notamment pour `next/image`) et du JSON-LD. Passer à
@@ -417,26 +426,34 @@ Mesures en place :
 
 - En-têtes HTTP : HSTS, `X-Frame-Options: DENY`, `X-Content-Type-Options`,
   `Referrer-Policy`, `Permissions-Policy`, CSP complète (`next.config.mjs`).
-- Row Level Security activée sur les quatre tables ; tout est interdit par
+- Row Level Security activée sur les huit tables ; tout est interdit par
   défaut, les accès sont ouverts au cas par cas (`supabase/schema.sql`).
 - Trois barrières successives sur `/admin` : middleware (session), vérification
   serveur de l'appartenance à la table `admins`, puis politiques RLS.
 - Chaque Server Action revérifie les droits de l'appelant. Une Server Action est
   une route HTTP : elle ne fait jamais confiance au contexte d'affichage.
 - Validation zod côté serveur sur toutes les entrées, avec les mêmes schémas que
-  le client.
+  le client. Les URL d'image n'acceptent que `http` et `https` (pas de
+  `javascript:` ni de `data:`).
 - Formulaire de contact : honeypot, piège temporel (3 secondes minimum) et
-  limitation à 5 envois par heure et par IP. Aucune IP n'est stockée en base.
+  limitation partagée à 5 envois par heure et par visiteur. Aucune IP n'est
+  stockée en base, seulement son empreinte salée.
 - Déconnexion en POST uniquement, pour qu'un simple lien ou un préchargement ne
   puisse pas la déclencher.
 - Redirection après connexion restreinte aux chemins internes (pas de
-  redirection ouverte via `?suite=`).
+  redirection ouverte via `?suite=`), y compris contre les variantes que les
+  navigateurs normalisent en URL externe (`/\evil.com`, tabulations…).
 - Message de connexion générique, qui ne permet pas d'énumérer les comptes.
 - `poweredByHeader` désactivé ; `/admin` et `/connexion` exclus de
   l'indexation.
 - Téléversements : type MIME et poids contrôlés côté client, nom de fichier
   reconstruit de zéro, écriture réservée aux administrateurs par politique
   Storage.
+- Tests et CI : à chaque push sur main, à chaque pull request et chaque lundi,
+  GitHub Actions exécute le lint, le typage, les tests unitaires (validation,
+  redirection post-connexion, contrôle d'accès admin, actions du back-office),
+  le build de production et `npm audit` (échec dès la gravité « high »). Une
+  pull request ne peut être fusionnée sur main que si ces contrôles sont verts.
 
 Bonnes pratiques à votre charge :
 
@@ -444,7 +461,11 @@ Bonnes pratiques à votre charge :
 - Faites tourner la clé `service_role` si vous soupçonnez une fuite
   (**Project Settings** → **API** → **Reset**).
 - Activez les sauvegardes automatiques de la base dans Supabase.
-- Lancez `npm audit` régulièrement.
+- Surveillez le badge en tête de ce fichier : le job « Audit des
+  dépendances » passe au rouge dès qu'une vulnérabilité « high » ou
+  « critical » touche une dépendance. Restent seulement des vulnérabilités
+  modérées dans l'outillage ESLint (dépendances de développement, jamais
+  déployées), en attente d'un correctif compatible avec typescript-eslint 8.
 
 ## 12. Dépannage
 
