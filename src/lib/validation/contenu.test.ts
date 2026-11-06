@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { schemaCoordonnees, schemaQuestionFaq } from "@/lib/validation/contenu";
+import {
+  schemaArticle,
+  schemaCoordonnees,
+  schemaProjet,
+  schemaQuestionFaq,
+} from "@/lib/validation/contenu";
 
 const questionValide = {
   question: "Certains matériels sont-ils mis en vente ?",
@@ -88,5 +93,61 @@ describe("schemaCoordonnees", () => {
 
   it("refuse une adresse à Kinshasa de plus de 200 caractères", () => {
     expect(coordonneesAcceptees({ adresseRdc: "a".repeat(201) })).toBe(false);
+  });
+});
+
+const articleValide = {
+  titre: "Livraison d'ordinateurs",
+  slug: "livraison-ordinateurs",
+  extrait: "",
+  contenu: "Un contenu suffisamment long pour dépasser la limite des cinquante caractères.",
+  imageCouverture: "",
+  imageAlt: "",
+  statut: "publie",
+  datePublication: "2026-10-01",
+  auteur: "",
+};
+
+const projetValide = {
+  titre: "Équipement d'une école",
+  slug: "equipement-ecole",
+  description: "Remise de postes informatiques reconditionnés à une école.",
+  lieu: "Brazzaville",
+  dateProjet: "",
+  typeMateriel: "Informatique",
+  resultat: "Une salle informatique ouverte aux élèves.",
+  imageUrl: "",
+  imageAlt: "",
+  publie: true,
+  ordre: 0,
+  latitude: null,
+  longitude: null,
+};
+
+describe("URL d'image des articles et des projets", () => {
+  it.each([
+    "https://abc.supabase.co/storage/v1/object/public/medias/a.webp",
+    "http://example.org/image.jpg",
+    "",
+  ])("accepte « %s »", (url) => {
+    expect(schemaArticle.safeParse({ ...articleValide, imageCouverture: url }).success).toBe(true);
+    expect(schemaProjet.safeParse({ ...projetValide, imageUrl: url }).success).toBe(true);
+  });
+
+  it.each([
+    "javascript:alert(1)",
+    "JavaScript:alert(1)",
+    "data:image/svg+xml;base64,PHN2Zz4=",
+    "file:///etc/passwd",
+    "ftp://example.org/image.jpg",
+    "vbscript:msgbox(1)",
+    "pas une url",
+  ])("refuse « %s »", (url) => {
+    const article = schemaArticle.safeParse({ ...articleValide, imageCouverture: url });
+    const projet = schemaProjet.safeParse({ ...projetValide, imageUrl: url });
+    expect(article.success).toBe(false);
+    expect(article.error?.issues[0]?.path).toEqual(["imageCouverture"]);
+    expect(projet.success).toBe(false);
+    expect(projet.error?.issues[0]?.path).toEqual(["imageUrl"]);
   });
 });
