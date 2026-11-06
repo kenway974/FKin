@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { ChampFormulaire, Input } from "@/components/ui/field";
 import { creerClientNavigateur } from "@/lib/supabase/client";
+import { destinationApresConnexion } from "@/lib/redirection";
 
 const schemaConnexion = z.object({
   email: z.email("Adresse e-mail invalide."),
@@ -63,11 +64,8 @@ export function FormulaireConnexion() {
       return;
     }
 
-    // Une destination doit rester interne au site : on refuse toute URL absolue
-    // pour empêcher une redirection ouverte via `?suite=https://…`.
-    const suite = parametres.get("suite");
-    const destination =
-      suite && suite.startsWith("/") && !suite.startsWith("//") ? suite : "/admin";
+    // Une destination doit rester interne au site : voir `lib/redirection.ts`.
+    const destination = destinationApresConnexion(parametres.get("suite"));
 
     router.replace(destination);
     router.refresh();

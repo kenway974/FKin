@@ -2,8 +2,8 @@
 --  Schéma de la base — Respusse (France ↔ Congo)
 -- =============================================================================
 --
---  CE FICHIER N'A PAS ÉTÉ APPLIQUÉ. Il est fourni tel quel, à exécuter
---  vous-même dans votre propre projet Supabase.
+--  Ce fichier décrit l'intégralité de la base. Il sert à installer un nouveau
+--  projet Supabase comme à mettre à jour une base déjà en service.
 --
 --  Comment l'appliquer :
 --    1. Ouvrez votre projet sur https://supabase.com
@@ -30,6 +30,7 @@
 --   12. Limite d'envois du formulaire de contact (anti-spam)
 --   13. Table `faq` (questions fréquentes)
 --   14. Table `coordonnees` (coordonnées du site)
+--   15. Privilèges de la table `messages` (défense en profondeur)
 -- =============================================================================
 
 
@@ -696,6 +697,25 @@ values (true, null, null, null, '94240', 'L''Haÿ-les-Roses',
         'Avenue Soki n° 20, commune de Mont-Ngafula, Kinshasa', null)
 on conflict (id) do nothing;
 
+
+-- -----------------------------------------------------------------------------
+--  15. Privilèges de la table `messages` — défense en profondeur
+-- -----------------------------------------------------------------------------
+--  Supabase accorde par défaut tous les droits sur les tables de `public` aux
+--  rôles `anon` et `authenticated` ; seule la RLS les filtre. On retire ici
+--  tout ce dont l'application n'a pas besoin, pour que la table reste fermée
+--  même si la RLS venait à être désactivée par erreur :
+--    - `anon` : aucun droit (le formulaire écrit via la clé service_role) ;
+--    - `authenticated` : lecture, suppression (avec les photos jointes), et
+--      mise à jour de la seule colonne `lu` (le contenu d'un message reçu,
+--      ses détails et ses photos ne sont jamais modifiables).
+--  `service_role` n'est pas concerné. Retour arrière, si nécessaire :
+--    grant all on public.messages to anon, authenticated;
+
+revoke all on public.messages from anon;
+revoke insert, update, truncate, references, trigger on public.messages from authenticated;
+grant  select, delete on public.messages to authenticated;
+grant  update (lu) on public.messages to authenticated;
 
 -- =============================================================================
 --  ÉTAPE SUIVANTE — déclarer votre compte administrateur

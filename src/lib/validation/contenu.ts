@@ -18,9 +18,20 @@ const slug = z
     "Le slug ne peut contenir que des minuscules, des chiffres et des tirets.",
   );
 
-/** URL d'image : soit une URL http(s) complète, soit vide. */
+/**
+ * URL d'image : soit une URL http(s) complète, soit vide.
+ *
+ * Le protocole est restreint explicitement : sans cela, `z.url()` accepte
+ * aussi `javascript:`, `data:` ou `file:`.
+ */
 const urlImage = z
-  .union([z.url("L'adresse de l'image doit être une URL valide."), z.literal("")])
+  .union([
+    z.url({
+      protocol: /^https?$/,
+      error: "L'adresse de l'image doit être une URL valide (http ou https).",
+    }),
+    z.literal(""),
+  ])
   .optional();
 
 export const schemaArticle = z.object({
