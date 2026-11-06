@@ -7,6 +7,11 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Chaque lundi : une vulnérabilité publiée entre deux push fait passer l'audit
+  # (et le badge) au rouge, sans attendre le prochain commit.
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -18,23 +23,45 @@ concurrency:
 
 jobs:
   verifications:
+    # Nom repris tel quel par la règle de protection de main : ne pas le changer
+    # sans mettre à jour cette règle sur GitHub.
     name: Lint, typage, tests et build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      # Actions épinglées par SHA de commit (v7.0.1 / v7.1.0) : un tag peut être
+      # déplacé, un SHA non.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 22
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
           cache: npm
 
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
-      # Ne fait rien tant que le projet n'a pas de script « test » ; s'active
-      # tout seul dès que les tests sont installés.
-      - run: npm test --if-present
+      - run: npm test
       # Sans variables Supabase, le site se construit avec ses contenus de
-      # secours : le build vérifie la compilation, pas les données.
+      # secours : le build vérifie la compilation, pas les données. Aucun
+      # secret n'est donc injecté ici, pas même factice.
       - run: npm run build
+
+  audit:
+    name: Audit des dépendances
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Échoue sur toute vulnérabilité de gravité « high » ou « critical ».
+      - run: npm audit --audit-level=high
