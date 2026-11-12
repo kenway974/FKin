@@ -46,11 +46,13 @@ export const metadata: Metadata = {
     "réemploi informatique",
   ],
   authors: [{ name: site.nom }],
-  alternates: { canonical: "/" },
+  // Pas d'URL canonique ni d'URL Open Graph ici : elles seraient héritées
+  // telles quelles par toutes les pages (une page désignerait l'accueil comme
+  // sa version de référence). Chaque page publique déclare les siennes via
+  // `metadonneesPage()` (lib/seo.ts).
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    url: urlSite,
     siteName: site.nom,
     title: `${site.nom} — Dons de matériel, en France et au Congo`,
     description: site.description,

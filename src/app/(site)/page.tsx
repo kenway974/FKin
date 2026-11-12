@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
+import { site } from "@/lib/site";
 import { ArrowRight, GraduationCap, Recycle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChiffreCle, EtatVide, Section, TitreSection } from "@/components/sections";
@@ -13,12 +15,13 @@ import { CarteArticle } from "@/components/carte-article";
 import { chiffresAccueil, listerArticlesPublies, listerProjetsPublies } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Donnez une seconde vie à votre matériel",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Donnez une seconde vie à votre matériel",
   description:
     "Nous collectons le matériel informatique, électrique et scolaire des entreprises partout en France et le redistribuons à des écoles et associations, en France comme au Congo. Traçabilité, reçus, comptes rendus d'usage.",
-  alternates: { canonical: "/" },
-};
+  chemin: "/",
+  titrePartage: `${site.nom} — Dons de matériel, en France et au Congo`,
+});
 
 /**
  * Vitesses de parallaxe des éléments d'une même rangée : chaque colonne glisse

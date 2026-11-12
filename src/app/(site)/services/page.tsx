@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import {
   ArrowRight,
   ClipboardCheck,
@@ -21,12 +22,12 @@ import { BannierePage } from "@/components/bannieres";
 import { Blob, varianteBlob } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
-export const metadata: Metadata = {
-  title: "Nos services",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Nos services",
   description:
     "Collecte et effacement des données pour les entreprises partout en France ; équipement d'écoles et d'associations en France et au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
-  alternates: { canonical: "/services" },
-};
+  chemin: "/services",
+});
 
 /** Prestations proposées aux entreprises donatrices. */
 const servicesEntreprises = [

@@ -246,6 +246,11 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
 5. Une fois le domaine personnalisé branché (**Settings** → **Domains**),
    corrigez `NEXT_PUBLIC_SITE_URL` si nécessaire et **redéployez** : cette
    variable est lue au build pour le sitemap et les balises canoniques.
+6. **Settings** → **Environments** → **Production** → **Branch Tracking** :
+   la branche de production est **`main`**. Chaque fusion sur `main` déploie
+   le site ; les autres branches et les pull requests obtiennent un
+   déploiement d'aperçu. Côté GitHub, `main` doit aussi être la branche par
+   défaut (**Settings** → **General** → **Default branch**).
 
 ### Après la mise en ligne
 
@@ -264,13 +269,14 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
 ├── .github/workflows/           CI : lint, typage, tests, build, audit
 ├── cahier-des-charges.md        Document de référence du projet
 ├── docs/admin.md                Guide d'utilisation du back-office
-├── middleware.ts                Session Supabase + protection de /admin
+├── docs/arborescence-urls.md    Toutes les URL du site et leurs règles
 ├── next.config.mjs              En-têtes de sécurité, CSP, images distantes
 ├── supabase/
 │   ├── schema.sql               Tables, contraintes, RLS, buckets (idempotent)
 │   └── seed.sql                 Administrateurs + articles de départ
 ├── tests/                       Utilitaires de test (faux client Supabase)
 └── src/
+    ├── middleware.ts            URL canoniques, session Supabase, accès /admin
     ├── app/
     │   ├── (site)/              Pages publiques (header + footer communs)
     │   │   ├── page.tsx                 Accueil
@@ -286,7 +292,9 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
     │   ├── connexion/           Authentification
     │   ├── deconnexion/         Route POST de déconnexion
     │   ├── robots.ts            /robots.txt
-    │   ├── sitemap.ts           /sitemap.xml
+    │   ├── sitemap.ts           /sitemap.xml (contenu : lib/plan-du-site.ts)
+    │   ├── manifest.ts          /manifest.webmanifest
+    │   ├── favicon.ico, icon.png, apple-icon.png   Icônes du site
     │   └── opengraph-image.tsx  Image de partage générée
     ├── components/
     │   ├── ui/                  Primitives (bouton, champs, carte, alerte)

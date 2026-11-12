@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import { jsonLdSur } from "@/lib/utils";
 import { EtatVide, Section } from "@/components/sections";
 import { BannierePage } from "@/components/bannieres";
@@ -9,17 +10,12 @@ import { listerArticlesPublies } from "@/lib/data";
 import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Actualités",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Actualités",
   description:
     "Comptes rendus de convois, retours de terrain et nouvelles des structures équipées en France et au Congo.",
-  alternates: { canonical: "/actualites" },
-  openGraph: {
-    title: "Actualités",
-    description: "Comptes rendus de convois et retours de terrain.",
-    url: `${urlSite}/actualites`,
-  },
-};
+  chemin: "/actualites",
+});
 
 /** Le blog change peu : une revalidation horaire suffit et allège les requêtes. */
 export const revalidate = 3600;

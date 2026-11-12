@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import { jsonLdSur } from "@/lib/utils";
 import { Bande, EtatVide, Section, TitreSection } from "@/components/sections";
 import { CarteStructures } from "@/components/carte-structures";
@@ -10,17 +11,12 @@ import { listerProjetsPublies } from "@/lib/data";
 import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Réalisations",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Réalisations",
   description:
     "Les projets menés à leur terme : lieu, matériel livré et résultat obtenu pour chaque école, mairie ou association équipée, en France comme au Congo.",
-  alternates: { canonical: "/realisations" },
-  openGraph: {
-    title: "Réalisations",
-    description: "Les projets menés à leur terme, lieu par lieu, avec le résultat obtenu.",
-    url: `${urlSite}/realisations`,
-  },
-};
+  chemin: "/realisations",
+});
 
 /**
  * Revalidation toutes les heures : la galerie est alimentée par la base, mais

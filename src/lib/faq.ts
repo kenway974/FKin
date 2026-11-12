@@ -84,6 +84,44 @@ export const FAQ: QuestionFaq[] = [
       "Seul le matériel qu'aucune structure n'a demandé est revendu, pour financer le transport, l'acheminement et le fonctionnement de l'association. En 2025, il s'agissait d'accessoires réseau et informatiques (switchs, onduleurs…), vendus à des particuliers. L'association ne reçoit aucun financement public : elle vit des cotisations des écoles adhérentes et des adhérents privés, et de ces ventes.",
     public: "tous",
   },
+  {
+    question: "Comment proposer un don de matériel ?",
+    reponse:
+      "Remplissez le formulaire de contact : type de matériel, quantité approximative, état, ville et délai souhaité. Une liste précise n'est pas nécessaire : sous 72 heures, nous vous disons ce qui est réemployable et ce qui part au recyclage.",
+    public: "donateurs",
+  },
+  {
+    question: "Faut-il préparer le matériel avant l'enlèvement ?",
+    reponse:
+      "Non. Nous intervenons partout en France, étage compris, et notre équipe assure le chargement : rien à préparer de votre côté. Un inventaire détaillé est établi et signé au moment de l'enlèvement.",
+    public: "donateurs",
+  },
+  {
+    question:
+      "Notre entreprise renouvelle son parc régulièrement : pouvez-vous passer à intervalles réguliers ?",
+    reponse:
+      "Oui. Nous mettons en place un calendrier d'enlèvements adapté à vos renouvellements, avec un interlocuteur unique côté association.",
+    public: "donateurs",
+  },
+  {
+    question: "Comment savoir ce qu'est devenu le matériel donné ?",
+    reponse:
+      "L'entreprise donatrice reçoit, quelques mois après la livraison, un compte rendu avec photos. Les projets menés à leur terme sont aussi publiés dans nos réalisations, avec le lieu, le matériel livré et le résultat obtenu, et nos actualités racontent les collectes et les livraisons.",
+    public: "tous",
+  },
+  {
+    question: "Qui installe le matériel dans notre structure ?",
+    reponse:
+      "Notre équipe en France, et nos partenaires locaux au Congo, accompagnent l'installation et la première prise en main avec la personne référente, pour que le matériel serve dès la première semaine.",
+    public: "beneficiaires",
+  },
+  {
+    question: "Sous quel délai répondez-vous aux demandes ?",
+    reponse:
+      "Sous 72 heures ouvrées, que vous soyez une entreprise qui souhaite donner ou une structure qui cherche à être équipée.",
+    public: "tous",
+    essentielle: true,
+  },
 ];
 
 /**
