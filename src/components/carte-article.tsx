@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { CardTitre } from "@/components/ui/card";
 import { VisuelParDefaut } from "@/components/sections";
 import { extraireResume, formaterDate } from "@/lib/utils";
+import { texteBrut } from "@/lib/mise-en-forme";
 import type { Article } from "@/types/database";
 
 /** Carte d'aperçu d'un article, utilisée sur l'accueil et la liste des actualités. */
@@ -14,7 +15,7 @@ export function CarteArticle({
   article: Article;
   priorite?: boolean;
 }) {
-  const resume = article.extrait?.trim() || extraireResume(article.contenu, 150);
+  const resume = article.extrait?.trim() || extraireResume(texteBrut(article.contenu), 150);
 
   return (
     // Pas de carte encadrée : image en forme souple, texte posé dessous.

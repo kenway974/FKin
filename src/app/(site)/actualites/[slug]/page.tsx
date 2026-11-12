@@ -6,7 +6,9 @@ import { metadonneesPage } from "@/lib/seo";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { listerArticlesPublies, trouverArticleParSlug } from "@/lib/data";
-import { decouperParagraphes, extraireResume, formaterDate, jsonLdSur } from "@/lib/utils";
+import { extraireResume, formaterDate, jsonLdSur } from "@/lib/utils";
+import { texteBrut } from "@/lib/mise-en-forme";
+import { ContenuArticle } from "@/components/contenu-article";
 import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 import { BannierePage } from "@/components/bannieres";
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: Proprietes): Promise<Metadata
     return { title: "Article introuvable", robots: { index: false, follow: false } };
   }
 
-  const description = article.extrait?.trim() || extraireResume(article.contenu, 155);
+  const description = article.extrait?.trim() || extraireResume(texteBrut(article.contenu), 155);
   const base = metadonneesPage({
     titre: article.titre,
     description,
@@ -66,8 +68,7 @@ export default async function PageArticle({ params }: Proprietes) {
   // Slug inconnu ou article encore en brouillon : page 404, jamais de fuite.
   if (!article) notFound();
 
-  const paragraphes = decouperParagraphes(article.contenu);
-  const description = article.extrait?.trim() || extraireResume(article.contenu, 155);
+  const description = article.extrait?.trim() || extraireResume(texteBrut(article.contenu), 155);
 
   const donneesStructurees = {
     "@context": "https://schema.org",
@@ -141,15 +142,10 @@ export default async function PageArticle({ params }: Proprietes) {
           ) : null}
 
           {/*
-            Le contenu est stocké en texte brut et rendu paragraphe par
-            paragraphe : aucun HTML n'est interprété, ce qui élimine toute
-            possibilité d'injection depuis le back-office.
+            Texte saisi dans le back-office, mis en forme sans jamais
+            interpréter de HTML (voir components/contenu-article.tsx).
           */}
-          <div className="text-encre/90 space-y-5 text-[1.05rem] leading-relaxed">
-            {paragraphes.map((paragraphe, index) => (
-              <p key={index}>{paragraphe}</p>
-            ))}
-          </div>
+          <ContenuArticle contenu={article.contenu} />
         </div>
       </article>
     </>

@@ -75,9 +75,20 @@ d'un conteneur, l'installation d'une salle, un retour de terrain.
 **Pour faire des paragraphes**, laissez une ligne vide entre deux blocs de
 texte. Chaque bloc devient un paragraphe distinct sur le site.
 
-> Le gras, l'italique et les liens ne sont pas gérés dans le corps d'un article.
-> C'est un choix délibéré : cela garantit qu'aucun code indésirable ne peut être
-> introduit dans les pages.
+**Mise en forme possible** dans le corps d'un article :
+
+| Vous tapez                          | Sur le site                   |
+| ----------------------------------- | ----------------------------- |
+| `## Que faire de ses ordinateurs ?` | Un intertitre                 |
+| `- un élément` (une ligne par puce) | Une liste à puces             |
+| `[nos services](/services)`         | Un lien vers une page du site |
+| `[la CNIL](https://www.cnil.fr)`    | Un lien vers un autre site    |
+
+Les intertitres comptent beaucoup pour Google : formulez-les comme les
+questions que se posent vos lecteurs.
+
+> L'italique et le code HTML ne sont pas gérés. C'est un choix
+> délibéré : aucun code indésirable ne peut être introduit dans les pages.
 
 ### Enregistrer et publier
 
