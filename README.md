@@ -84,14 +84,33 @@ quoi que ce soit chez Supabase.
 
 ### Scripts disponibles
 
-| Commande            | Effet                                 |
-| ------------------- | ------------------------------------- |
-| `npm run dev`       | Serveur de développement              |
-| `npm run build`     | Build de production                   |
-| `npm run start`     | Sert le build de production           |
-| `npm run lint`      | ESLint                                |
-| `npm run typecheck` | Vérification TypeScript sans émission |
-| `npm run format`    | Formatage Prettier                    |
+| Commande               | Effet                                                               |
+| ---------------------- | ------------------------------------------------------------------- |
+| `npm run dev`          | Serveur de développement                                            |
+| `npm run build`        | Build de production                                                 |
+| `npm run start`        | Sert le build de production                                         |
+| `npm run lint`         | ESLint                                                              |
+| `npm run typecheck`    | Vérification TypeScript sans émission                               |
+| `npm run format`       | Formatage Prettier                                                  |
+| `npm run format:check` | Vérifie le formatage sans modifier                                  |
+| `npm run test`         | Tests unitaires (Vitest)                                            |
+| `npm run test:watch`   | Tests unitaires en continu                                          |
+| `npm run test:e2e`     | Tests de bout en bout (Playwright) — construit puis démarre le site |
+| `npm run verif`        | Lint + formatage + types + tests unitaires, comme la CI             |
+
+### Tests
+
+- **Unitaires** (`src/**/*.test.ts`, Vitest) : utilitaires, schémas de
+  validation zod, limitation de débit. Rapides, sans réseau.
+- **De bout en bout** (`e2e/`, Playwright) : exécutés contre le build de
+  production, sur un profil ordinateur et un profil smartphone. Ils vérifient
+  l'affichage des pages publiques, la navigation, la page 404, le formulaire de
+  contact (validation, pré-sélection du profil, champ piège), les en-têtes de
+  sécurité, la redirection du back-office, `robots.txt` et `sitemap.xml`.
+
+Les tests de bout en bout ne supposent **aucune** base Supabase : ils valident
+le site dans son état « non branché », qui doit rester consultable. Première
+utilisation en local : `npx playwright install chromium`.
 
 ## 4. Brancher Supabase
 
@@ -243,6 +262,29 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
    corrigez `NEXT_PUBLIC_SITE_URL` si nécessaire et **redéployez** : cette
    variable est lue au build pour le sitemap et les balises canoniques.
 
+### Intégration continue
+
+Le workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) s'exécute à
+chaque poussée, sur toutes les branches, en deux tâches parallèles :
+
+1. **Qualité** — ESLint, Prettier, TypeScript, tests unitaires ;
+2. **Build et e2e** — build de production sans variable d'environnement, puis
+   tests Playwright. En cas d'échec, le rapport est joint à l'exécution
+   (artefact `rapport-playwright`).
+
+Le déploiement reste confié à Vercel (aperçu par branche, production sur la
+branche de production). Pour qu'un déploiement de production n'ait jamais lieu
+avec une CI rouge :
+
+- GitHub → **Settings** → **Branches** → règle de protection sur la branche de
+  production → cochez **Require status checks to pass** et sélectionnez les
+  deux tâches de la CI ;
+- fusionnez uniquement via pull request.
+
+[Dependabot](.github/dependabot.yml) propose chaque lundi les mises à jour npm
+(mineures et correctifs regroupés) et chaque mois celles des actions GitHub ;
+la CI les valide avant fusion.
+
 ### Après la mise en ligne
 
 - Vérifiez `https://votre-domaine.fr/robots.txt` et
@@ -258,13 +300,15 @@ envoyée au navigateur**. Ne préfixez jamais ainsi une clé secrète.
 ```
 .
 ├── cahier-des-charges.md        Document de référence du projet
+├── .github/                     CI GitHub Actions + Dependabot
 ├── docs/admin.md                Guide d'utilisation du back-office
-├── middleware.ts                Session Supabase + protection de /admin
+├── e2e/                         Tests de bout en bout (Playwright)
 ├── next.config.mjs              En-têtes de sécurité, CSP, images distantes
 ├── supabase/
 │   ├── schema.sql               Tables, contraintes, RLS, bucket — NON APPLIQUÉ
 │   └── seed.sql                 Contenu de démonstration — NON APPLIQUÉ
 └── src/
+    ├── middleware.ts            Session Supabase + protection de /admin
     ├── app/
     │   ├── (site)/              Pages publiques (header + footer communs)
     │   │   ├── page.tsx                 Accueil
@@ -374,14 +418,14 @@ affiche une illustration SVG (une scène « bureaux franciliens → conteneur �
 `public/bannieres/` et la bannière bascule automatiquement sur votre
 photographie**, sans toucher au code :
 
-| Fichier | Page |
-| --- | --- |
-| `public/bannieres/accueil.jpg` | Accueil |
-| `public/bannieres/services.jpg` | Nos services |
-| `public/bannieres/realisations.jpg` | Réalisations |
+| Fichier                                  | Page              |
+| ---------------------------------------- | ----------------- |
+| `public/bannieres/accueil.jpg`           | Accueil           |
+| `public/bannieres/services.jpg`          | Nos services      |
+| `public/bannieres/realisations.jpg`      | Réalisations      |
 | `public/bannieres/comment-ca-marche.jpg` | Comment ça marche |
-| `public/bannieres/actualites.jpg` | Actualités |
-| `public/bannieres/contact.jpg` | Contact |
+| `public/bannieres/actualites.jpg`        | Actualités        |
+| `public/bannieres/contact.jpg`           | Contact           |
 
 Les extensions `.jpg`, `.jpeg`, `.png`, `.webp` et `.avif` sont reconnues.
 Format conseillé : 2000 × 1000 px environ, moins de 400 ko. Un voile dégradé

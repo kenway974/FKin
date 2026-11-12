@@ -2,14 +2,14 @@
 
 Déposez ici vos photos pour remplacer les illustrations par défaut.
 
-| Fichier attendu       | Page concernée     |
-| --------------------- | ------------------ |
-| `accueil.jpg`         | Accueil            |
-| `services.jpg`        | Nos services       |
-| `realisations.jpg`    | Réalisations       |
+| Fichier attendu         | Page concernée    |
+| ----------------------- | ----------------- |
+| `accueil.jpg`           | Accueil           |
+| `services.jpg`          | Nos services      |
+| `realisations.jpg`      | Réalisations      |
 | `comment-ca-marche.jpg` | Comment ça marche |
-| `actualites.jpg`      | Actualités         |
-| `contact.jpg`         | Contact            |
+| `actualites.jpg`        | Actualités        |
+| `contact.jpg`           | Contact           |
 
 Extensions reconnues : `.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`.
 

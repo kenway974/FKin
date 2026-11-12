@@ -1,0 +1,78 @@
+# Intégration continue.
+#
+# Le déploiement (CD) est assuré par l'intégration Git de Vercel : un aperçu
+# par branche ou pull request, la production à chaque fusion sur la branche de
+# production. Ce workflow garantit que rien de cassé n'y arrive. Pour bloquer
+# la fusion tant qu'il n'est pas vert, voir la section « Intégration continue »
+# du README.
+
+name: CI
+
+# Toute poussée déclenche la CI, sur n'importe quelle branche : les pull
+# requests ouvertes depuis ce dépôt affichent donc ces vérifications sans
+# exécution en double.
+on:
+  push:
+  workflow_dispatch:
+
+# Une nouvelle poussée sur la même branche annule l'exécution précédente.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  qualite:
+    name: Lint, format, types, tests unitaires
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm run test
+
+  build-e2e:
+    name: Build et tests de bout en bout
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+
+      # Cache incrémental de Next.js : accélère nettement les builds suivants.
+      - uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+
+      # Build sans Supabase : le site doit rester constructible et consultable
+      # avant que la base ne soit branchée (voir README, section 9).
+      - run: npm run build
+
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+
+      - name: Rapport Playwright
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-playwright
+          path: playwright-report/
+          retention-days: 7
