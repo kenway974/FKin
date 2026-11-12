@@ -87,7 +87,7 @@ texte. Chaque bloc devient un paragraphe distinct sur le site.
 Les intertitres comptent beaucoup pour Google : formulez-les comme les
 questions que se posent vos lecteurs.
 
-> Le gras, l'italique et le code HTML ne sont pas gérés. C'est un choix
+> L'italique et le code HTML ne sont pas gérés. C'est un choix
 > délibéré : aucun code indésirable ne peut être introduit dans les pages.
 
 ### Enregistrer et publier

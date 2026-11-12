@@ -7,6 +7,7 @@
  *
  *   ## Un intertitre          → titre de section (<h2>)
  *   - un élément de liste     → liste à puces
+ *   **texte important**       → texte en gras
  *   [texte du lien](/chemin)  → lien interne, ou externe en https://
  *
  * Une ligne vide sépare deux paragraphes, comme avant : les articles écrits
@@ -15,6 +16,7 @@
 
 export type Segment =
   | { type: "texte"; texte: string }
+  | { type: "gras"; texte: string }
   | { type: "lien"; texte: string; href: string; externe: boolean };
 
 export type Bloc =
@@ -35,7 +37,23 @@ function lienAutorise(href: string): boolean {
   return /^https?:\/\/[^/\s]+/i.test(href);
 }
 
-/** Découpe une ligne de texte en segments de texte et de liens. */
+const MOTIF_GRAS = /\*\*([^*\n]+)\*\*/g;
+
+/** Découpe un morceau de texte sans lien en texte normal et texte en gras. */
+function separerGras(texte: string): Segment[] {
+  const segments: Segment[] = [];
+  let position = 0;
+  for (const correspondance of texte.matchAll(MOTIF_GRAS)) {
+    const debut = correspondance.index ?? 0;
+    if (debut > position) segments.push({ type: "texte", texte: texte.slice(position, debut) });
+    segments.push({ type: "gras", texte: correspondance[1] ?? "" });
+    position = debut + correspondance[0].length;
+  }
+  if (position < texte.length) segments.push({ type: "texte", texte: texte.slice(position) });
+  return segments;
+}
+
+/** Découpe une ligne de texte en segments de texte, de gras et de liens. */
 function analyserLigne(ligne: string): Segment[] {
   const segments: Segment[] = [];
   let tampon = "";
@@ -47,7 +65,7 @@ function analyserLigne(ligne: string): Segment[] {
     position = (correspondance.index ?? 0) + complet.length;
 
     if (lienAutorise(href)) {
-      if (tampon) segments.push({ type: "texte", texte: tampon });
+      segments.push(...separerGras(tampon));
       tampon = "";
       segments.push({ type: "lien", texte, href, externe: !href.startsWith("/") });
     } else {
@@ -56,7 +74,7 @@ function analyserLigne(ligne: string): Segment[] {
   }
 
   tampon += ligne.slice(position);
-  if (tampon) segments.push({ type: "texte", texte: tampon });
+  segments.push(...separerGras(tampon));
   return segments;
 }
 

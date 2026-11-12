@@ -58,6 +58,25 @@ describe("analyserContenu", () => {
     }
   });
 
+  it("met en gras le texte entre doubles astérisques, y compris dans une liste", () => {
+    expect(analyserContenu("- **Écrans** : utiles.\n\nUn **mot** fort.")).toEqual([
+      {
+        type: "liste",
+        elements: [[{ type: "gras", texte: "Écrans" }, texte(" : utiles.")]],
+      },
+      {
+        type: "paragraphe",
+        segments: [texte("Un "), { type: "gras", texte: "mot" }, texte(" fort.")],
+      },
+    ]);
+  });
+
+  it("laisse tels quels des astérisques isolés", () => {
+    expect(analyserContenu("Note * importante")).toEqual([
+      { type: "paragraphe", segments: [texte("Note * importante")] },
+    ]);
+  });
+
   it("n'interprète jamais de HTML", () => {
     expect(analyserContenu("<script>alert(1)</script>")).toEqual([
       { type: "paragraphe", segments: [texte("<script>alert(1)</script>")] },
@@ -71,7 +90,7 @@ describe("analyserContenu", () => {
 
 describe("texteBrut", () => {
   it("retire la mise en forme pour produire un résumé lisible", () => {
-    expect(texteBrut("## Titre\n\nUn [lien](/contact) utile.\n\n- un\n- deux")).toBe(
+    expect(texteBrut("## Titre\n\nUn [lien](/contact) **utile**.\n\n- un\n- deux")).toBe(
       "Titre Un lien utile. un deux",
     );
   });

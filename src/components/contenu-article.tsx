@@ -15,6 +15,13 @@ const classeLien =
 function Segments({ segments }: { segments: Segment[] }) {
   return segments.map((segment, index) => {
     if (segment.type === "texte") return segment.texte;
+    if (segment.type === "gras") {
+      return (
+        <strong key={index} className="text-encre font-bold">
+          {segment.texte}
+        </strong>
+      );
+    }
     return segment.externe ? (
       <a
         key={index}
