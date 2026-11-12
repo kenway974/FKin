@@ -637,6 +637,33 @@ select * from (values
 ) as depart (question, reponse, public, essentielle, ordre)
 where not exists (select 1 from public.faq);
 
+-- Questions ajoutées en novembre 2026. Insérées une à une si elles manquent :
+-- rejouer ce script les ajoute à une base déjà en service sans toucher aux
+-- questions existantes. (Une question supprimée depuis le back-office
+-- reviendrait si le script est rejoué : la supprimer aussi d'ici.)
+insert into public.faq (question, reponse, public, essentielle, ordre)
+select * from (values
+  ('Comment proposer un don de matériel ?',
+   'Remplissez le formulaire de contact : type de matériel, quantité approximative, état, ville et délai souhaité. Une liste précise n''est pas nécessaire : sous 72 heures, nous vous disons ce qui est réemployable et ce qui part au recyclage.',
+   'donateurs', false, 11),
+  ('Faut-il préparer le matériel avant l''enlèvement ?',
+   'Non. Nous intervenons partout en France, étage compris, et notre équipe assure le chargement : rien à préparer de votre côté. Un inventaire détaillé est établi et signé au moment de l''enlèvement.',
+   'donateurs', false, 12),
+  ('Notre entreprise renouvelle son parc régulièrement : pouvez-vous passer à intervalles réguliers ?',
+   'Oui. Nous mettons en place un calendrier d''enlèvements adapté à vos renouvellements, avec un interlocuteur unique côté association.',
+   'donateurs', false, 13),
+  ('Comment savoir ce qu''est devenu le matériel donné ?',
+   'L''entreprise donatrice reçoit, quelques mois après la livraison, un compte rendu avec photos. Les projets menés à leur terme sont aussi publiés dans nos réalisations, avec le lieu, le matériel livré et le résultat obtenu, et nos actualités racontent les collectes et les livraisons.',
+   'tous', false, 14),
+  ('Qui installe le matériel dans notre structure ?',
+   'Notre équipe en France, et nos partenaires locaux au Congo, accompagnent l''installation et la première prise en main avec la personne référente, pour que le matériel serve dès la première semaine.',
+   'beneficiaires', false, 15),
+  ('Sous quel délai répondez-vous aux demandes ?',
+   'Sous 72 heures ouvrées, que vous soyez une entreprise qui souhaite donner ou une structure qui cherche à être équipée.',
+   'tous', true, 16)
+) as ajout (question, reponse, public, essentielle, ordre)
+where not exists (select 1 from public.faq f where f.question = ajout.question);
+
 
 -- -----------------------------------------------------------------------------
 --  14. Table `coordonnees` — coordonnées affichées sur le site
