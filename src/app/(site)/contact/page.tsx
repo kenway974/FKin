@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import { Clock, Mail, MapPin, Phone, Zap } from "lucide-react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -13,12 +14,12 @@ import { lireCoordonnees, lireFaq } from "@/lib/data";
 import { lienTelephone } from "@/lib/coordonnees";
 import { LienWhatsApp } from "@/components/whatsapp";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Contact",
   description:
     "Entreprise en France souhaitant donner du matériel, ou structure en France ou au Congo cherchant à être équipée : écrivez-nous, nous répondons sous 72 heures ouvrées.",
-  alternates: { canonical: "/contact" },
-};
+  chemin: "/contact",
+});
 
 export default async function PageContact() {
   const [coordonnees, faq] = await Promise.all([lireCoordonnees(), lireFaq()]);
@@ -128,7 +129,7 @@ export default async function PageContact() {
             />
             <Faq nom="faq-contact" questions={essentielles} />
             <Button asChild variante="courbe">
-              <Link href="/comment-ca-marche#titre-faq">
+              <Link href="/comment-ca-marche#faq">
                 Toutes les questions fréquentes
                 <ArrowRight aria-hidden="true" />
               </Link>

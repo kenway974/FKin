@@ -1,14 +1,15 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { lireCoordonnees } from "@/lib/data";
 import { BannierePage } from "@/components/bannieres";
 
-export const metadata: Metadata = {
-  title: "Mentions légales",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Mentions légales",
   description: `Mentions légales du site ${site.nom} : éditeur, directeur de la publication et hébergement.`,
-  alternates: { canonical: "/mentions-legales" },
-};
+  chemin: "/mentions-legales",
+});
 
 /**
  * Mentions légales.

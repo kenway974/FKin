@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import { cn, jsonLdSur } from "@/lib/utils";
 import { Alert } from "@/components/ui/alert";
 import { Section, TitreSection } from "@/components/sections";
@@ -9,12 +10,12 @@ import { BannierePage } from "@/components/bannieres";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { urlSite } from "@/lib/env";
 
-export const metadata: Metadata = {
-  title: "Comment ça marche",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Comment ça marche",
   description:
     "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école, en France ou au Congo, étape par étape et avec les délais.",
-  alternates: { canonical: "/comment-ca-marche" },
-};
+  chemin: "/comment-ca-marche",
+});
 
 /**
  * Le parcours d'un don, étape par étape.
@@ -160,7 +161,7 @@ export default async function PageCommentCaMarche() {
       </Section>
 
       {/* ------------------------------------------------ Questions fréquentes */}
-      <Section aria-labelledby="titre-faq">
+      <Section id="faq" aria-labelledby="titre-faq" className="scroll-mt-24">
         <div className="contenu max-w-4xl space-y-10">
           <TitreSection
             id="titre-faq"

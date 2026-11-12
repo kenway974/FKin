@@ -1,9 +1,19 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BannierePage } from "@/components/bannieres";
 import { Logo } from "@/components/layout/logo";
 import { navigation, site } from "@/lib/site";
+
+/**
+ * Une page introuvable ne doit jamais être indexée ; on laisse les robots
+ * suivre ses liens vers les vraies pages.
+ */
+export const metadata: Metadata = {
+  title: "Page introuvable",
+  robots: { index: false, follow: true },
+};
 
 /**
  * Page 404 globale, dans la langue du héros : plein écran marine, vague et

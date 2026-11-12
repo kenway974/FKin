@@ -1,14 +1,15 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { lireCoordonnees } from "@/lib/data";
 import { BannierePage } from "@/components/bannieres";
 
-export const metadata: Metadata = {
-  title: "Politique de confidentialité",
+export const metadata: Metadata = metadonneesPage({
+  titre: "Politique de confidentialité",
   description: `Comment ${site.nom} collecte, utilise et protège les données transmises via le formulaire de contact, et comment exercer vos droits.`,
-  alternates: { canonical: "/confidentialite" },
-};
+  chemin: "/confidentialite",
+});
 
 /**
  * Politique de confidentialité (RGPD).

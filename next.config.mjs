@@ -56,8 +56,27 @@ const csp = [
   "upgrade-insecure-requests",
 ].join("; ");
 
+/**
+ * URL publique du site (canoniques, Open Graph, sitemap, robots.txt).
+ *
+ * `NEXT_PUBLIC_SITE_URL` fait foi. À défaut, sur Vercel, on prend le domaine
+ * de production du projet (variable système `VERCEL_PROJECT_PRODUCTION_URL`,
+ * fournie au build) : un oubli de configuration ne publie donc jamais un
+ * sitemap pointant vers localhost. Les déploiements d'aperçu désignent ainsi,
+ * eux aussi, le domaine de production comme version de référence.
+ */
+const urlSite =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : undefined);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: urlSite ? { NEXT_PUBLIC_SITE_URL: urlSite } : {},
+  // URL sans barre oblique finale (comportement par défaut, rendu explicite) :
+  // `/contact/` est redirigé vers `/contact`.
+  trailingSlash: false,
   reactStrictMode: true,
   // N'annonce pas la techno utilisée dans les en-têtes de réponse.
   poweredByHeader: false,

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { metadonneesPage } from "@/lib/seo";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { listerArticlesPublies, trouverArticleParSlug } from "@/lib/data";
@@ -35,24 +36,25 @@ export async function generateMetadata({ params }: Proprietes): Promise<Metadata
   }
 
   const description = article.extrait?.trim() || extraireResume(article.contenu, 155);
-  const url = `${urlSite}/actualites/${article.slug}`;
+  const base = metadonneesPage({
+    titre: article.titre,
+    description,
+    chemin: `/actualites/${article.slug}`,
+    type: "article",
+  });
 
   return {
-    title: article.titre,
-    description,
-    alternates: { canonical: `/actualites/${article.slug}` },
+    ...base,
     openGraph: {
+      ...base.openGraph,
       type: "article",
-      title: article.titre,
-      description,
-      url,
       publishedTime: article.date_publication ?? undefined,
-      images: article.image_couverture ? [{ url: article.image_couverture }] : undefined,
+      modifiedTime: article.updated_at,
+      ...(article.image_couverture ? { images: [{ url: article.image_couverture }] } : {}),
     },
     twitter: {
-      card: article.image_couverture ? "summary_large_image" : "summary",
-      title: article.titre,
-      description,
+      ...base.twitter,
+      ...(article.image_couverture ? { images: [article.image_couverture] } : {}),
     },
   };
 }
