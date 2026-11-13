@@ -1,3 +1,5 @@
+import type { CategorieArticle } from "@/lib/articles-filtre";
+
 /**
  * Types de la base Supabase.
  *
@@ -24,6 +26,8 @@ export type Article = {
   image_couverture: string | null;
   image_alt: string | null;
   statut: StatutArticle;
+  /** Rubrique de la page Actualités (voir lib/articles-filtre.ts). */
+  categorie: CategorieArticle | null;
   date_publication: string | null;
   auteur: string | null;
   created_at: string;

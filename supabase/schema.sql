@@ -31,6 +31,7 @@
 --   13. Table `faq` (questions fréquentes)
 --   14. Table `coordonnees` (coordonnées du site)
 --   15. Privilèges de la table `messages` (défense en profondeur)
+--   16. Rubrique des articles (filtre de la page Actualités)
 -- =============================================================================
 
 
@@ -743,6 +744,21 @@ revoke all on public.messages from anon;
 revoke insert, update, truncate, references, trigger on public.messages from authenticated;
 grant  select, delete on public.messages to authenticated;
 grant  update (lu) on public.messages to authenticated;
+
+-- -----------------------------------------------------------------------------
+--  16. Rubrique des articles (filtre de la page Actualités)
+-- -----------------------------------------------------------------------------
+--  Facultative : un article sans rubrique reste visible dans « Tout ».
+--  Les valeurs possibles sont aussi déclarées dans src/lib/articles-filtre.ts.
+
+alter table public.articles add column if not exists categorie text;
+
+alter table public.articles drop constraint if exists articles_categorie_valide;
+alter table public.articles
+  add constraint articles_categorie_valide check (
+    categorie is null or categorie in ('entreprises', 'beneficiaires', 'congo', 'association')
+  );
+
 
 -- =============================================================================
 --  ÉTAPE SUIVANTE — déclarer votre compte administrateur
