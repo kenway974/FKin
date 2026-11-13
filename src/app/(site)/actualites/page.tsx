@@ -6,6 +6,7 @@ import { BannierePage } from "@/components/bannieres";
 import { DeuxPortes } from "@/components/deux-portes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 import { CarteArticle } from "@/components/carte-article";
+import { ListeActualites } from "@/components/liste-actualites";
 import { listerArticlesPublies } from "@/lib/data";
 import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
@@ -57,13 +58,17 @@ export default async function PageActualites() {
       <Section>
         <div className="contenu">
           {articles.length > 0 ? (
-            <ul data-apparition-cascade="" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {articles.map((article, index) => (
-                <li key={article.id}>
-                  <CarteArticle article={article} priorite={index < 2} />
-                </li>
+            <ListeActualites
+              elements={articles.map((article) => ({
+                cle: article.id,
+                titre: article.titre,
+                extrait: article.extrait,
+                categorie: article.categorie,
+              }))}
+              cartes={articles.map((article, index) => (
+                <CarteArticle key={article.id} article={article} priorite={index < 2} compacte />
               ))}
-            </ul>
+            />
           ) : (
             <EtatVide titre="Aucun article publié pour le moment">
               <p>
