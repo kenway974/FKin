@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CATEGORIES_ARTICLE } from "@/lib/articles-filtre";
 
 /**
  * Schémas de validation du back-office (articles et projets).
@@ -52,6 +53,11 @@ export const schemaArticle = z.object({
     .optional()
     .or(z.literal("")),
   statut: z.enum(["brouillon", "publie"]),
+  /** Rubrique de la page Actualités ; vide = article non classé. */
+  categorie: z
+    .enum(CATEGORIES_ARTICLE.map((categorie) => categorie.id))
+    .optional()
+    .or(z.literal("")),
   datePublication: z
     .string()
     .trim()

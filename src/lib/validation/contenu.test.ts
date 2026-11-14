@@ -124,6 +124,23 @@ const projetValide = {
   longitude: null,
 };
 
+describe("catégorie des articles", () => {
+  it.each(["entreprises", "beneficiaires", "congo", "association", ""])(
+    "accepte « %s »",
+    (categorie) => {
+      expect(schemaArticle.safeParse({ ...articleValide, categorie }).success).toBe(true);
+    },
+  );
+
+  it("accepte un article sans catégorie", () => {
+    expect(schemaArticle.safeParse(articleValide).success).toBe(true);
+  });
+
+  it("refuse une catégorie inconnue", () => {
+    expect(schemaArticle.safeParse({ ...articleValide, categorie: "sport" }).success).toBe(false);
+  });
+});
+
 describe("URL d'image des articles et des projets", () => {
   it.each([
     "https://abc.supabase.co/storage/v1/object/public/medias/a.webp",

@@ -30,6 +30,7 @@ function versLigne(donnees: z.infer<typeof schemaArticle>) {
     image_couverture: donnees.imageCouverture || null,
     image_alt: donnees.imageAlt || null,
     statut: donnees.statut,
+    categorie: donnees.categorie || null,
     // Un article publié sans date reçoit la date du jour : cela évite de le
     // voir disparaître du tri par date sur la liste publique.
     date_publication:

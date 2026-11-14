@@ -12,6 +12,7 @@ import { ChampFormulaire, Input, Select, Textarea } from "@/components/ui/field"
 import { TeleversementImage } from "@/components/admin/televersement-image";
 import { schemaArticle, type DonneesArticle } from "@/lib/validation/contenu";
 import { genererSlug } from "@/lib/utils";
+import { CATEGORIES_ARTICLE } from "@/lib/articles-filtre";
 import { creerArticle, modifierArticle } from "./actions";
 import type { ResultatAction } from "@/lib/actions-types";
 import type { Article } from "@/types/database";
@@ -47,6 +48,7 @@ export function FormulaireArticle({ article }: { article?: Article }) {
       imageCouverture: article?.image_couverture ?? "",
       imageAlt: article?.image_alt ?? "",
       statut: article?.statut ?? "brouillon",
+      categorie: article?.categorie ?? "",
       datePublication: article?.date_publication?.slice(0, 10) ?? "",
       auteur: article?.auteur ?? "",
     },
@@ -176,6 +178,24 @@ export function FormulaireArticle({ article }: { article?: Article }) {
                 <Select {...aria} aria-describedby="aide-statut" {...register("statut")}>
                   <option value="brouillon">Brouillon (non visible)</option>
                   <option value="publie">Publié (visible sur le site)</option>
+                </Select>
+              )}
+            </ChampFormulaire>
+
+            <ChampFormulaire
+              id="categorie"
+              libelle="Rubrique"
+              erreur={errors.categorie?.message}
+              aide="Permet aux visiteurs de filtrer les actualités par thème."
+            >
+              {(aria) => (
+                <Select {...aria} {...register("categorie")}>
+                  <option value="">Non classé</option>
+                  {CATEGORIES_ARTICLE.map((categorie) => (
+                    <option key={categorie.id} value={categorie.id}>
+                      {categorie.libelle}
+                    </option>
+                  ))}
                 </Select>
               )}
             </ChampFormulaire>
