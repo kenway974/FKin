@@ -1,7 +1,10 @@
 # Plan éditorial — Actualités Respusse
 
 Document de travail vivant : on coche, on réordonne, on complète au fil des
-publications. Rythme visé : **1 à 2 articles par jour**.
+publications. Rythme visé : **2 articles par semaine**, réguliers. Google ne
+pénalise pas la fréquence en soi, mais un site neuf qui publie en masse des
+articles moyens ressemble à du contenu produit à la chaîne (ce que ses règles
+anti-spam visent). Mieux vaut 2 bons articles par semaine que 10 moyens.
 
 Dernière mise à jour : 18 novembre 2026.
 
@@ -427,24 +430,24 @@ Un récit par projet réel, **en plus** de la fiche Réalisation :
 
 ---
 
-## 6. Calendrier de départ (1 à 2 par jour)
+## 6. Calendrier de départ (2 par semaine)
 
 Ordre pensé pour publier d'abord ce qui **ne dépend de personne**, pendant que
 l'association rassemble ses infos.
 
-| Jour | Article(s)                        | Bloquant ?                      |
-| ---- | --------------------------------- | ------------------------------- |
-| J1   | A1 · A13                          | non                             |
-| J2   | A2 · B1                           | non                             |
-| J3   | A5 · B3                           | non                             |
-| J4   | B2 · A9                           | non                             |
-| J5   | A3                                | méthode d'effacement            |
-| J6   | B5                                | non                             |
-| J7   | A6                                | statut fiscal                   |
-| J8   | A10 · A11                         | filière, délais                 |
-| J9   | A4 · A15                          | A3 publié, une intervention IDF |
-| J10  | D1                                | histoire, statut                |
-| J11+ | C1, C4, B4, D2, puis P3 et récits | selon les réponses              |
+| Semaine | Article(s)                 | Bloquant ?                   |
+| ------- | -------------------------- | ---------------------------- |
+| S1      | A1 · A13                   | non                          |
+| S2      | A2 · B1                    | non                          |
+| S3      | A5 · B3                    | non                          |
+| S4      | A3 · B2                    | méthode d'effacement (A3)    |
+| S5      | A6 · A9                    | statut fiscal (A6)           |
+| S6      | A10 · B5                   | filière de recyclage (A10)   |
+| S7      | A11 · A15                  | délais, une intervention IDF |
+| S8      | A4 · D1                    | histoire, statut (D1)        |
+| S9+     | C1, C4, B4, D2, P3, récits | selon les réponses           |
+
+Les récits de vrais projets passent **avant** le calendrier dès qu'ils sont prêts.
 
 Si une info bloquante n'est pas arrivée, on passe au suivant non bloqué.
 
