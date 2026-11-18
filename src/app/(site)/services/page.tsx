@@ -24,9 +24,11 @@ import { Blob, varianteBlob } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Collecte en entreprise et équipement d'écoles",
+  // Construit sur les recherches observées dans Google Trends :
+  // « recyclage ordinateur » et « recyclage pc ».
+  titre: "Recyclage de PC, ordinateurs et autres matériels informatiques : enlèvement gratuit",
   description:
-    "Collecte et effacement des données pour les entreprises partout en France ; équipement d'écoles et d'associations en France et au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
+    "Recyclage de vos PC, ordinateurs, écrans et autres matériels informatiques d'entreprise : enlèvement gratuit partout en France, données effacées, matériel réemployé dans des écoles.",
   chemin: "/services",
 });
 
