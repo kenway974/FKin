@@ -56,4 +56,15 @@ describe("metadonneesPage", () => {
     expect(() => metadonneesPage({ titre: "x", description: "x", chemin: "/Services/" })).toThrow();
     expect(() => metadonneesPage({ titre: "x", description: "x", chemin: "services" })).toThrow();
   });
+
+  it("peut poser un titre absolu, sans le suffixe du modèle", () => {
+    const accueil = metadonneesPage({
+      titre: "Respusse — Don de matériel",
+      titreAbsolu: true,
+      description: "…",
+      chemin: "/",
+    });
+    expect(accueil.title).toEqual({ absolute: "Respusse — Don de matériel" });
+    expect(accueil.openGraph?.title).toBe("Respusse — Don de matériel");
+  });
 });

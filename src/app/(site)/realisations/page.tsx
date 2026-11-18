@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import { jsonLdSur } from "@/lib/utils";
 import { Bande, EtatVide, Section, TitreSection } from "@/components/sections";
@@ -12,7 +13,7 @@ import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Réalisations",
+  titre: "Réalisations : écoles équipées en France et au Congo",
   description:
     "Les projets menés à leur terme : lieu, matériel livré et résultat obtenu pour chaque école, mairie ou association équipée, en France comme au Congo.",
   chemin: "/realisations",
@@ -38,6 +39,7 @@ export default async function PageRealisations() {
     hasPart: projets.map((projet) => ({
       "@type": "CreativeWork",
       name: projet.titre,
+      url: `${urlSite}/realisations/${projet.slug}`,
       description: projet.description,
       locationCreated: projet.lieu,
       ...(projet.date_projet ? { dateCreated: projet.date_projet } : {}),
@@ -46,6 +48,7 @@ export default async function PageRealisations() {
 
   return (
     <>
+      <FilArianeJsonLd etapes={[{ nom: "Réalisations", chemin: "/realisations" }]} />
       {projets.length > 0 ? (
         <script
           type="application/ld+json"

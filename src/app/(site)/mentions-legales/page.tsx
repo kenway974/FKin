@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { lireCoordonnees } from "@/lib/data";
@@ -23,6 +24,7 @@ export default async function PageMentionsLegales() {
   const coordonnees = await lireCoordonnees();
   return (
     <article className="pb-16">
+      <FilArianeJsonLd etapes={[{ nom: "Mentions légales", chemin: "/mentions-legales" }]} />
       <BannierePage
         surtitre="Informations légales"
         titre="Mentions légales"

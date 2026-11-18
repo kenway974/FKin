@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { CalendarDays, MapPin, Package } from "lucide-react";
 import { Badge, CardTitre } from "@/components/ui/card";
 import { VisuelParDefaut } from "@/components/sections";
@@ -6,7 +7,8 @@ import { formaterDate } from "@/lib/utils";
 import type { Projet } from "@/types/database";
 
 /**
- * Carte d'un projet de la galerie « Réalisations ».
+ * Carte d'un projet de la galerie « Réalisations », menant à sa fiche
+ * (`/realisations/[slug]`).
  *
  * `priorite` n'est vrai que pour les toutes premières cartes visibles : les
  * suivantes restent en chargement paresseux, ce qui évite de saturer une
@@ -17,7 +19,7 @@ export function CarteProjet({ projet, priorite = false }: { projet: Projet; prio
     // Pas de carte encadrée : la photo prend une forme souple, le texte est
     // posé dessous, directement sur la page.
     <div className="group h-full">
-      <article className="flex h-full flex-col">
+      <article className="relative flex h-full flex-col">
         {projet.image_url ? (
           <div className="bg-nuage forme-blob-1 relative aspect-[4/3] w-full overflow-hidden">
             <Image
@@ -51,7 +53,15 @@ export function CarteProjet({ projet, priorite = false }: { projet: Projet; prio
             ) : null}
           </div>
 
-          <CardTitre>{projet.titre}</CardTitre>
+          <CardTitre>
+            {/* Lien étiré : toute la carte mène à la fiche du projet. */}
+            <Link
+              href={`/realisations/${projet.slug}`}
+              className="hover:text-rouge after:absolute after:inset-0"
+            >
+              {projet.titre}
+            </Link>
+          </CardTitre>
           <p className="text-doux text-sm leading-relaxed">{projet.description}</p>
 
           <dl className="mt-auto space-y-2 pt-1 text-sm">

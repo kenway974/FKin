@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -90,6 +91,12 @@ export default async function PageArticle({ params }: Proprietes) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesStructurees) }}
+      />
+      <FilArianeJsonLd
+        etapes={[
+          { nom: "Actualités", chemin: "/actualites" },
+          { nom: article.titre, chemin: `/actualites/${article.slug}` },
+        ]}
       />
 
       <article className="pb-16">

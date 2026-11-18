@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { lireCoordonnees } from "@/lib/data";
@@ -22,6 +23,7 @@ export default async function PageConfidentialite() {
   const coordonnees = await lireCoordonnees();
   return (
     <article className="pb-16">
+      <FilArianeJsonLd etapes={[{ nom: "Politique de confidentialité", chemin: "/confidentialite" }]} />
       <BannierePage
         surtitre="Informations légales"
         titre="Politique de confidentialité"

@@ -16,11 +16,13 @@ import { chiffresAccueil, listerArticlesPublies, listerProjetsPublies } from "@/
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Donnez une seconde vie à votre matériel",
+  // Titre absolu : la marque en tête, puis ce que l'on fait, en termes de
+  // recherche (« don de matériel informatique », « écoles »).
+  titre: `${site.nom} — Don de matériel informatique aux écoles`,
+  titreAbsolu: true,
   description:
     "Nous collectons le matériel informatique, électrique et scolaire des entreprises partout en France et le redistribuons à des écoles et associations, en France comme au Congo. Traçabilité, reçus, comptes rendus d'usage.",
   chemin: "/",
-  titrePartage: `${site.nom} — Dons de matériel, en France et au Congo`,
 });
 
 /**

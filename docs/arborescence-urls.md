@@ -17,7 +17,7 @@ publiée et indexée ne doit plus changer sans redirection 301/308.
 - **Domaine** : `NEXT_PUBLIC_SITE_URL`, à défaut le domaine de production
   Vercel. Les déploiements d'aperçu désignent le domaine de production comme
   version de référence.
-- **Slugs** des articles : générés depuis le titre, validés côté serveur
+- **Slugs** des articles et des réalisations : générés depuis le titre, validés côté serveur
   (`^[a-z0-9]+(?:-[a-z0-9]+)*$`, 80 caractères au plus).
 
 ## Pages publiques (indexées, présentes dans le sitemap)
@@ -28,6 +28,7 @@ publiée et indexée ne doit plus changer sans redirection 301/308.
 │   ├── #reparation                   Réparation par des jeunes (Kinshasa)
 │   └── #formation                    Centre de formation
 ├── /realisations                   Réalisations (projets publiés)
+│   └── /realisations/{slug}          Fiche d'un projet publié
 ├── /comment-ca-marche              Parcours d'un don
 │   └── #faq                          Questions fréquentes (JSON-LD FAQPage)
 ├── /actualites                     Actualités (liste)

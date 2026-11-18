@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import { Clock, Mail, MapPin, Phone, Zap } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +16,7 @@ import { lienTelephone } from "@/lib/coordonnees";
 import { LienWhatsApp } from "@/components/whatsapp";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Contact",
+  titre: "Contact : donner du matériel ou équiper une école",
   description:
     "Entreprise en France souhaitant donner du matériel, ou structure en France ou au Congo cherchant à être équipée : écrivez-nous, nous répondons sous 72 heures ouvrées.",
   chemin: "/contact",
@@ -27,6 +28,7 @@ export default async function PageContact() {
   const essentielles = faq.filter((question) => question.essentielle);
   return (
     <>
+      <FilArianeJsonLd etapes={[{ nom: "Contact", chemin: "/contact" }]} />
       <BannierePage
         surtitre="Contact"
         titre="Écrivez-nous"

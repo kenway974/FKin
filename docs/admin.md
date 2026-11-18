@@ -136,7 +136,10 @@ donner. Une fiche = une livraison menée à son terme.
 | **Ordre d'affichage**  | Les petits nombres passent en premier. Mettez `1` sur votre plus belle réalisation.                                                                         |
 | **Photographie**       | Voir la section suivante.                                                                                                                                   |
 
-Un projet **Visible** apparaît immédiatement dans `/realisations`, et les trois
+Un projet **Visible** apparaît immédiatement dans `/realisations` et obtient sa
+propre page, `/realisations/{identifiant}` (l'identifiant « slug » du
+formulaire : changez-le avec prudence, l'ancienne adresse cessera de marcher).
+Les trois
 premiers remontent sur la page d'accueil.
 
 Modification et suppression fonctionnent comme pour les articles.

@@ -30,11 +30,14 @@ export function metadonneesPage({
   titre,
   description,
   chemin,
+  titreAbsolu = false,
   titrePartage = titre,
   type = "website",
 }: {
   /** Titre de l'onglet, complété par « · Respusse » via le modèle du layout. */
   titre: string;
+  /** Vrai pour afficher `titre` tel quel, sans le suffixe « · Respusse » (accueil). */
+  titreAbsolu?: boolean;
   description: string;
   /** Chemin canonique de la page : `/`, `/services`, `/actualites/mon-article`… */
   chemin: string;
@@ -47,7 +50,7 @@ export function metadonneesPage({
   }
 
   return {
-    title: titre,
+    title: titreAbsolu ? { absolute: titre } : titre,
     description,
     alternates: { canonical: chemin },
     openGraph: {

@@ -137,6 +137,13 @@ export function listerProjetsPublies(limite?: number): Promise<Projet[]> {
   });
 }
 
+/** Un projet publié identifié par son slug, ou `null` s'il n'existe pas. */
+export function trouverProjetParSlug(slug: string): Promise<Projet | null> {
+  return lire("trouverProjetParSlug", null, (supabase) =>
+    supabase.from("projets").select("*").eq("slug", slug).eq("publie", true).maybeSingle(),
+  );
+}
+
 /**
  * Chiffres d'impact saisis par l'équipe dans le back-office. Liste vide si la
  * table n'existe pas encore ou est vide : l'accueil affiche alors les chiffres

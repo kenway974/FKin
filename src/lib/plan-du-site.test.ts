@@ -63,7 +63,10 @@ describe("construireSitemap", () => {
         article("ancien", "2026-01-01T00:00:00Z"),
         article("recent", "2026-09-01T00:00:00Z"),
       ],
-      projets: [{ updated_at: "2026-10-05T00:00:00Z" }, { updated_at: "2026-03-01T00:00:00Z" }],
+      projets: [
+        { slug: "recent", updated_at: "2026-10-05T00:00:00Z" },
+        { slug: "ancien", updated_at: "2026-03-01T00:00:00Z" },
+      ],
     });
     const date = (url: string) => entrees.find((entree) => entree.url === url)?.lastModified;
 
@@ -71,5 +74,17 @@ describe("construireSitemap", () => {
     expect(date(`${URL_SITE}/realisations`)).toBe("2026-10-05T00:00:00Z");
     expect(date(URL_SITE)).toBe("2026-10-05T00:00:00Z");
     expect(date(`${URL_SITE}/services`)).toBeUndefined();
+  });
+
+  it("ajoute chaque réalisation sous son slug, avec sa date de modification", () => {
+    const entrees = construireSitemap({
+      urlSite: URL_SITE,
+      articles: [],
+      projets: [{ slug: "ecole-mont-ngafula", updated_at: "2026-10-05T00:00:00Z" }],
+    });
+    expect(entrees).toContainEqual({
+      url: `${URL_SITE}/realisations/ecole-mont-ngafula`,
+      lastModified: "2026-10-05T00:00:00Z",
+    });
   });
 });

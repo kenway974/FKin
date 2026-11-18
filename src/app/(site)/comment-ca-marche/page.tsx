@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import { cn, jsonLdSur } from "@/lib/utils";
 import { Alert } from "@/components/ui/alert";
@@ -11,7 +12,7 @@ import { trouverPhotoBanniere } from "@/lib/visuels";
 import { urlSite } from "@/lib/env";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Comment ça marche",
+  titre: "Comment donner du matériel : les étapes d'un don",
   description:
     "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école, en France ou au Congo, étape par étape et avec les délais.",
   chemin: "/comment-ca-marche",
@@ -101,6 +102,7 @@ export default async function PageCommentCaMarche() {
 
   return (
     <>
+      <FilArianeJsonLd etapes={[{ nom: "Comment ça marche", chemin: "/comment-ca-marche" }]} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdSur(donneesStructurees) }}

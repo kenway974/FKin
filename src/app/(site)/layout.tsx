@@ -26,6 +26,10 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     name: site.nom,
     alternateName: site.nomLong,
     url: urlSite,
+    // Logo carré sur fond blanc : repris par Google dans ses résultats et
+    // son panneau de connaissances (112 px minimum).
+    logo: `${urlSite}/icone-512.png`,
+    image: `${urlSite}/icone-512.png`,
     description: site.description,
     email: coordonnees.email,
     ...(coordonnees.telephone ? { telephone: coordonnees.telephone } : {}),

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import { jsonLdSur } from "@/lib/utils";
 import { EtatVide, Section } from "@/components/sections";
@@ -12,7 +13,7 @@ import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Actualités",
+  titre: "Actualités : convois et nouvelles du terrain",
   description:
     "Comptes rendus de convois, retours de terrain et nouvelles des structures équipées en France et au Congo.",
   chemin: "/actualites",
@@ -40,6 +41,7 @@ export default async function PageActualites() {
 
   return (
     <>
+      <FilArianeJsonLd etapes={[{ nom: "Actualités", chemin: "/actualites" }]} />
       {articles.length > 0 ? (
         <script
           type="application/ld+json"

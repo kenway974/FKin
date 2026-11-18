@@ -25,7 +25,7 @@ export const PAGES_INDEXABLES = [
 ] as const;
 
 type ArticlePlan = { slug: string; updated_at: string; date_publication: string | null };
-type ProjetPlan = { updated_at: string };
+type ProjetPlan = { slug: string; updated_at: string };
 
 /** Date ISO la plus récente d'une liste, ou `undefined` si elle est vide. */
 function plusRecente(dates: string[]): string | undefined {
@@ -73,5 +73,10 @@ export function construireSitemap({
     lastModified: dateArticles(article),
   }));
 
-  return [...pages, ...pagesArticles];
+  const pagesProjets = projets.map((projet) => ({
+    url: `${urlSite}/realisations/${projet.slug}`,
+    lastModified: projet.updated_at,
+  }));
+
+  return [...pages, ...pagesArticles, ...pagesProjets];
 }

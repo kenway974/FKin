@@ -16,6 +16,9 @@ import type { ResultatAction } from "@/lib/actions-types";
 function rafraichirPagesPubliques() {
   revalidatePath("/");
   revalidatePath("/realisations");
+  // Toutes les fiches projet : un ancien slug doit aussi cesser d'être servi.
+  revalidatePath("/realisations/[slug]", "page");
+  revalidatePath("/sitemap.xml");
 }
 
 function versLigne(donnees: z.infer<typeof schemaProjet>) {

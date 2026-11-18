@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { FilArianeJsonLd } from "@/components/fil-ariane";
 import { metadonneesPage } from "@/lib/seo";
 import {
   ArrowRight,
@@ -23,7 +24,7 @@ import { Blob, varianteBlob } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Nos services",
+  titre: "Collecte en entreprise et équipement d'écoles",
   description:
     "Collecte et effacement des données pour les entreprises partout en France ; équipement d'écoles et d'associations en France et au Congo, réparation du matériel par des jeunes et centre de formation aux métiers de l'informatique.",
   chemin: "/services",
@@ -100,6 +101,7 @@ const servicesBeneficiaires = [
 export default function PageServices() {
   return (
     <>
+      <FilArianeJsonLd etapes={[{ nom: "Nos services", chemin: "/services" }]} />
       <BannierePage
         surtitre="Nos services"
         titre="Une même chaîne, de la collecte à la formation"
