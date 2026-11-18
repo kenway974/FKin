@@ -25,6 +25,8 @@ publiée et indexée ne doit plus changer sans redirection 301/308.
 ```
 /                                   Accueil
 ├── /services                       Nos services
+│   ├── #entreprises                  Pour les entreprises donatrices
+│   ├── #beneficiaires                Pour les écoles et associations
 │   ├── #reparation                   Réparation par des jeunes (Kinshasa)
 │   └── #formation                    Centre de formation
 ├── /realisations                   Réalisations (projets publiés)
@@ -32,6 +34,8 @@ publiée et indexée ne doit plus changer sans redirection 301/308.
 ├── /comment-ca-marche              Parcours d'un don
 │   └── #faq                          Questions fréquentes (JSON-LD FAQPage)
 ├── /actualites                     Actualités (liste)
+│   ├── ?categorie={rubrique}         Filtre : entreprises, beneficiaires, congo, association
+│   ├── ?q={texte}                    Recherche dans les titres et extraits
 │   └── /actualites/{slug}            Un article publié
 ├── /contact                        Formulaire de contact
 │   ├── ?profil=entreprise            Pré-sélectionne « entreprise donatrice »
