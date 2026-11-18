@@ -16,12 +16,12 @@ import { chiffresAccueil, listerArticlesPublies, listerProjetsPublies } from "@/
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = metadonneesPage({
-  // Titre absolu : la marque en tête, puis ce que l'on fait, en termes de
-  // recherche (« don de matériel informatique », « écoles »).
-  titre: `${site.nom} — Don de matériel informatique aux écoles`,
+  // Titre absolu, construit sur les recherches observées dans Google Trends :
+  // « donner pc » et « association afrique ».
+  titre: `${site.nom} : donner son PC à une association, France et Afrique`,
   titreAbsolu: true,
   description:
-    "Nous collectons le matériel informatique, électrique et scolaire des entreprises partout en France et le redistribuons à des écoles et associations, en France comme au Congo. Traçabilité, reçus, comptes rendus d'usage.",
+    "Donnez vos PC, écrans et matériel informatique : nous venons les chercher gratuitement partout en France et équipons des écoles en France et en Afrique.",
   chemin: "/",
 });
 
