@@ -16,9 +16,10 @@ import { lienTelephone } from "@/lib/coordonnees";
 import { LienWhatsApp } from "@/components/whatsapp";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Contact : donner du matériel ou équiper une école",
+  // Recherches visées (Google Trends) : « récupération pc », « donner pc ».
+  titre: "Faire récupérer son PC ou demander du matériel",
   description:
-    "Entreprise en France souhaitant donner du matériel, ou structure en France ou au Congo cherchant à être équipée : écrivez-nous, nous répondons sous 72 heures ouvrées.",
+    "Particulier ou entreprise : proposez votre PC ou votre matériel informatique, nous venons le récupérer. École ou association : présentez vos besoins.",
   chemin: "/contact",
 });
 

@@ -10,6 +10,9 @@ Dernière mise à jour : 18 novembre 2026.
 
 ---
 
+> Liste courte des sujets, une ligne par article, appuyée sur Google Trends :
+> voir [`idees-publications.md`](./idees-publications.md).
+
 ## 1. Règles du jeu (à relire avant chaque article)
 
 1. **Rien d'inventé.** Aucun projet, chiffre, témoignage, partenaire ou date

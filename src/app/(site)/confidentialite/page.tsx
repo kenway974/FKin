@@ -23,7 +23,9 @@ export default async function PageConfidentialite() {
   const coordonnees = await lireCoordonnees();
   return (
     <article className="pb-16">
-      <FilArianeJsonLd etapes={[{ nom: "Politique de confidentialité", chemin: "/confidentialite" }]} />
+      <FilArianeJsonLd
+        etapes={[{ nom: "Politique de confidentialité", chemin: "/confidentialite" }]}
+      />
       <BannierePage
         surtitre="Informations légales"
         titre="Politique de confidentialité"

@@ -24,11 +24,10 @@ import { Blob, varianteBlob } from "@/components/formes";
 import { trouverPhotoBanniere } from "@/lib/visuels";
 
 export const metadata: Metadata = metadonneesPage({
-  // Construit sur les recherches observées dans Google Trends :
-  // « recyclage ordinateur » et « recyclage pc ».
-  titre: "Recyclage de PC, ordinateurs et autres matériels informatiques : enlèvement gratuit",
+  // Recherches visées (Google Trends) : « récupération pc », « recyclage pc ».
+  titre: "Récupération et recyclage de PC : enlèvement gratuit",
   description:
-    "Recyclage de vos PC, ordinateurs, écrans et autres matériels informatiques d'entreprise : enlèvement gratuit partout en France, données effacées, matériel réemployé dans des écoles.",
+    "Récupération et recyclage de PC, ordinateurs, écrans et matériel informatique, pour les entreprises comme les particuliers : enlèvement gratuit partout en France, données effacées.",
   chemin: "/services",
 });
 

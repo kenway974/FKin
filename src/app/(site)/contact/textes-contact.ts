@@ -38,7 +38,8 @@ export const TEXTES: Record<
     aidePhotos: "Deux ou trois photos suffisent pour évaluer le lot plus vite. 5 au maximum.",
     ville: "Ville de l'enlèvement",
     exempleVille: "Ex. : Lyon",
-    organisation: "Entreprise",
+    // Les particuliers donnent aussi : le nom d'entreprise reste facultatif.
+    organisation: "Entreprise (facultatif)",
     usageTelephone: "organiser l'enlèvement",
     envoyer: "Envoyer ma proposition",
     recapMateriel: "Matériel",

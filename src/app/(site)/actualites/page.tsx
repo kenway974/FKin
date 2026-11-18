@@ -13,9 +13,10 @@ import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Actualités : convois et nouvelles du terrain",
+  // Recherches visées (Google Trends) : « donner pc », « recyclage pc », « formater pc », « deee ».
+  titre: "Donner, recycler, réemployer son PC : nos conseils",
   description:
-    "Comptes rendus de convois, retours de terrain et nouvelles des structures équipées en France et au Congo.",
+    "Donner son vieux PC, le formater avant un don, le recycler, respecter les règles DEEE : nos guides pour les particuliers et les entreprises.",
   chemin: "/actualites",
 });
 

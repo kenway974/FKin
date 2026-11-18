@@ -12,9 +12,10 @@ import { trouverPhotoBanniere } from "@/lib/visuels";
 import { urlSite } from "@/lib/env";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Comment donner du matériel : les étapes d'un don",
+  // Recherches visées (Google Trends) : « donner pc », « vieux pc », « ancien pc ».
+  titre: "Donner son vieux PC : comment ça se passe",
   description:
-    "Le parcours complet d'un don, du premier message d'une entreprise en France jusqu'à la mise en service du matériel dans une école, en France ou au Congo, étape par étape et avec les délais.",
+    "Votre vieux PC ou ancien ordinateur ne sert plus ? Donnez-le : récupération gratuite partout en France, données effacées, puis installation dans une école.",
   chemin: "/comment-ca-marche",
 });
 

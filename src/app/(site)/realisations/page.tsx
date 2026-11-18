@@ -13,9 +13,10 @@ import { urlSite } from "@/lib/env";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = metadonneesPage({
-  titre: "Réalisations : écoles équipées en France et au Congo",
+  // Recherches visées (Google Trends) : « informatique école », « école afrique ».
+  titre: "Informatique pour les écoles en Afrique et en France",
   description:
-    "Les projets menés à leur terme : lieu, matériel livré et résultat obtenu pour chaque école, mairie ou association équipée, en France comme au Congo.",
+    "Écoles équipées en informatique grâce aux PC donnés : lieu, matériel livré et résultat obtenu pour chaque projet, en Afrique comme en France.",
   chemin: "/realisations",
 });
 
